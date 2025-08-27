@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأعمال</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">إدارة الأعمال</h1>
+                <div class="user-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="welcome-section">
+                <h2 class="welcome-text">مرحباً بك</h2>
+                <p class="welcome-subtitle">اختر الخدمة المطلوبة</p>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="menu-grid">
+                <div class="menu-item new-order" data-page="new-order">
+                    <div class="menu-icon">
+                        <i data-lucide="plus-circle"></i>
+                    </div>
+                    <h3>طلبية جديدة</h3>
+                    <p>إضافة طلبية جديدة</p>
+                </div>
+
+                <div class="menu-item expenses" data-page="expenses">
+                    <div class="menu-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h3>مصاريف</h3>
+                    <p>إدارة المصروفات</p>
+                </div>
+
+                <div class="menu-item receipts" data-page="receipts">
+                    <div class="menu-icon">
+                        <i data-lucide="banknote"></i>
+                    </div>
+                    <h3>مقبوضات</h3>
+                    <p>المبالغ المحصلة</p>
+                </div>
+
+                <div class="menu-item debts-to-us" data-page="debts-to-us">
+                    <div class="menu-icon">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+                    <h3>ديون لنا</h3>
+                    <p>المبالغ المستحقة لنا</p>
+                </div>
+
+                <div class="menu-item purchases" data-page="purchases">
+                    <div class="menu-icon">
+                        <i data-lucide="shopping-cart"></i>
+                    </div>
+                    <h3>مشتريات</h3>
+                    <p>إدارة المشتريات</p>
+                </div>
+
+                <div class="menu-item debts-on-us" data-page="debts-on-us">
+                    <div class="menu-icon">
+                        <i data-lucide="trending-down"></i>
+                    </div>
+                    <h3>ديون علينا</h3>
+                    <p>المبالغ المستحقة علينا</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active">
+                <i data-lucide="home"></i>
+                <span>الرئيسية</span>
+            </div>
+            <div class="nav-item">
+                <i data-lucide="bar-chart-3"></i>
+                <span>التقارير</span>
+            </div>
+            <div class="nav-item">
+                <i data-lucide="settings"></i>
+                <span>الإعدادات</span>
+            </div>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
