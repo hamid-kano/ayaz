@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2000);
 });
 
+// Global variables
+let currentPage = 'home';
+
 function showLoadingAnimation() {
     const loading = document.createElement('div');
     loading.className = 'loading';
@@ -24,7 +27,7 @@ function initializeApp() {
     menuItems.forEach(item => {
         item.addEventListener('click', function() {
             const page = this.dataset.page;
-            handleMenuClick(page, this);
+            navigateToPage(page);
         });
         
         // Add touch feedback
@@ -43,32 +46,94 @@ function initializeApp() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', function() {
-            navItems.forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Add ripple effect
-            createRipple(this, event);
+            const page = this.dataset.page;
+            if (page) {
+                navigateToPage(page);
+                updateBottomNav(page);
+            }
         });
+    });
+    
+    // Back buttons
+    const backBtns = document.querySelectorAll('.back-btn');
+    backBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const backPage = this.dataset.back;
+            navigateToPage(backPage);
+        });
+    });
+    
+    // User menu dropdown
+    const userMenu = document.getElementById('userMenu');
+    const userDropdown = document.getElementById('userDropdown');
+    const overlay = document.getElementById('overlay');
+    
+    userMenu.addEventListener('click', function() {
+        userDropdown.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+    
+    // Notifications panel
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationsPanel = document.getElementById('notificationsPanel');
+    const closeNotifications = document.getElementById('closeNotifications');
+    
+    notificationBtn.addEventListener('click', function() {
+        notificationsPanel.classList.add('active');
+        overlay.classList.add('active');
+    });
+    
+    closeNotifications.addEventListener('click', function() {
+        notificationsPanel.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+    
+    // Close dropdowns when clicking overlay
+    overlay.addEventListener('click', function() {
+        userDropdown.classList.remove('active');
+        notificationsPanel.classList.remove('active');
+        overlay.classList.remove('active');
     });
     
     // Add scroll animations
     addScrollAnimations();
 }
 
-function handleMenuClick(page, element) {
-    // Add click animation
-    element.style.transform = 'scale(0.95)';
+// Navigation function
+function navigateToPage(page) {
+    // Hide all pages
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(p => p.classList.remove('active'));
     
-    setTimeout(() => {
-        element.style.transform = '';
+    // Show target page
+    const targetPage = document.getElementById(page + 'Page');
+    if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = page;
         
-        // Show notification
-        showNotification(`تم اختيار ${element.querySelector('h3').textContent}`);
+        // Update bottom navigation
+        updateBottomNav(page);
         
-        // Here you can add navigation to different pages
-        console.log(`Navigating to: ${page}`);
-        
-    }, 150);
+        // Re-initialize Lucide icons for new content
+        setTimeout(() => {
+            lucide.createIcons();
+        }, 100);
+    }
+}
+
+function updateBottomNav(page) {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.page === page) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Special case for home page
+    if (page === 'home') {
+        navItems[0].classList.add('active');
+    }
 }
 
 function createRipple(element, event) {
@@ -147,13 +212,24 @@ function addScrollAnimations() {
     });
 }
 
-// Add CSS for ripple animation
+// Add CSS for ripple animation and page transitions
 const style = document.createElement('style');
 style.textContent = `
     @keyframes ripple {
         to {
             transform: scale(2);
             opacity: 0;
+        }
+    }
+    
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
     }
 `;
@@ -200,3 +276,53 @@ function addHapticFeedback() {
 
 // Initialize haptic feedback
 addHapticFeedback();
+
+// Handle form submissions
+function handleFormSubmit(formType) {
+    showNotification(`تم حفظ ${formType} بنجاح`);
+    
+    // Navigate back to home after a delay
+    setTimeout(() => {
+        navigateToPage('home');
+    }, 1500);
+}
+
+// Add event listeners for form submissions
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('submit-btn')) {
+        e.preventDefault();
+        handleFormSubmit('البيانات');
+    }
+    
+    if (e.target.closest('.add-btn')) {
+        showNotification('فتح نموذج الإضافة');
+    }
+    
+    if (e.target.closest('.dropdown-item')) {
+        const item = e.target.closest('.dropdown-item');
+        const text = item.querySelector('span').textContent;
+        showNotification(`تم اختيار: ${text}`);
+        
+        // Close dropdown
+        document.getElementById('userDropdown').classList.remove('active');
+        document.getElementById('overlay').classList.remove('active');
+    }
+});
+
+// Mark notifications as read when clicked
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.notification-item')) {
+        const notification = e.target.closest('.notification-item');
+        notification.classList.remove('unread');
+        
+        // Update notification badge
+        const badge = document.querySelector('.notification-badge');
+        const currentCount = parseInt(badge.textContent);
+        if (currentCount > 0) {
+            badge.textContent = currentCount - 1;
+            if (currentCount - 1 === 0) {
+                badge.style.display = 'none';
+            }
+        }
+    }
+});

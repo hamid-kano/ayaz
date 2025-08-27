@@ -16,21 +16,92 @@
         <header class="header">
             <div class="header-content">
                 <h1 class="app-title">إدارة الأعمال</h1>
-                <div class="user-avatar">
-                    <i data-lucide="user"></i>
+                <div class="header-actions">
+                    <div class="notification-btn" id="notificationBtn">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-avatar" id="userMenu">
+                        <i data-lucide="user"></i>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="welcome-section">
-                <h2 class="welcome-text">مرحباً بك</h2>
-                <p class="welcome-subtitle">اختر الخدمة المطلوبة</p>
+        <!-- User Menu Dropdown -->
+        <div class="dropdown-menu user-dropdown" id="userDropdown">
+            <div class="dropdown-item">
+                <i data-lucide="user-circle"></i>
+                <span>الملف الشخصي</span>
             </div>
+            <div class="dropdown-item">
+                <i data-lucide="settings"></i>
+                <span>الإعدادات</span>
+            </div>
+            <div class="dropdown-item">
+                <i data-lucide="help-circle"></i>
+                <span>المساعدة</span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item logout">
+                <i data-lucide="log-out"></i>
+                <span>تسجيل الخروج</span>
+            </div>
+        </div>
 
-            <!-- Menu Grid -->
-            <div class="menu-grid">
+        <!-- Notifications Panel -->
+        <div class="notifications-panel" id="notificationsPanel">
+            <div class="notifications-header">
+                <h3>الإشعارات</h3>
+                <button class="close-btn" id="closeNotifications">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="notifications-list">
+                <div class="notification-item unread">
+                    <div class="notification-icon new-order">
+                        <i data-lucide="plus-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>طلبية جديدة</h4>
+                        <p>تم إضافة طلبية جديدة #1234</p>
+                        <span class="notification-time">منذ 5 دقائق</span>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <div class="notification-icon receipts">
+                        <i data-lucide="banknote"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>مقبوضات جديدة</h4>
+                        <p>تم تحصيل مبلغ 1500 ريال</p>
+                        <span class="notification-time">منذ 15 دقيقة</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon expenses">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>مصروف جديد</h4>
+                        <p>تم إضافة مصروف بقيمة 300 ريال</p>
+                        <span class="notification-time">منذ ساعة</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Home Page -->
+            <div class="page home-page active" id="homePage">
+                <div class="welcome-section">
+                    <h2 class="welcome-text">مرحباً بك</h2>
+                    <p class="welcome-subtitle">اختر الخدمة المطلوبة</p>
+                </div>
+
+                <!-- Menu Grid -->
+                <div class="menu-grid">
                 <div class="menu-item new-order" data-page="new-order">
                     <div class="menu-icon">
                         <i data-lucide="plus-circle"></i>
@@ -78,24 +149,187 @@
                     <h3>ديون علينا</h3>
                     <p>المبالغ المستحقة علينا</p>
                 </div>
+                </div>
+            </div>
+
+            <!-- New Order Page -->
+            <div class="page new-order-page" id="newOrderPage">
+                <div class="page-header">
+                    <button class="back-btn" data-back="home">
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <h2>طلبية جديدة</h2>
+                </div>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label>اسم العميل</label>
+                        <input type="text" placeholder="أدخل اسم العميل">
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" placeholder="أدخل رقم الهاتف">
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ</label>
+                        <input type="number" placeholder="أدخل المبلغ">
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف</label>
+                        <textarea placeholder="وصف الطلبية"></textarea>
+                    </div>
+                    <button class="submit-btn">حفظ الطلبية</button>
+                </div>
+            </div>
+
+            <!-- Expenses Page -->
+            <div class="page expenses-page" id="expensesPage">
+                <div class="page-header">
+                    <button class="back-btn" data-back="home">
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <h2>المصاريف</h2>
+                    <button class="add-btn" id="addExpense">
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="item-icon expenses">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <div class="item-content">
+                            <h4>إيجار المحل</h4>
+                            <p>مصروف شهري</p>
+                            <span class="amount">2000 ريال</span>
+                        </div>
+                        <div class="item-date">اليوم</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-icon expenses">
+                            <i data-lucide="fuel"></i>
+                        </div>
+                        <div class="item-content">
+                            <h4>وقود</h4>
+                            <p>مصروف يومي</p>
+                            <span class="amount">150 ريال</span>
+                        </div>
+                        <div class="item-date">أمس</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipts Page -->
+            <div class="page receipts-page" id="receiptsPage">
+                <div class="page-header">
+                    <button class="back-btn" data-back="home">
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <h2>المقبوضات</h2>
+                    <button class="add-btn" id="addReceipt">
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>15,500 ريال</h3>
+                            <p>إجمالي المقبوضات</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="item-icon receipts">
+                            <i data-lucide="banknote"></i>
+                        </div>
+                        <div class="item-content">
+                            <h4>أحمد محمد</h4>
+                            <p>دفعة من طلبية #1234</p>
+                            <span class="amount positive">+1500 ريال</span>
+                        </div>
+                        <div class="item-date">اليوم</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div class="page reports-page" id="reportsPage">
+                <div class="page-header">
+                    <h2>التقارير</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon new-order">
+                            <i data-lucide="plus-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>25</h3>
+                            <p>طلبيات جديدة</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon receipts">
+                            <i data-lucide="banknote"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>15,500</h3>
+                            <p>إجمالي المقبوضات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page settings-page" id="settingsPage">
+                <div class="page-header">
+                    <h2>الإعدادات</h2>
+                </div>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-icon">
+                            <i data-lucide="user"></i>
+                        </div>
+                        <div class="setting-content">
+                            <h4>الملف الشخصي</h4>
+                            <p>إدارة بيانات الحساب</p>
+                        </div>
+                        <i data-lucide="chevron-left"></i>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-icon">
+                            <i data-lucide="bell"></i>
+                        </div>
+                        <div class="setting-content">
+                            <h4>الإشعارات</h4>
+                            <p>إعدادات التنبيهات</p>
+                        </div>
+                        <i data-lucide="chevron-left"></i>
+                    </div>
+                </div>
             </div>
         </main>
 
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
-            <div class="nav-item active">
+            <div class="nav-item active" data-page="home">
                 <i data-lucide="home"></i>
                 <span>الرئيسية</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" data-page="reports">
                 <i data-lucide="bar-chart-3"></i>
                 <span>التقارير</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" data-page="settings">
                 <i data-lucide="settings"></i>
                 <span>الإعدادات</span>
             </div>
         </nav>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
     </div>
 
     <script src="script.js"></script>
