@@ -73,25 +73,21 @@ function initializeApp() {
         overlay.classList.toggle('active');
     });
     
-    // Notifications panel
+    // Notifications dropdown
     const notificationBtn = document.getElementById('notificationBtn');
-    const notificationsPanel = document.getElementById('notificationsPanel');
-    const closeNotifications = document.getElementById('closeNotifications');
+    const notificationsDropdown = document.getElementById('notificationsDropdown');
     
     notificationBtn.addEventListener('click', function() {
-        notificationsPanel.classList.add('active');
-        overlay.classList.add('active');
-    });
-    
-    closeNotifications.addEventListener('click', function() {
-        notificationsPanel.classList.remove('active');
-        overlay.classList.remove('active');
+        notificationsDropdown.classList.toggle('active');
+        overlay.classList.toggle('active');
+        // Close user dropdown if open
+        userDropdown.classList.remove('active');
     });
     
     // Close dropdowns when clicking overlay
     overlay.addEventListener('click', function() {
         userDropdown.classList.remove('active');
-        notificationsPanel.classList.remove('active');
+        notificationsDropdown.classList.remove('active');
         overlay.classList.remove('active');
     });
     

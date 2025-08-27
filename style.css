@@ -338,58 +338,45 @@ body {
     margin: 8px 0;
 }
 
-/* Notifications Panel */
-.notifications-panel {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 100%;
-    max-width: 414px;
-    height: 100vh;
-    background: white;
-    z-index: 2000;
-    transition: right 0.3s ease;
+/* Notifications Dropdown */
+.notifications-dropdown {
+    top: 90px;
+    right: 20px;
+    left: auto;
+    min-width: 300px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
-.notifications-panel.active {
-    right: 0;
+.dropdown-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8f9fa;
+    border-radius: 15px 15px 0 0;
 }
 
-.notifications-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.close-btn {
-    width: 35px;
-    height: 35px;
-    border: none;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: white;
-}
-
-.notifications-list {
-    padding: 20px;
+.dropdown-header h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
 }
 
 .notification-item {
     display: flex;
-    gap: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    background: #f8f9fa;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
     transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
 }
 
 .notification-item.unread {
@@ -398,30 +385,32 @@ body {
 }
 
 .notification-icon {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
+    font-size: 14px;
+    flex-shrink: 0;
 }
 
-.notification-content h4 {
-    font-size: 16px;
+.notification-content h5 {
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     color: #2d3748;
 }
 
 .notification-content p {
-    font-size: 14px;
+    font-size: 12px;
     color: #718096;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .notification-time {
-    font-size: 12px;
+    font-size: 10px;
     color: #a0aec0;
 }
 
