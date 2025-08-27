@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلبية جديدة - مطبعة آياز</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">مطبعة آياز</h1>
+                <div class="header-actions">
+                    <div class="notification-btn" id="notificationBtn">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-avatar" id="userMenu">
+                        <i data-lucide="user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="index.html" class="back-btn">
+                    <i data-lucide="arrow-right"></i>
+                </a>
+                <h2>طلبية جديدة</h2>
+            </div>
+            
+            <div class="form-container">
+                <!-- Customer Info Section -->
+                <div class="section-header">
+                    <i data-lucide="user"></i>
+                    <h3>بيانات العميل</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>اسم العميل</label>
+                        <input type="text" id="customerName" placeholder="أدخل اسم العميل" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" id="customerPhone" placeholder="09XX XXX XXX" required>
+                    </div>
+                </div>
+                
+                <!-- Order Details Section -->
+                <div class="section-header">
+                    <i data-lucide="clipboard-list"></i>
+                    <h3>تفاصيل الطلبية</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label>نوع الطباعة</label>
+                    <select id="printType" required>
+                        <option value="">اختر نوع الطباعة</option>
+                        <option value="business-cards">بطاقات عمل</option>
+                        <option value="flyers">فلايرز</option>
+                        <option value="brochures">بروشورات</option>
+                        <option value="banners">لافتات</option>
+                        <option value="books">كتب ومجلات</option>
+                        <option value="other">أخرى</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>الكمية</label>
+                        <input type="number" id="quantity" placeholder="عدد القطع" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الحجم</label>
+                        <select id="size" required>
+                            <option value="">اختر الحجم</option>
+                            <option value="a4">A4</option>
+                            <option value="a3">A3</option>
+                            <option value="a5">A5</option>
+                            <option value="custom">حجم مخصص</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>وصف الطلبية</label>
+                    <textarea id="orderDescription" placeholder="أدخل تفاصيل إضافية عن الطلبية" rows="3"></textarea>
+                </div>
+                
+                <!-- Pricing Section -->
+                <div class="section-header">
+                    <i data-lucide="dollar-sign"></i>
+                    <h3>التسعير</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>العملة</label>
+                        <select id="currency" required>
+                            <option value="syp">ليرة سورية</option>
+                            <option value="usd">دولار أمريكي</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ</label>
+                        <input type="number" id="amount" placeholder="أدخل المبلغ" min="0" step="0.01" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>تاريخ التسليم</label>
+                    <input type="date" id="deliveryDate" required>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="clearForm()">
+                        <i data-lucide="x"></i>
+                        مسح
+                    </button>
+                    <button type="submit" class="submit-btn" onclick="saveOrder()">
+                        <i data-lucide="save"></i>
+                        حفظ الطلبية
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i data-lucide="home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i data-lucide="bar-chart-3"></i>
+                <span>التقارير</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i data-lucide="settings"></i>
+                <span>الإعدادات</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
