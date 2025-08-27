@@ -128,7 +128,18 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-    padding: 0 20px;
+    padding: 20px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.page-header h2 {
+    text-align: right;
+    flex: 1;
+    margin: 0 15px;
 }
 
 .back-btn {
@@ -171,7 +182,7 @@ body {
 
 /* Main Content */
 .main-content {
-    padding: 0 0 100px;
+    padding: 0 0 120px;
     animation: fadeInUp 0.8s ease-out;
 }
 
