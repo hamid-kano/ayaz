@@ -341,11 +341,38 @@ body {
 /* Notifications Dropdown */
 .notifications-dropdown {
     top: 90px;
-    right: 20px;
+    right: 60px;
     left: auto;
     min-width: 300px;
     max-height: 400px;
+    overflow: hidden;
+    padding-right: 8px;
+}
+
+.notifications-scroll {
+    max-height: 350px;
     overflow-y: auto;
+    padding-right: 8px;
+    margin-right: -8px;
+}
+
+/* Custom Scrollbar */
+.notifications-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notifications-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.notifications-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.notifications-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
 }
 
 .dropdown-header {
