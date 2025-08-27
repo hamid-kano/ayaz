@@ -273,23 +273,61 @@ function addHapticFeedback() {
 // Initialize haptic feedback
 addHapticFeedback();
 
-// Handle form submissions
-function handleFormSubmit(formType) {
-    showNotification(`تم حفظ ${formType} بنجاح`);
+// Form functions
+function clearForm() {
+    document.querySelectorAll('#newOrderPage input, #newOrderPage select, #newOrderPage textarea').forEach(field => {
+        field.value = '';
+    });
+    showNotification('تم مسح النموذج');
+}
+
+function saveOrder() {
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const printType = document.getElementById('printType').value;
+    const quantity = document.getElementById('quantity').value;
+    const amount = document.getElementById('amount').value;
     
-    // Navigate back to home after a delay
+    if (!customerName || !customerPhone || !printType || !quantity || !amount) {
+        showNotification('يرجى ملء جميع الحقول المطلوبة');
+        return;
+    }
+    
+    showNotification('تم حفظ الطلبية بنجاح');
+    
     setTimeout(() => {
         navigateToPage('home');
+        clearForm();
     }, 1500);
 }
 
-// Add event listeners for form submissions
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('submit-btn')) {
-        e.preventDefault();
-        handleFormSubmit('البيانات');
-    }
+// Filter functionality
+function initializeFilters() {
+    const filterBtns = document.querySelectorAll('.tab-btn');
+    const listItems = document.querySelectorAll('.list-item[data-category]');
     
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Update active tab
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter items
+            listItems.forEach(item => {
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+// Add event listeners for form submissions and actions
+document.addEventListener('click', function(e) {
     if (e.target.closest('.add-btn')) {
         showNotification('فتح نموذج الإضافة');
     }
@@ -303,6 +341,28 @@ document.addEventListener('click', function(e) {
         document.getElementById('userDropdown').classList.remove('active');
         document.getElementById('overlay').classList.remove('active');
     }
+    
+    if (e.target.closest('.action-btn.edit')) {
+        showNotification('فتح نموذج التعديل');
+    }
+    
+    if (e.target.closest('.action-btn.delete')) {
+        if (confirm('هل أنت متأكد من الحذف؟')) {
+            const listItem = e.target.closest('.list-item');
+            listItem.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+                listItem.remove();
+                showNotification('تم الحذف بنجاح');
+            }, 300);
+        }
+    }
+});
+
+// Initialize filters when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        initializeFilters();
+    }, 2100);
 });
 
 // Mark notifications as read when clicked
