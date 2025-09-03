@@ -1,2 +1,5 @@
 # Configuration notes
 # Sensitive information has been removed for security purposes
+
+
+cd domains/ghostwhite-mosquito-524345.hostingersite.com/public_html
