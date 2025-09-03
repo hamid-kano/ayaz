@@ -101,11 +101,19 @@
                 </div>
                 
                 <div class="add-attachment">
-                    <input type="file" id="newAttachment" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd" style="display: none;">
-                    <button class="btn-secondary" onclick="document.getElementById('newAttachment').click()">
-                        <i data-lucide="plus"></i>
-                        إضافة مرفق
-                    </button>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" class="file-upload-input" id="newAttachment" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd">
+                        <div class="file-upload-content">
+                            <div class="file-upload-icon">
+                                <i data-lucide="upload"></i>
+                            </div>
+                            <div class="file-upload-text">
+                                <h4>اسحب الملفات هنا أو اضغط للتحديد</h4>
+                                <p>PDF, Word, صور, Excel, Photoshop</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uploaded-files" id="newUploadedFiles"></div>
                 </div>
                 
                 <!-- Audio Section -->

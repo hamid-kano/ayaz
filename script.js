@@ -460,12 +460,97 @@ function filterOrders() {
     });
 }
 
+// File upload functionality
+function initializeFileUpload() {
+    const fileUploadAreas = document.querySelectorAll('.file-upload-area');
+    
+    fileUploadAreas.forEach(area => {
+        const input = area.querySelector('.file-upload-input');
+        const uploadedFilesContainer = area.parentElement.querySelector('.uploaded-files');
+        
+        if (!input) return;
+        
+        // Drag and drop events
+        area.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            area.classList.add('dragover');
+        });
+        
+        area.addEventListener('dragleave', () => {
+            area.classList.remove('dragover');
+        });
+        
+        area.addEventListener('drop', (e) => {
+            e.preventDefault();
+            area.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files, uploadedFilesContainer);
+        });
+        
+        // File input change
+        input.addEventListener('change', (e) => {
+            handleFiles(e.target.files, uploadedFilesContainer);
+        });
+    });
+}
+
+function handleFiles(files, container) {
+    if (!container) return;
+    
+    Array.from(files).forEach(file => {
+        addFileToList(file, container);
+    });
+}
+
+function addFileToList(file, container) {
+    const fileElement = document.createElement('div');
+    fileElement.className = 'uploaded-file';
+    
+    const fileSize = (file.size / 1024).toFixed(1) + ' KB';
+    const fileIcon = getFileIcon(file.name);
+    
+    fileElement.innerHTML = `
+        <div class="file-info">
+            <div class="file-icon">
+                <i data-lucide="${fileIcon}"></i>
+            </div>
+            <div class="file-details">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${fileSize}</div>
+            </div>
+        </div>
+        <button class="remove-file" onclick="removeFile(this)">
+            <i data-lucide="x"></i>
+        </button>
+    `;
+    
+    container.appendChild(fileElement);
+    lucide.createIcons();
+}
+
+function getFileIcon(fileName) {
+    const extension = fileName.toLowerCase().split('.').pop();
+    
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) return 'image';
+    if (['pdf'].includes(extension)) return 'file-text';
+    if (['doc', 'docx'].includes(extension)) return 'file-text';
+    if (['xls', 'xlsx'].includes(extension)) return 'file-spreadsheet';
+    if (['psd'].includes(extension)) return 'layers';
+    
+    return 'file';
+}
+
+function removeFile(button) {
+    button.parentElement.remove();
+}
+
 // Initialize filters and audio recorder when page loads
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initializeFilters();
         initializeAudioRecorder();
         initializeOrdersSearch();
+        initializeFileUpload();
         
         // Set current date
         const today = new Date().toISOString().split('T')[0];
