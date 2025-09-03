@@ -1,0 +1,2 @@
+# Configuration notes
+# Sensitive information has been removed for security purposes
