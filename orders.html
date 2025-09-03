@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الطلبات - مطبعة آياز</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-header">
+                <a href="index.html" class="back-btn">
+                    <i data-lucide="arrow-right"></i>
+                </a>
+                <h2>الطلبات</h2>
+                <a href="new-order.html" class="add-btn">
+                    <i data-lucide="plus"></i>
+                </a>
+            </div>
+            
+            <!-- Search Section -->
+            <div class="search-container">
+                <div class="search-row">
+                    <div class="search-group">
+                        <input type="text" id="searchNumber" placeholder="بحث برقم الطلبية">
+                        <i data-lucide="hash"></i>
+                    </div>
+                    <div class="search-group">
+                        <input type="text" id="searchGeneral" placeholder="بحث عام">
+                        <i data-lucide="search"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Grid -->
+            <div class="orders-grid" id="ordersGrid">
+                <!-- Order Card 1 -->
+                <div class="order-card" data-order="ORD-001" data-customer="أحمد محمد" data-type="بطاقات عمل">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-001</div>
+                        <div class="order-status new">جديدة</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>أحمد محمد</h4>
+                        <p class="order-type">بطاقات عمل</p>
+                        <p class="order-details">1000 بطاقة عمل ملونة</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">250 دولار</div>
+                        <div class="order-date">2024-01-15</div>
+                    </div>
+                </div>
+                
+                <!-- Order Card 2 -->
+                <div class="order-card" data-order="ORD-002" data-customer="فاطمة علي" data-type="فلايرز">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-002</div>
+                        <div class="order-status in-progress">قيد التنفيذ</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>فاطمة علي</h4>
+                        <p class="order-type">فلايرز</p>
+                        <p class="order-details">500 فلاير إعلاني A4</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">150,000 ليرة</div>
+                        <div class="order-date">2024-01-14</div>
+                    </div>
+                </div>
+                
+                <!-- Order Card 3 -->
+                <div class="order-card" data-order="ORD-003" data-customer="عمر خالد" data-type="بروشورات">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-003</div>
+                        <div class="order-status delivered">تم التسليم</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>عمر خالد</h4>
+                        <p class="order-type">بروشورات</p>
+                        <p class="order-details">200 بروشور ثلاثي الطي</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">180 دولار</div>
+                        <div class="order-date">2024-01-13</div>
+                    </div>
+                </div>
+                
+                <!-- Order Card 4 -->
+                <div class="order-card" data-order="ORD-004" data-customer="سارة أحمد" data-type="لافتات">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-004</div>
+                        <div class="order-status cancelled">ملغاة</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>سارة أحمد</h4>
+                        <p class="order-type">لافتات</p>
+                        <p class="order-details">لافتة إعلانية كبيرة</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">300 دولار</div>
+                        <div class="order-date">2024-01-12</div>
+                    </div>
+                </div>
+                
+                <!-- Order Card 5 -->
+                <div class="order-card" data-order="ORD-005" data-customer="محمد حسن" data-type="كتب">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-005</div>
+                        <div class="order-status new">جديدة</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>محمد حسن</h4>
+                        <p class="order-type">كتب ومجلات</p>
+                        <p class="order-details">كتاب 100 صفحة</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">120,000 ليرة</div>
+                        <div class="order-date">2024-01-11</div>
+                    </div>
+                </div>
+                
+                <!-- Order Card 6 -->
+                <div class="order-card" data-order="ORD-006" data-customer="نور الدين" data-type="بطاقات عمل">
+                    <div class="order-header">
+                        <div class="order-number">#ORD-006</div>
+                        <div class="order-status in-progress">قيد التنفيذ</div>
+                    </div>
+                    <div class="order-info">
+                        <h4>نور الدين</h4>
+                        <p class="order-type">بطاقات عمل</p>
+                        <p class="order-details">500 بطاقة عمل فاخرة</p>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-cost">200 دولار</div>
+                        <div class="order-date">2024-01-10</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i data-lucide="home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i data-lucide="bar-chart-3"></i>
+                <span>التقارير</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i data-lucide="settings"></i>
+                <span>الإعدادات</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

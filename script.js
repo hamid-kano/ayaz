@@ -434,11 +434,50 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Orders search functionality
+function initializeOrdersSearch() {
+    const searchNumber = document.getElementById('searchNumber');
+    const searchGeneral = document.getElementById('searchGeneral');
+    
+    if (searchNumber) {
+        searchNumber.addEventListener('input', filterOrders);
+    }
+    
+    if (searchGeneral) {
+        searchGeneral.addEventListener('input', filterOrders);
+    }
+}
+
+function filterOrders() {
+    const searchNumber = document.getElementById('searchNumber')?.value.toLowerCase() || '';
+    const searchGeneral = document.getElementById('searchGeneral')?.value.toLowerCase() || '';
+    const orderCards = document.querySelectorAll('.order-card');
+    
+    orderCards.forEach(card => {
+        const orderNumber = card.dataset.order.toLowerCase();
+        const customerName = card.dataset.customer.toLowerCase();
+        const orderType = card.dataset.type.toLowerCase();
+        
+        const matchesNumber = orderNumber.includes(searchNumber);
+        const matchesGeneral = customerName.includes(searchGeneral) || 
+                              orderType.includes(searchGeneral) || 
+                              orderNumber.includes(searchGeneral);
+        
+        if ((searchNumber === '' || matchesNumber) && 
+            (searchGeneral === '' || matchesGeneral)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
 // Initialize filters and audio recorder when page loads
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initializeFilters();
         initializeAudioRecorder();
+        initializeOrdersSearch();
         
         // Set current date
         const today = new Date().toISOString().split('T')[0];

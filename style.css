@@ -282,6 +282,11 @@ body {
     color: white;
 }
 
+.orders .menu-icon {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+}
+
 .debts-on-us .menu-icon {
     background: linear-gradient(135deg, #be185d 0%, #9333ea 100%);
     color: white;
@@ -600,6 +605,161 @@ body {
     padding: 5px 8px;
     cursor: pointer;
     font-size: 12px;
+}
+
+/* Search Container */
+.search-container {
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.search-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.search-group {
+    position: relative;
+}
+
+.search-group input {
+    width: 100%;
+    padding: 15px 45px 15px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', sans-serif;
+}
+
+.search-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-group i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Orders Grid */
+.orders-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.order-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.order-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.order-status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.order-status.new {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.order-status.in-progress {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.order-status.delivered {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.order-status.cancelled {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.order-info h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.order-type {
+    font-size: 14px;
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.order-details {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.order-cost {
+    font-size: 16px;
+    font-weight: 700;
+    color: #059669;
+}
+
+.order-date {
+    font-size: 12px;
+    color: #a0aec0;
+}
+
+@media (min-width: 768px) {
+    .orders-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 375px) {
+    .search-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 .form-actions {
