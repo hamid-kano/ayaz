@@ -529,6 +529,76 @@ body {
     transform: scale(1.1);
 }
 
+/* Debts On Us Grid */
+.debts-on-us-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.debt-on-us-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid #dc2626;
+}
+
+.debt-on-us-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.debt-on-us-card .debt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.debt-on-us-card .debt-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.debt-on-us-card .debt-status.debt {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.debt-on-us-card .debt-supplier {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.debt-on-us-card .debt-details {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.debt-on-us-card .debt-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 8px;
+}
+
+.debt-on-us-card .debt-date {
+    font-size: 12px;
+    color: #a0aec0;
+}
+
 .notification-item {
     display: flex;
     gap: 12px;
