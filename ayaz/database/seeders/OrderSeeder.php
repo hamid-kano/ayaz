@@ -1,0 +1,101 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Carbon\Carbon;
+
+class OrderSeeder extends Seeder
+{
+    public function run()
+    {
+        $users = User::all();
+        
+        $orders = [
+            [
+                'order_number' => 'ORD-001',
+                'order_date' => Carbon::now()->subDays(5),
+                'customer_name' => 'أحمد محمد',
+                'order_type' => 'business-cards',
+                'order_details' => '1000 بطاقة عمل ملونة مع تصميم خاص',
+                'cost' => 250.00,
+                'currency' => 'usd',
+                'status' => 'new',
+                'delivery_date' => Carbon::now()->addDays(3),
+                'reviewer_id' => $users->first()->id,
+                'executor_id' => $users->skip(1)->first()->id,
+            ],
+            [
+                'order_number' => 'ORD-002',
+                'order_date' => Carbon::now()->subDays(4),
+                'customer_name' => 'فاطمة علي',
+                'order_type' => 'flyers',
+                'order_details' => '500 فلاير إعلاني A4 ملون',
+                'cost' => 150000.00,
+                'currency' => 'syp',
+                'status' => 'in-progress',
+                'delivery_date' => Carbon::now()->addDays(2),
+                'reviewer_id' => $users->skip(1)->first()->id,
+                'executor_id' => $users->last()->id,
+            ],
+            [
+                'order_number' => 'ORD-003',
+                'order_date' => Carbon::now()->subDays(3),
+                'customer_name' => 'عمر خالد',
+                'order_type' => 'brochures',
+                'order_details' => '200 بروشور ثلاثي الطي',
+                'cost' => 180.00,
+                'currency' => 'usd',
+                'status' => 'delivered',
+                'delivery_date' => Carbon::now()->subDay(),
+                'reviewer_id' => $users->last()->id,
+                'executor_id' => $users->first()->id,
+            ],
+            [
+                'order_number' => 'ORD-004',
+                'order_date' => Carbon::now()->subDays(2),
+                'customer_name' => 'سارة أحمد',
+                'order_type' => 'banners',
+                'order_details' => 'لافتة إعلانية كبيرة 3x2 متر',
+                'cost' => 300.00,
+                'currency' => 'usd',
+                'status' => 'cancelled',
+                'delivery_date' => Carbon::now()->addDays(5),
+                'reviewer_id' => $users->first()->id,
+                'executor_id' => $users->skip(1)->first()->id,
+            ],
+            [
+                'order_number' => 'ORD-005',
+                'order_date' => Carbon::now()->subDay(),
+                'customer_name' => 'محمد حسن',
+                'order_type' => 'books',
+                'order_details' => 'كتاب 100 صفحة مع غلاف ملون',
+                'cost' => 120000.00,
+                'currency' => 'syp',
+                'status' => 'new',
+                'delivery_date' => Carbon::now()->addDays(7),
+                'reviewer_id' => $users->skip(1)->first()->id,
+                'executor_id' => $users->last()->id,
+            ],
+            [
+                'order_number' => 'ORD-006',
+                'order_date' => Carbon::now(),
+                'customer_name' => 'نور الدين',
+                'order_type' => 'business-cards',
+                'order_details' => '500 بطاقة عمل فاخرة مع طباعة ذهبية',
+                'cost' => 200.00,
+                'currency' => 'usd',
+                'status' => 'in-progress',
+                'delivery_date' => Carbon::now()->addDays(4),
+                'reviewer_id' => $users->last()->id,
+                'executor_id' => $users->first()->id,
+            ],
+        ];
+
+        foreach ($orders as $orderData) {
+            Order::create($orderData);
+        }
+    }
+}
