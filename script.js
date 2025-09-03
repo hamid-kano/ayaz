@@ -436,21 +436,15 @@ document.addEventListener('click', function(e) {
 
 // Orders search functionality
 function initializeOrdersSearch() {
-    const searchNumber = document.getElementById('searchNumber');
-    const searchGeneral = document.getElementById('searchGeneral');
+    const searchOrders = document.getElementById('searchOrders');
     
-    if (searchNumber) {
-        searchNumber.addEventListener('input', filterOrders);
-    }
-    
-    if (searchGeneral) {
-        searchGeneral.addEventListener('input', filterOrders);
+    if (searchOrders) {
+        searchOrders.addEventListener('input', filterOrders);
     }
 }
 
 function filterOrders() {
-    const searchNumber = document.getElementById('searchNumber')?.value.toLowerCase() || '';
-    const searchGeneral = document.getElementById('searchGeneral')?.value.toLowerCase() || '';
+    const searchTerm = document.getElementById('searchOrders')?.value.toLowerCase() || '';
     const orderCards = document.querySelectorAll('.order-card');
     
     orderCards.forEach(card => {
@@ -458,17 +452,11 @@ function filterOrders() {
         const customerName = card.dataset.customer.toLowerCase();
         const orderType = card.dataset.type.toLowerCase();
         
-        const matchesNumber = orderNumber.includes(searchNumber);
-        const matchesGeneral = customerName.includes(searchGeneral) || 
-                              orderType.includes(searchGeneral) || 
-                              orderNumber.includes(searchGeneral);
+        const matches = orderNumber.includes(searchTerm) || 
+                       customerName.includes(searchTerm) || 
+                       orderType.includes(searchTerm);
         
-        if ((searchNumber === '' || matchesNumber) && 
-            (searchGeneral === '' || matchesGeneral)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
+        card.style.display = matches || searchTerm === '' ? 'block' : 'none';
     });
 }
 

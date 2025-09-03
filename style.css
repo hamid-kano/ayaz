@@ -613,11 +613,7 @@ body {
     margin-bottom: 20px;
 }
 
-.search-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+
 
 .search-group {
     position: relative;
@@ -753,11 +749,7 @@ body {
 
 
 
-@media (max-width: 375px) {
-    .search-row {
-        grid-template-columns: 1fr;
-    }
-}
+
 
 .form-actions {
     display: flex;
