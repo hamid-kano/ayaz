@@ -281,14 +281,91 @@ function clearForm() {
     showNotification('تم مسح النموذج');
 }
 
-function saveOrder() {
-    const customerName = document.getElementById('customerName').value;
-    const customerPhone = document.getElementById('customerPhone').value;
-    const printType = document.getElementById('printType').value;
-    const quantity = document.getElementById('quantity').value;
-    const amount = document.getElementById('amount').value;
+// Audio recording functionality
+let mediaRecorder;
+let audioChunks = [];
+let recordingCount = 0;
+
+function initializeAudioRecorder() {
+    const recordBtn = document.getElementById('recordBtn');
+    if (!recordBtn) return;
     
-    if (!customerName || !customerPhone || !printType || !quantity || !amount) {
+    recordBtn.addEventListener('click', toggleRecording);
+}
+
+function toggleRecording() {
+    const recordBtn = document.getElementById('recordBtn');
+    
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        recordBtn.innerHTML = '<i data-lucide="mic"></i> بدء التسجيل';
+        recordBtn.classList.remove('recording');
+    } else {
+        startRecording();
+    }
+}
+
+function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+            
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                addAudioToList(audioBlob);
+                stream.getTracks().forEach(track => track.stop());
+            };
+            
+            mediaRecorder.start();
+            
+            const recordBtn = document.getElementById('recordBtn');
+            recordBtn.innerHTML = '<i data-lucide="square"></i> إيقاف التسجيل';
+            recordBtn.classList.add('recording');
+            
+            lucide.createIcons();
+        })
+        .catch(err => {
+            showNotification('لا يمكن الوصول للميكروفون');
+        });
+}
+
+function addAudioToList(audioBlob) {
+    recordingCount++;
+    const audioList = document.getElementById('audioList');
+    const audioItem = document.createElement('div');
+    audioItem.className = 'audio-item';
+    
+    const audioUrl = URL.createObjectURL(audioBlob);
+    
+    audioItem.innerHTML = `
+        <span>تسجيل ${recordingCount}</span>
+        <audio controls src="${audioUrl}"></audio>
+        <button type="button" class="delete-audio" onclick="deleteAudio(this)">حذف</button>
+    `;
+    
+    audioList.appendChild(audioItem);
+}
+
+function deleteAudio(button) {
+    button.parentElement.remove();
+}
+
+function saveOrder() {
+    // Generate order number
+    const orderNumber = 'ORD-' + Date.now();
+    document.getElementById('orderNumber').value = orderNumber;
+    
+    const customerName = document.getElementById('customerName').value;
+    const orderType = document.getElementById('orderType').value;
+    const orderDetails = document.getElementById('orderDetails').value;
+    const orderCost = document.getElementById('orderCost').value;
+    
+    if (!customerName || !orderType || !orderDetails || !orderCost) {
         showNotification('يرجى ملء جميع الحقول المطلوبة');
         return;
     }
@@ -296,8 +373,7 @@ function saveOrder() {
     showNotification('تم حفظ الطلبية بنجاح');
     
     setTimeout(() => {
-        navigateToPage('home');
-        clearForm();
+        window.location.href = 'index.html';
     }, 1500);
 }
 
@@ -358,10 +434,18 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Initialize filters when page loads
+// Initialize filters and audio recorder when page loads
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initializeFilters();
+        initializeAudioRecorder();
+        
+        // Set current date
+        const today = new Date().toISOString().split('T')[0];
+        const orderDateField = document.getElementById('orderDate');
+        if (orderDateField) {
+            orderDateField.value = today;
+        }
     }, 2100);
 });
 

@@ -526,6 +526,82 @@ body {
     resize: vertical;
 }
 
+.form-group input[type="file"] {
+    padding: 10px;
+    border: 2px dashed #e2e8f0;
+    background: #f8f9fa;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* Audio Recorder */
+.audio-recorder {
+    margin-bottom: 20px;
+}
+
+.record-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', sans-serif;
+    margin-bottom: 15px;
+}
+
+.record-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.record-btn.recording {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    animation: pulse 1.5s infinite;
+}
+
+.audio-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.audio-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.audio-item audio {
+    flex: 1;
+    height: 35px;
+}
+
+.delete-audio {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
 .form-actions {
     display: flex;
     gap: 15px;

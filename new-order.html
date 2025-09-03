@@ -24,33 +24,32 @@
             </div>
             
             <div class="form-container">
-                <!-- Customer Info Section -->
+                <!-- Order Info Section -->
                 <div class="section-header">
-                    <i data-lucide="user"></i>
-                    <h3>بيانات العميل</h3>
+                    <i data-lucide="file-text"></i>
+                    <h3>بيانات الطلبية</h3>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>اسم العميل</label>
-                        <input type="text" id="customerName" placeholder="أدخل اسم العميل" required>
+                        <label>رقم الطلبية</label>
+                        <input type="text" id="orderNumber" placeholder="سيتم إنشاؤه تلقائياً" readonly>
                     </div>
                     <div class="form-group">
-                        <label>رقم الهاتف</label>
-                        <input type="tel" id="customerPhone" placeholder="09XX XXX XXX" required>
+                        <label>التاريخ</label>
+                        <input type="date" id="orderDate" required>
                     </div>
-                </div>
-                
-                <!-- Order Details Section -->
-                <div class="section-header">
-                    <i data-lucide="clipboard-list"></i>
-                    <h3>تفاصيل الطلبية</h3>
                 </div>
                 
                 <div class="form-group">
-                    <label>نوع الطباعة</label>
-                    <select id="printType" required>
-                        <option value="">اختر نوع الطباعة</option>
+                    <label>اسم العميل</label>
+                    <input type="text" id="customerName" placeholder="أدخل اسم العميل" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>النوع</label>
+                    <select id="orderType" required>
+                        <option value="">اختر نوع الطلبية</option>
                         <option value="business-cards">بطاقات عمل</option>
                         <option value="flyers">فلايرز</option>
                         <option value="brochures">بروشورات</option>
@@ -60,51 +59,92 @@
                     </select>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>الكمية</label>
-                        <input type="number" id="quantity" placeholder="عدد القطع" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>الحجم</label>
-                        <select id="size" required>
-                            <option value="">اختر الحجم</option>
-                            <option value="a4">A4</option>
-                            <option value="a3">A3</option>
-                            <option value="a5">A5</option>
-                            <option value="custom">حجم مخصص</option>
-                        </select>
-                    </div>
-                </div>
-                
                 <div class="form-group">
-                    <label>وصف الطلبية</label>
-                    <textarea id="orderDescription" placeholder="أدخل تفاصيل إضافية عن الطلبية" rows="3"></textarea>
-                </div>
-                
-                <!-- Pricing Section -->
-                <div class="section-header">
-                    <i data-lucide="dollar-sign"></i>
-                    <h3>التسعير</h3>
+                    <label>التفاصيل</label>
+                    <textarea id="orderDetails" placeholder="أدخل تفاصيل الطلبية" rows="3" required></textarea>
                 </div>
                 
                 <div class="form-row">
+                    <div class="form-group">
+                        <label>الكلفة</label>
+                        <input type="number" id="orderCost" placeholder="أدخل الكلفة" min="0" step="0.01" required>
+                    </div>
                     <div class="form-group">
                         <label>العملة</label>
                         <select id="currency" required>
-                            <option value="syp">ليرة سورية</option>
-                            <option value="usd">دولار أمريكي</option>
+                            <option value="syp">سوري</option>
+                            <option value="usd">دولار</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label>المبلغ</label>
-                        <input type="number" id="amount" placeholder="أدخل المبلغ" min="0" step="0.01" required>
                     </div>
                 </div>
                 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>حالة الطلبية</label>
+                        <select id="orderStatus" required>
+                            <option value="new">جديدة</option>
+                            <option value="in-progress">قيد التنفيذ</option>
+                            <option value="delivered">تم التسليم</option>
+                            <option value="cancelled">ملغاة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>تاريخ التسليم</label>
+                        <input type="date" id="deliveryDate" required>
+                    </div>
+                </div>
+                
+                <!-- Attachments Section -->
+                <div class="section-header">
+                    <i data-lucide="paperclip"></i>
+                    <h3>المرفقات</h3>
+                </div>
+                
                 <div class="form-group">
-                    <label>تاريخ التسليم</label>
-                    <input type="date" id="deliveryDate" required>
+                    <label>رفع ملفات</label>
+                    <input type="file" id="attachments" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd">
+                    <small>يمكن رفع ملفات PDF, Word, صور, Excel, Photoshop</small>
+                </div>
+                
+                <!-- Audio Section -->
+                <div class="section-header">
+                    <i data-lucide="mic"></i>
+                    <h3>مقاطع صوتية</h3>
+                </div>
+                
+                <div class="audio-recorder">
+                    <button type="button" class="record-btn" id="recordBtn">
+                        <i data-lucide="mic"></i>
+                        بدء التسجيل
+                    </button>
+                    <div class="audio-list" id="audioList"></div>
+                </div>
+                
+                <!-- Users Section -->
+                <div class="section-header">
+                    <i data-lucide="users"></i>
+                    <h3>المستخدمين</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>مدقق الطلب</label>
+                        <select id="reviewer" required>
+                            <option value="">اختر مدقق</option>
+                            <option value="user1">أحمد محمد</option>
+                            <option value="user2">فاطمة علي</option>
+                            <option value="user3">عمر خالد</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المنفذ للطلبية</label>
+                        <select id="executor" required>
+                            <option value="">اختر منفذ</option>
+                            <option value="user1">أحمد محمد</option>
+                            <option value="user2">فاطمة علي</option>
+                            <option value="user3">عمر خالد</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <!-- Action Buttons -->
