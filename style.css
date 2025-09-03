@@ -952,6 +952,93 @@ body {
     color: #6c757d;
 }
 
+/* Debts Grid */
+.debts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.debt-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid #f59e0b;
+}
+
+.debt-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.debt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.debt-order {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.debt-link {
+    width: 35px;
+    height: 35px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.debt-link:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: scale(1.05);
+}
+
+.debt-customer {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.debt-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.debt-total {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.debt-paid {
+    font-size: 14px;
+    color: #059669;
+}
+
+.debt-remaining {
+    font-size: 18px;
+    font-weight: 700;
+    color: #dc2626;
+    padding: 8px 12px;
+    background: rgba(220, 38, 38, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
 @media (max-width: 375px) {
     .info-grid {
         grid-template-columns: 1fr;
