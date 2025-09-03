@@ -20,9 +20,9 @@
                     <i data-lucide="arrow-right"></i>
                 </a>
                 <h2>المقبوضات</h2>
-                <button class="add-btn">
+                <a href="add-receipt.html" class="add-btn">
                     <i data-lucide="plus"></i>
-                </button>
+                </a>
             </div>
             <div class="stats-cards">
                 <div class="stat-card">
@@ -35,17 +35,48 @@
                     </div>
                 </div>
             </div>
-            <div class="list-container">
-                <div class="list-item">
-                    <div class="item-icon receipts">
-                        <i data-lucide="banknote"></i>
+            
+            <div class="receipts-grid">
+                <!-- Receipt Card 1 -->
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <div class="receipt-order">#ORD-001</div>
+                        <a href="view-order.html" class="receipt-link">
+                            <i data-lucide="external-link"></i>
+                        </a>
                     </div>
-                    <div class="item-content">
-                        <h4>أحمد محمد</h4>
-                        <p>دفعة من طلبية #1234</p>
-                        <span class="amount positive">+250000 ليرة</span>
+                    <div class="receipt-info">
+                        <div class="receipt-amount">250 دولار</div>
+                        <div class="receipt-date">2024-01-15</div>
                     </div>
-                    <div class="item-date">اليوم</div>
+                </div>
+                
+                <!-- Receipt Card 2 -->
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <div class="receipt-order">#ORD-002</div>
+                        <a href="view-order.html" class="receipt-link">
+                            <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                    <div class="receipt-info">
+                        <div class="receipt-amount">150,000 ليرة</div>
+                        <div class="receipt-date">2024-01-14</div>
+                    </div>
+                </div>
+                
+                <!-- Receipt Card 3 -->
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <div class="receipt-order">#ORD-003</div>
+                        <a href="view-order.html" class="receipt-link">
+                            <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                    <div class="receipt-info">
+                        <div class="receipt-amount">180 دولار</div>
+                        <div class="receipt-date">2024-01-13</div>
+                    </div>
                 </div>
             </div>
         </main>
