@@ -1039,6 +1039,104 @@ body {
     text-align: center;
 }
 
+/* Purchases Grid */
+.purchases-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.purchase-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.purchase-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.purchase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.purchase-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.purchase-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.purchase-status.cash {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.purchase-status.debt {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.purchase-info {
+    margin-bottom: 15px;
+}
+
+.purchase-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 8px;
+}
+
+.purchase-date {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.purchase-supplier {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.purchase-details {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.4;
+}
+
+.purchase-attachments {
+    padding-top: 15px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.attachment-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #667eea;
+    font-size: 14px;
+}
+
+.attachment-count i {
+    font-size: 16px;
+}
+
 @media (max-width: 375px) {
     .info-grid {
         grid-template-columns: 1fr;
