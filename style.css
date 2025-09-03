@@ -650,8 +650,8 @@ body {
 
 /* Orders Grid */
 .orders-grid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
     padding: 0 20px;
 }
@@ -663,6 +663,7 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     cursor: pointer;
+    width: 100%;
 }
 
 .order-card:hover {
@@ -750,11 +751,7 @@ body {
     color: #a0aec0;
 }
 
-@media (min-width: 768px) {
-    .orders-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
+
 
 @media (max-width: 375px) {
     .search-row {
