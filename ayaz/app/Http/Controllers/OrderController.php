@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Attachment;
+use App\Models\AudioRecording;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -117,5 +120,42 @@ class OrderController extends Controller
         $totalSyp = $orders->where('currency', 'syp')->sum('remaining_amount');
 
         return view('orders.debts', compact('orders', 'totalUsd', 'totalSyp'));
+    }
+
+    public function uploadAttachment(Request $request, Order $order)
+    {
+        $request->validate([
+            'attachments.*' => 'required|file|max:10240'
+        ]);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments', 'public');
+                $order->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'file_type' => $file->getClientMimeType(),
+                    'file_size' => $file->getSize(),
+                ]);
+            }
+        }
+
+        return redirect()->route('orders.show', $order)->with('success', 'تم رفع المرفقات بنجاح');
+    }
+
+    public function deleteAttachment(Attachment $attachment)
+    {
+        Storage::disk('public')->delete($attachment->file_path);
+        $attachment->delete();
+        
+        return back()->with('success', 'تم حذف المرفق بنجاح');
+    }
+
+    public function deleteAudio(AudioRecording $audio)
+    {
+        Storage::disk('public')->delete($audio->file_path);
+        $audio->delete();
+        
+        return back()->with('success', 'تم حذف التسجيل بنجاح');
     }
 }

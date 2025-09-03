@@ -30,4 +30,9 @@ Route::middleware('auth')->group(function () {
     // Purchases
     Route::resource('purchases', PurchaseController::class);
     Route::get('/debts-on-us', [PurchaseController::class, 'debts'])->name('purchases.debts');
+    
+    // Attachments
+    Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');
+    Route::delete('/attachments/{attachment}', [OrderController::class, 'deleteAttachment'])->name('attachments.destroy');
+    Route::delete('/audio/{audio}', [OrderController::class, 'deleteAudio'])->name('audio.destroy');
 });
