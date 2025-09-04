@@ -14,6 +14,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('js/lucide.js') }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     
     @stack('styles')
 </head>
@@ -82,6 +84,9 @@
             @yield('content')
         </main>
 
+        <!-- Delete Modal -->
+        @include('components.delete-modal')
+
         @auth
         <!-- Simple Bottom Navigation -->
         <nav class="modern-bottom-nav">
@@ -128,6 +133,7 @@
         });
     </script>
     
+    <script src="{{ asset('js/delete-modal.js') }}"></script>
     @stack('scripts')
 </body>
 </html>
