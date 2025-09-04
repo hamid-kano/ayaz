@@ -4,17 +4,26 @@
 
 @section('content')
 <div class="page-header">
-    <h2>التقارير والإحصائيات</h2>
-    <div class="report-filters">
+    <a href="{{ route('dashboard') }}" class="back-btn">
+        <i data-lucide="arrow-right"></i>
+    </a>
+    <h2>التقارير</h2>
+    <button class="export-btn">
+        <i data-lucide="download"></i>
+    </button>
+</div>
+
+<!-- Filters Section -->
+<div class="search-container">
+    <div class="search-group">
         <select class="filter-select">
             <option>آخر 30 يوم</option>
             <option>آخر 3 أشهر</option>
             <option>آخر 6 أشهر</option>
             <option>السنة الحالية</option>
         </select>
-        <button class="export-btn">
-            <i data-lucide="download"></i>
-            تصدير PDF
+        <button class="filter-btn">
+            <i data-lucide="filter"></i>
         </button>
     </div>
 </div>
@@ -136,34 +145,91 @@
 <style>
 .page-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 16px;
     margin-bottom: 24px;
 }
 
-.report-filters {
+.back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f3f4f6;
     display: flex;
-    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.page-header h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.export-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #10b981;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.export-btn:hover {
+    background: #059669;
+}
+
+.search-container {
+    margin-bottom: 24px;
+}
+
+.search-group {
+    display: flex;
+    gap: 8px;
     align-items: center;
 }
 
 .filter-select {
-    padding: 8px 12px;
+    flex: 1;
+    padding: 12px 16px;
     border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border-radius: 12px;
     background: white;
+    font-size: 16px;
+    color: #374151;
 }
 
-.export-btn {
-    background: #10b981;
+.filter-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #3b82f6;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background: #2563eb;
 }
 
 .stats-grid {
@@ -357,14 +423,8 @@
 }
 
 @media (max-width: 768px) {
-    .page-header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: stretch;
-    }
-    
-    .report-filters {
-        justify-content: center;
+    .page-header h2 {
+        font-size: 20px;
     }
     
     .stats-grid {
@@ -439,9 +499,13 @@
         text-align: center;
     }
     
-    .export-btn {
-        width: 100%;
-        justify-content: center;
+    .search-group {
+        gap: 12px;
+    }
+    
+    .filter-select {
+        font-size: 14px;
+        padding: 10px 12px;
     }
 }
 </style>
