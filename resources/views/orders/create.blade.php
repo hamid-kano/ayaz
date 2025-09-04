@@ -12,13 +12,6 @@
 
 <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="form-container">
     @csrf
-    
-    <!-- Order Info Section -->
-    <div class="section-header">
-        <i data-lucide="file-text"></i>
-        <h3>بيانات الطلبية</h3>
-    </div>
-    
     <div class="form-group">
         <label>اسم العميل</label>
         <input type="text" name="customer_name" value="{{ old('customer_name') }}" required>

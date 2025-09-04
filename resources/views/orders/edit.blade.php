@@ -13,13 +13,6 @@
 <form action="{{ route('orders.update', $order) }}" method="POST" class="form-container">
     @csrf
     @method('PUT')
-    
-    <!-- Order Info Section -->
-    <div class="section-header">
-        <i data-lucide="file-text"></i>
-        <h3>بيانات الطلبية</h3>
-    </div>
-    
     <div class="form-row">
         <div class="form-group">
             <label>رقم الطلبية</label>

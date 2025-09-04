@@ -14,12 +14,6 @@
 </div>
 
 <div class="view-container">
-    <!-- Order Info Section -->
-    <div class="section-header">
-        <i data-lucide="file-text"></i>
-        <h3>بيانات الطلبية</h3>
-    </div>
-    
     <div class="info-grid">
         <div class="info-item">
             <label>رقم الطلبية</label>
