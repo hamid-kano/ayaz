@@ -53,6 +53,16 @@
             <h3>ديون علينا</h3>
             <p>المبالغ المستحقة علينا</p>
         </a>
+
+        @if(auth()->user()->isAdmin())
+        <a href="{{ route('users.index') }}" class="menu-item">
+            <div class="menu-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <i data-lucide="users"></i>
+            </div>
+            <h3>إدارة المستخدمين</h3>
+            <p>إضافة وتعديل المستخدمين</p>
+        </a>
+        @endif
     </div>
 </div>
 @endsection

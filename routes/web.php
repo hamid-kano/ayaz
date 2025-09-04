@@ -7,6 +7,7 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 // Authentication Routes
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
     
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    
+    // Users (Admin only)
+    Route::middleware('admin')->group(function () {
+        Route::resource('users', UserController::class);
+    });
     
     // Attachments
     Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');

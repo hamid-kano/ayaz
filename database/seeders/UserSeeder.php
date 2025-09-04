@@ -11,21 +11,27 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'أحمد محمد',
+            'name' => 'المدير العام',
             'email' => 'admin@ayaz.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
+            'is_active' => true,
         ]);
 
         User::create([
             'name' => 'فاطمة علي',
             'email' => 'fatima@ayaz.com',
             'password' => Hash::make('password'),
+            'role' => 'user',
+            'is_active' => true,
         ]);
 
         User::create([
             'name' => 'عمر خالد',
             'email' => 'omar@ayaz.com',
             'password' => Hash::make('password'),
+            'role' => 'user',
+            'is_active' => true,
         ]);
     }
 }
