@@ -37,17 +37,32 @@
         <div class="debt-card">
             <div class="debt-header">
                 <div class="debt-order">#{{ $order->order_number }}</div>
-                <a href="{{ route('orders.show', $order) }}" class="debt-link">
-                    <i data-lucide="external-link"></i>
-                </a>
+                <div class="debt-actions">
+                    <a href="{{ route('receipts.create', ['order_id' => $order->id]) }}" class="add-receipt-btn" title="إضافة سند قبض">
+                        <i data-lucide="plus"></i>
+                    </a>
+                    <a href="{{ route('orders.show', $order) }}" class="debt-link" title="عرض التفاصيل">
+                        <i data-lucide="external-link"></i>
+                    </a>
+                </div>
             </div>
             <div class="debt-info">
                 <div class="debt-customer">{{ $order->customer_name }}</div>
+                <div class="debt-type">{{ $order->order_type }}</div>
                 <div class="debt-details">
-                    <span class="debt-total">إجمالي: {{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
-                    <span class="debt-paid">مدفوع: {{ number_format($order->total_paid, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                    <div class="debt-row">
+                        <span class="debt-label">إجمالي:</span>
+                        <span class="debt-total">{{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                    </div>
+                    <div class="debt-row">
+                        <span class="debt-label">مدفوع:</span>
+                        <span class="debt-paid">{{ number_format($order->total_paid, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                    </div>
                 </div>
-                <div class="debt-remaining">متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</div>
+                <div class="debt-remaining">
+                    <span class="remaining-label">متبقي:</span>
+                    <span class="remaining-amount">{{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                </div>
             </div>
         </div>
     @empty

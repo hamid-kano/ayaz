@@ -23,10 +23,10 @@
     <div class="info-grid">
         <div class="info-item">
             <label>رقم الطلبية</label>
-            <span>{{ $order->order_number }}</span>
+            <span>#{{ $order->order_number }}</span>
         </div>
         <div class="info-item">
-            <label>التاريخ</label>
+            <label>تاريخ الطلب</label>
             <span>{{ $order->order_date->format('Y-m-d') }}</span>
         </div>
         <div class="info-item">
@@ -34,16 +34,12 @@
             <span>{{ $order->customer_name }}</span>
         </div>
         <div class="info-item">
-            <label>النوع</label>
+            <label>نوع الطلبية</label>
             <span>{{ $order->order_type }}</span>
-        </div>
-        <div class="info-item full-width">
-            <label>التفاصيل</label>
-            <span>{{ $order->order_details }}</span>
         </div>
         <div class="info-item">
             <label>الكلفة</label>
-            <span>{{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+            <span class="cost-value">{{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
         </div>
         <div class="info-item">
             <label>حالة الطلبية</label>
@@ -68,6 +64,10 @@
             <label>المنفذ</label>
             <span>{{ $order->executor->name ?? 'غير محدد' }}</span>
         </div>
+        <div class="info-item full-width">
+            <label>تفاصيل الطلبية</label>
+            <span class="details-text">{{ $order->order_details }}</span>
+        </div>
     </div>
     
     <!-- Attachments Section -->
@@ -77,21 +77,34 @@
     </div>
     
     <div class="attachments-list">
-        @foreach($order->attachments as $attachment)
+        @forelse($order->attachments as $attachment)
             <div class="attachment-item">
                 <div class="attachment-info">
-                    <i data-lucide="{{ $attachment->file_icon }}"></i>
-                    <span>{{ $attachment->file_name }}</span>
+                    <i data-lucide="file"></i>
+                    <div class="attachment-details">
+                        <span class="attachment-name">{{ $attachment->file_name }}</span>
+                        <small class="attachment-size">{{ number_format($attachment->file_size / 1024, 1) }} KB</small>
+                    </div>
                 </div>
-                <form method="POST" action="{{ route('attachments.destroy', $attachment) }}" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete-attachment" onclick="return confirm('هل أنت متأكد من حذف هذا المرفق؟')">
-                        <i data-lucide="trash-2"></i>
-                    </button>
-                </form>
+                <div class="attachment-actions">
+                    <a href="{{ Storage::url($attachment->file_path) }}" class="view-attachment" target="_blank" title="عرض">
+                        <i data-lucide="eye"></i>
+                    </a>
+                    <form method="POST" action="{{ route('attachments.destroy', $attachment) }}" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="delete-attachment" onclick="return confirm('هل أنت متأكد من حذف هذا المرفق؟')" title="حذف">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
-        @endforeach
+        @empty
+            <div class="empty-attachments">
+                <i data-lucide="paperclip"></i>
+                <p>لا توجد مرفقات</p>
+            </div>
+        @endforelse
     </div>
     
     <div class="add-attachment">

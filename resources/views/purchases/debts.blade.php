@@ -41,11 +41,19 @@
             </div>
             <div class="debt-info">
                 <div class="debt-supplier">{{ $purchase->supplier }}</div>
-                <div class="debt-details">{{ $purchase->details }}</div>
-                <div class="debt-amount">
-                    {{ number_format($purchase->amount, 2) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                <div class="debt-details">{{ Str::limit($purchase->details, 80) }}</div>
+                <div class="debt-footer">
+                    <div class="debt-amount">
+                        {{ number_format($purchase->amount, 2) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                    </div>
+                    <div class="debt-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
                 </div>
-                <div class="debt-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
+                @if($purchase->attachments->count() > 0)
+                    <div class="debt-attachments">
+                        <i data-lucide="paperclip"></i>
+                        <span>{{ $purchase->attachments->count() }} مرفقات</span>
+                    </div>
+                @endif
             </div>
         </div>
     @empty
@@ -53,6 +61,10 @@
             <i data-lucide="trending-down"></i>
             <h3>لا توجد ديون</h3>
             <p>جميع المشتريات مدفوعة نقداً</p>
+            <a href="{{ route('purchases.create') }}" class="btn-primary">
+                <i data-lucide="plus"></i>
+                إضافة مشترى
+            </a>
         </div>
     @endforelse
 </div>

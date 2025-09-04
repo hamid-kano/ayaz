@@ -17,7 +17,7 @@
 <div class="search-container">
     <div class="search-group">
         <form method="GET" action="{{ route('orders.index') }}">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في الطلبات (رقم الطلبية، اسم العميل، النوع)">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في الطلبات...">
             <i data-lucide="search"></i>
         </form>
     </div>
@@ -44,16 +44,18 @@
                 <p class="order-details">{{ Str::limit($order->order_details, 50) }}</p>
             </div>
             <div class="order-footer">
-                <div class="order-cost">
-                    {{ number_format($order->cost, 2) }} 
-                    {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                <div class="order-meta">
+                    <div class="order-cost">
+                        {{ number_format($order->cost, 2) }} 
+                        {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                    </div>
+                    <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>
                 </div>
-                <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>
                 <div class="order-actions">
-                    <a href="{{ route('orders.show', $order) }}" class="action-btn details">
+                    <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
                         <i data-lucide="eye"></i>
                     </a>
-                    <a href="{{ route('orders.edit', $order) }}" class="action-btn edit">
+                    <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
                         <i data-lucide="edit-2"></i>
                     </a>
                 </div>

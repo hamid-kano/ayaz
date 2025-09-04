@@ -21,11 +21,14 @@
     
     <div class="form-group">
         <label>رقم الطلبية</label>
-        <select name="order_id" required>
+        <select name="order_id" required id="orderSelect">
             <option value="">اختر رقم الطلبية</option>
             @foreach($orders as $order)
-                <option value="{{ $order->id }}" {{ old('order_id') == $order->id ? 'selected' : '' }}>
-                    {{ $order->order_number }} - {{ $order->customer_name }} 
+                <option value="{{ $order->id }}" 
+                        data-currency="{{ $order->currency }}"
+                        data-remaining="{{ $order->remaining_amount }}"
+                        {{ old('order_id') == $order->id ? 'selected' : '' }}>
+                    #{{ $order->order_number }} - {{ $order->customer_name }} 
                     (متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }})
                 </option>
             @endforeach
@@ -35,17 +38,28 @@
         @enderror
     </div>
     
+    <div class="selected-order-info" id="selectedOrderInfo" style="display: none;">
+        <div class="order-summary">
+            <h4>معلومات الطلبية</h4>
+            <div class="summary-row">
+                <span>المبلغ المتبقي:</span>
+                <span id="remainingAmount" class="remaining-display"></span>
+            </div>
+        </div>
+    </div>
+    
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" value="{{ old('amount') }}" min="0" step="0.01" required>
+            <input type="number" name="amount" id="amountInput" value="{{ old('amount') }}" min="0" step="0.01" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror
+            <small class="form-hint">أدخل المبلغ المقبوض</small>
         </div>
         <div class="form-group">
             <label>العملة</label>
-            <select name="currency" required>
+            <select name="currency" id="currencySelect" required>
                 <option value="syp" {{ old('currency') == 'syp' ? 'selected' : '' }}>ليرة سورية</option>
                 <option value="usd" {{ old('currency') == 'usd' ? 'selected' : '' }}>دولار أمريكي</option>
             </select>
@@ -65,7 +79,7 @@
     
     <div class="form-group">
         <label>ملاحظات (اختياري)</label>
-        <textarea name="notes" rows="3">{{ old('notes') }}</textarea>
+        <textarea name="notes" rows="3" placeholder="أي ملاحظات إضافية...">{{ old('notes') }}</textarea>
         @error('notes')
             <span class="error-message">{{ $message }}</span>
         @enderror
@@ -83,4 +97,56 @@
         </button>
     </div>
 </form>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderSelect = document.getElementById('orderSelect');
+    const currencySelect = document.getElementById('currencySelect');
+    const amountInput = document.getElementById('amountInput');
+    const selectedOrderInfo = document.getElementById('selectedOrderInfo');
+    const remainingAmount = document.getElementById('remainingAmount');
+    
+    orderSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        
+        if (selectedOption.value) {
+            const currency = selectedOption.dataset.currency;
+            const remaining = selectedOption.dataset.remaining;
+            
+            // Update currency select
+            currencySelect.value = currency;
+            
+            // Show order info
+            selectedOrderInfo.style.display = 'block';
+            remainingAmount.textContent = parseFloat(remaining).toFixed(2) + ' ' + (currency === 'usd' ? 'دولار' : 'ليرة');
+            
+            // Set max amount
+            amountInput.max = remaining;
+            amountInput.value = remaining;
+        } else {
+            selectedOrderInfo.style.display = 'none';
+            amountInput.removeAttribute('max');
+            amountInput.value = '';
+        }
+    });
+    
+    // Validate amount doesn't exceed remaining
+    amountInput.addEventListener('input', function() {
+        const selectedOption = orderSelect.options[orderSelect.selectedIndex];
+        if (selectedOption.value) {
+            const remaining = parseFloat(selectedOption.dataset.remaining);
+            const amount = parseFloat(this.value);
+            
+            if (amount > remaining) {
+                this.setCustomValidity('المبلغ لا يمكن أن يتجاوز المبلغ المتبقي');
+            } else {
+                this.setCustomValidity('');
+            }
+        }
+    });
+});
+</script>
+@endpush
+
 @endsection

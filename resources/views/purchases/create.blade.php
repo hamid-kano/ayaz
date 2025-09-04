@@ -21,11 +21,11 @@
     
     <div class="form-row">
         <div class="form-group">
-            <label>الرقم</label>
-            <input type="text" value="سيتم إنشاؤه تلقائياً" readonly>
+            <label>رقم المشترى</label>
+            <input type="text" value="سيتم إنشاؤه تلقائياً" readonly class="readonly-input">
         </div>
         <div class="form-group">
-            <label>التاريخ</label>
+            <label>تاريخ المشترى</label>
             <input type="date" name="purchase_date" value="{{ old('purchase_date', now()->format('Y-m-d')) }}" required>
             @error('purchase_date')
                 <span class="error-message">{{ $message }}</span>
@@ -54,27 +54,29 @@
     </div>
     
     <div class="form-group">
-        <label>الحالة</label>
-        <select name="status" required>
+        <label>حالة الدفع</label>
+        <select name="status" required id="statusSelect">
+            <option value="">اختر حالة الدفع</option>
             <option value="cash" {{ old('status') == 'cash' ? 'selected' : '' }}>نقدي</option>
             <option value="debt" {{ old('status') == 'debt' ? 'selected' : '' }}>دين</option>
         </select>
         @error('status')
             <span class="error-message">{{ $message }}</span>
         @enderror
+        <small class="form-hint">اختر نقدي إذا تم الدفع فوراً أو دين إذا كان مؤجلاً</small>
     </div>
     
     <div class="form-group">
-        <label>المورد</label>
-        <input type="text" name="supplier" value="{{ old('supplier') }}" required>
+        <label>اسم المورد</label>
+        <input type="text" name="supplier" value="{{ old('supplier') }}" placeholder="أدخل اسم المورد" required>
         @error('supplier')
             <span class="error-message">{{ $message }}</span>
         @enderror
     </div>
     
     <div class="form-group">
-        <label>التفاصيل</label>
-        <textarea name="details" rows="3" required>{{ old('details') }}</textarea>
+        <label>تفاصيل المشترى</label>
+        <textarea name="details" rows="3" placeholder="وصف مفصل للمشترى..." required>{{ old('details') }}</textarea>
         @error('details')
             <span class="error-message">{{ $message }}</span>
         @enderror

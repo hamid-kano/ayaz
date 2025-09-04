@@ -24,7 +24,10 @@
                 
                 <div class="form-group">
                     <label for="name">الاسم الكامل</label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                    <div class="input-group">
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="أدخل اسمك الكامل" required autofocus>
+                        <i data-lucide="user" class="input-icon"></i>
+                    </div>
                     @error('name')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -32,7 +35,10 @@
 
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required>
+                        <i data-lucide="mail" class="input-icon"></i>
+                    </div>
                     @error('email')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -40,15 +46,22 @@
 
                 <div class="form-group">
                     <label for="password">كلمة المرور</label>
-                    <input type="password" id="password" name="password" required>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder="أدخل كلمة مرور قوية" required>
+                        <i data-lucide="lock" class="input-icon"></i>
+                    </div>
                     @error('password')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
+                    <small class="password-hint">يجب أن تحتوي على 8 أحرف على الأقل</small>
                 </div>
 
                 <div class="form-group">
                     <label for="password_confirmation">تأكيد كلمة المرور</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" required>
+                    <div class="input-group">
+                        <input type="password" id="password_confirmation" name="password_confirmation" placeholder="أعد كتابة كلمة المرور" required>
+                        <i data-lucide="lock" class="input-icon"></i>
+                    </div>
                 </div>
 
                 <button type="submit" class="auth-btn">

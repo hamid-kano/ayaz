@@ -24,7 +24,10 @@
                 
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required autofocus>
+                        <i data-lucide="mail" class="input-icon"></i>
+                    </div>
                     @error('email')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -32,7 +35,13 @@
 
                 <div class="form-group">
                     <label for="password">كلمة المرور</label>
-                    <input type="password" id="password" name="password" required>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+                        <i data-lucide="lock" class="input-icon"></i>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i data-lucide="eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -64,6 +73,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
         });
+        
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>

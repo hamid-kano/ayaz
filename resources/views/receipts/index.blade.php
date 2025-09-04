@@ -39,11 +39,17 @@
         <div class="receipt-card">
             <div class="receipt-header">
                 <div class="receipt-order">#{{ $receipt->order->order_number }}</div>
-                <a href="{{ route('orders.show', $receipt->order) }}" class="receipt-link">
+                <a href="{{ route('orders.show', $receipt->order) }}" class="receipt-link" title="عرض الطلبية">
                     <i data-lucide="external-link"></i>
                 </a>
             </div>
-            <div class="receipt-info">
+            <div class="receipt-body">
+                <div class="receipt-customer">{{ $receipt->order->customer_name }}</div>
+                @if($receipt->notes)
+                    <div class="receipt-notes">{{ Str::limit($receipt->notes, 50) }}</div>
+                @endif
+            </div>
+            <div class="receipt-footer">
                 <div class="receipt-amount">
                     {{ number_format($receipt->amount, 2) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}
                 </div>

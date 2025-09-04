@@ -62,8 +62,8 @@
         <div class="form-group">
             <label>العملة</label>
             <select name="currency" required>
-                <option value="syp" {{ old('currency') == 'syp' ? 'selected' : '' }}>سوري</option>
-                <option value="usd" {{ old('currency') == 'usd' ? 'selected' : '' }}>دولار</option>
+                <option value="syp" {{ old('currency') == 'syp' ? 'selected' : '' }}>ليرة سورية</option>
+                <option value="usd" {{ old('currency') == 'usd' ? 'selected' : '' }}>دولار أمريكي</option>
             </select>
             @error('currency')
                 <span class="error-message">{{ $message }}</span>
