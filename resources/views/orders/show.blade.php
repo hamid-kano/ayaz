@@ -87,7 +87,7 @@
                     <form method="POST" action="{{ route('attachments.destroy', $attachment) }}" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="delete-attachment" onclick="return confirm('هل أنت متأكد من حذف هذا المرفق؟')" title="حذف">
+                        <button type="button" onclick="showDeleteModal('{{ route('attachments.destroy', $attachment) }}', 'المرفق', this.closest('form'))" title="حذف">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </form>
@@ -139,7 +139,7 @@
                 <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete-audio" onclick="return confirm('هل أنت متأكد من حذف هذا التسجيل؟')">حذف</button>
+                    <button type="button" onclick="showDeleteModal('{{ route('audio.destroy', $audio) }}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
                 </form>
             </div>
         @endforeach

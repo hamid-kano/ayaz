@@ -14,7 +14,7 @@
     @csrf
     <div class="form-group">
         <label>اسم العميل</label>
-        <input type="text" name="customer_name" value="{{ old('customer_name') }}" required>
+        <input type="text" name="customer_name" value="{{ old('customer_name') }}" placeholder="أدخل اسم العميل" required>
         @error('customer_name')
             <span class="error-message">{{ $message }}</span>
         @enderror
@@ -38,7 +38,7 @@
     
     <div class="form-group">
         <label>التفاصيل</label>
-        <textarea name="order_details" rows="3" required>{{ old('order_details') }}</textarea>
+        <textarea name="order_details" rows="3" placeholder="وصف مفصل للطلبية..." required>{{ old('order_details') }}</textarea>
         @error('order_details')
             <span class="error-message">{{ $message }}</span>
         @enderror
@@ -47,7 +47,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>الكلفة</label>
-            <input type="number" name="cost" value="{{ old('cost') }}" min="0" step="0.01" required>
+            <input type="number" name="cost" value="{{ old('cost') }}" min="0" step="0.01" placeholder="0.00" required>
             @error('cost')
                 <span class="error-message">{{ $message }}</span>
             @enderror

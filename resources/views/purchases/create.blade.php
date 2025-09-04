@@ -36,7 +36,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" value="{{ old('amount') }}" min="0" step="0.01" required>
+            <input type="number" name="amount" value="{{ old('amount') }}" min="0" step="0.01" placeholder="أدخل المبلغ" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror

@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
                     <div class="input-group">
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required autofocus>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="أدخل البريد الإلكتروني" required autofocus>
                         <i data-lucide="mail" class="input-icon"></i>
                     </div>
                     @error('email')

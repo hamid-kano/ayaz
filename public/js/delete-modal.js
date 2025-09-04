@@ -1,6 +1,6 @@
 // Delete Modal Helper
-function showDeleteModal(deleteUrl, itemName = 'العنصر') {
-    // Update modal content if needed
+function showDeleteModal(deleteUrl, itemName = 'العنصر', formElement = null) {
+    // Update modal content
     const modal = document.querySelector('[x-data*="open: false"]');
     if (modal) {
         const message = modal.querySelector('p');
@@ -14,12 +14,32 @@ function showDeleteModal(deleteUrl, itemName = 'العنصر') {
     
     // Handle confirmation
     const handleConfirm = (e) => {
-        if (deleteUrl.includes('form-')) {
-            // Submit form
-            document.getElementById(deleteUrl.replace('#', '')).submit();
+        if (formElement) {
+            // Submit the form
+            formElement.submit();
         } else {
-            // Navigate to URL
-            window.location.href = deleteUrl;
+            // Create and submit form for DELETE request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = deleteUrl;
+            
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+            }
+            
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+            
+            document.body.appendChild(form);
+            form.submit();
         }
         window.removeEventListener('confirm-delete', handleConfirm);
     };
@@ -35,12 +55,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const match = onclick.match(/confirm\(['"]([^'"]+)['"]\)/);
         if (match) {
             const confirmText = match[1];
+            const originalOnclick = onclick;
             element.removeAttribute('onclick');
             
             element.addEventListener('click', function(e) {
                 e.preventDefault();
-                const href = this.getAttribute('href') || this.closest('form')?.getAttribute('action');
-                showDeleteModal(href, 'العنصر');
+                const form = this.closest('form');
+                const href = this.getAttribute('href');
+                
+                if (form) {
+                    showDeleteModal(form.action, 'العنصر', form);
+                } else if (href) {
+                    showDeleteModal(href, 'العنصر');
+                }
             });
         }
     });

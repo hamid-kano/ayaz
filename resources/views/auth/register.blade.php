@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label for="name">الاسم الكامل</label>
                     <div class="input-group">
-                        <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="أدخل اسمك الكامل" required autofocus>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="أدخل الاسم الكامل" required autofocus>
                         <i data-lucide="user" class="input-icon"></i>
                     </div>
                     @error('name')
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
                     <div class="input-group">
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="أدخل البريد الإلكتروني" required>
                         <i data-lucide="mail" class="input-icon"></i>
                     </div>
                     @error('email')
