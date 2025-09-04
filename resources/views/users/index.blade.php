@@ -1,14 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="page-header">
+    <button class="back-btn" onclick="window.location.href='{{ route('dashboard') }}'">
+        <i data-lucide="arrow-right"></i>
+    </button>
+    <h2>إدارة المستخدمين</h2>
+    <button class="add-btn" onclick="window.location.href='{{ route('users.create') }}'">
+        <i data-lucide="plus"></i>
+    </button>
+</div>
+
 <div class="container-fluid">
-    <div class="header">
-        <h1>إدارة المستخدمين</h1>
-        <a href="{{ route('users.create') }}" class="btn btn-primary">
-            <i data-lucide="plus"></i>
-            إضافة مستخدم
-        </a>
-    </div>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

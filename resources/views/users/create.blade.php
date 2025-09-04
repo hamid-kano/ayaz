@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="header">
-        <h1>إضافة مستخدم جديد</h1>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">
-            <i data-lucide="arrow-right"></i>
-            العودة
-        </a>
-    </div>
+<div class="page-header">
+    <button class="back-btn" onclick="window.location.href='{{ route('users.index') }}'">
+        <i data-lucide="arrow-right"></i>
+    </button>
+    <h2>إضافة مستخدم جديد</h2>
+    <div></div>
+</div>
 
     <div class="form-container">
         <form method="POST" action="{{ route('users.store') }}" class="form-card">
@@ -55,8 +54,8 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">إنشاء المستخدم</button>
-            <a href="{{ route('users.index') }}" class="btn btn-secondary">إلغاء</a>
+            <a href="{{ route('users.index') }}" class="btn-secondary">إلغاء</a>
+            <button type="submit" class="submit-btn">إنشاء المستخدم</button>
         </div>
         </form>
     </div>
