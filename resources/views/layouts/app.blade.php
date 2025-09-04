@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="dropdown-footer">
-                <a href="#" class="view-all-notifications">عرض جميع الإشعارات</a>
+                <a href="{{ route('notifications.index') }}" class="view-all-notifications">عرض جميع الإشعارات</a>
             </div>
         </div>
 
