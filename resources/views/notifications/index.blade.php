@@ -14,6 +14,29 @@
     </button>
 </div>
 
+<!-- Alerts -->
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if($errors->any())
+    <div class="alert alert-error">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="notifications-container">
     @forelse($notifications as $notification)
         <div class="notification-card {{ !$notification['read'] ? 'unread' : '' }}" data-id="{{ $notification['id'] }}">
