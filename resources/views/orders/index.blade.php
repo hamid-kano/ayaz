@@ -15,12 +15,14 @@
 
 <!-- Search Section -->
 <div class="search-container">
-    <div class="search-group">
-        <form method="GET" action="{{ route('orders.index') }}">
+    <form method="GET" action="{{ route('orders.index') }}">
+        <div class="search-group">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في الطلبات...">
-            <i data-lucide="search"></i>
-        </form>
-    </div>
+            <button type="submit" class="search-btn">
+                <i data-lucide="search"></i>
+            </button>
+        </div>
+    </form>
 </div>
 
 <!-- Orders Grid -->
