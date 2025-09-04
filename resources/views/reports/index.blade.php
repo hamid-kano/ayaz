@@ -346,14 +346,102 @@
     color: #22c55e;
 }
 
-@media (max-width: 768px) {
-    .charts-section,
+@media (max-width: 1024px) {
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+    
     .tables-section {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    
+    .report-filters {
+        justify-content: center;
     }
     
     .stats-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .stat-card {
+        padding: 16px;
+    }
+    
+    .stat-content h3 {
+        font-size: 20px;
+    }
+    
+    .chart-card {
+        padding: 16px;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .report-table th,
+    .report-table td {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .debt-summary {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        gap: 12px;
+    }
+    
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 12px;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .stat-content h3 {
+        font-size: 18px;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+    
+    .report-table {
+        font-size: 12px;
+    }
+    
+    .report-table th,
+    .report-table td {
+        padding: 6px 8px;
+    }
+    
+    .debt-item {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .export-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 </style>
