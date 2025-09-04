@@ -1,7 +1,10 @@
 <!-- Delete Modal Component -->
-<div x-data="{ open: false }" x-show="open" x-cloak 
+<div x-data="{ open: false }" 
+     x-show="open" 
+     x-cloak 
      class="fixed inset-0 z-50 overflow-y-auto" 
-     @delete-modal.window="open = true">
+     @delete-modal.window="open = true"
+     style="display: none;">
     
     <!-- Backdrop -->
     <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" 

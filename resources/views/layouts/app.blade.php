@@ -186,6 +186,12 @@
     <script src="{{ asset('js/delete-modal.js') }}"></script>
     
     <style>
+    [x-cloak] {
+        display: none !important;
+    }
+    </style>
+    
+    <style>
     .notifications-dropdown {
         width: 320px;
         max-height: 400px;
