@@ -39,6 +39,40 @@
             </div>
         </header>
 
+        <!-- Notifications Dropdown -->
+        <div class="dropdown-menu notifications-dropdown" id="notificationsDropdown">
+            <div class="dropdown-header">
+                <h4>الإشعارات</h4>
+                <span class="notifications-count">3</span>
+            </div>
+            <div class="notifications-list">
+                <div class="notification-item unread">
+                    <i data-lucide="package"></i>
+                    <div class="notification-content">
+                        <p>طلبية جديدة من أحمد محمد</p>
+                        <span class="notification-time">منذ 5 دقائق</span>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <i data-lucide="clock"></i>
+                    <div class="notification-content">
+                        <p>موعد تسليم طلبية #1001</p>
+                        <span class="notification-time">منذ ساعة</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i data-lucide="check-circle"></i>
+                    <div class="notification-content">
+                        <p>تم تسليم طلبية #999</p>
+                        <span class="notification-time">منذ 3 ساعات</span>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-footer">
+                <a href="#" class="view-all-notifications">عرض جميع الإشعارات</a>
+            </div>
+        </div>
+
         <!-- User Menu Dropdown -->
         <div class="dropdown-menu user-dropdown" id="userDropdown">
             <div class="dropdown-item">
@@ -115,6 +149,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
             
+            // Notifications toggle
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationsDropdown = document.getElementById('notificationsDropdown');
+            
+            if (notificationBtn && notificationsDropdown) {
+                notificationBtn.addEventListener('click', function() {
+                    notificationsDropdown.classList.toggle('show');
+                    userDropdown?.classList.remove('show');
+                });
+            }
+            
             // User menu toggle
             const userMenu = document.getElementById('userMenu');
             const userDropdown = document.getElementById('userDropdown');
@@ -122,18 +167,125 @@
             if (userMenu && userDropdown) {
                 userMenu.addEventListener('click', function() {
                     userDropdown.classList.toggle('show');
-                });
-                
-                document.addEventListener('click', function(e) {
-                    if (!userMenu.contains(e.target)) {
-                        userDropdown.classList.remove('show');
-                    }
+                    notificationsDropdown?.classList.remove('show');
                 });
             }
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!userMenu?.contains(e.target)) {
+                    userDropdown?.classList.remove('show');
+                }
+                if (!notificationBtn?.contains(e.target)) {
+                    notificationsDropdown?.classList.remove('show');
+                }
+            });
         });
     </script>
     
     <script src="{{ asset('js/delete-modal.js') }}"></script>
+    
+    <style>
+    .notifications-dropdown {
+        width: 320px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .dropdown-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f9fafb;
+    }
+    
+    .dropdown-header h4 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+    }
+    
+    .notifications-count {
+        background: #ef4444;
+        color: white;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
+        min-width: 18px;
+        text-align: center;
+    }
+    
+    .notifications-list {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+    
+    .notification-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 16px;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background-color 0.2s;
+        cursor: pointer;
+    }
+    
+    .notification-item:hover {
+        background: #f9fafb;
+    }
+    
+    .notification-item.unread {
+        background: #fef3f2;
+        border-right: 3px solid #ef4444;
+    }
+    
+    .notification-item i {
+        margin-left: 12px;
+        margin-top: 2px;
+        color: #6b7280;
+        flex-shrink: 0;
+    }
+    
+    .notification-item.unread i {
+        color: #ef4444;
+    }
+    
+    .notification-content {
+        flex: 1;
+    }
+    
+    .notification-content p {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        color: #374151;
+        line-height: 1.4;
+    }
+    
+    .notification-time {
+        font-size: 12px;
+        color: #6b7280;
+    }
+    
+    .dropdown-footer {
+        padding: 12px 16px;
+        border-top: 1px solid #e5e7eb;
+        background: #f9fafb;
+        text-align: center;
+    }
+    
+    .view-all-notifications {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .view-all-notifications:hover {
+        color: #2563eb;
+    }
+    </style>
     @stack('scripts')
 </body>
 </html>
