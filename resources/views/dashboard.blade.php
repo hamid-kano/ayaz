@@ -55,7 +55,7 @@
         </a>
 
         @if(auth()->user()->isAdmin())
-        <a href="{{ route('users.index') }}" class="menu-item">
+        <a href="{{ route('users.index') }}" class="menu-item users-management">
             <div class="menu-icon">
                 <i data-lucide="users"></i>
             </div>
