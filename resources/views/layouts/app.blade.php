@@ -17,9 +17,10 @@
     
     @stack('styles')
 </head>
-<body>
+<body class="{{ request()->routeIs('dashboard') ? 'dashboard' : '' }}">
     <div class="app-container">
         @auth
+        @if(request()->routeIs('dashboard'))
         <!-- Header -->
         <header class="header">
             <div class="header-content">
@@ -51,6 +52,7 @@
                 </button>
             </form>
         </div>
+        @endif
         @endauth
 
         <!-- Main Content -->

@@ -235,15 +235,42 @@ body {
     animation: fadeInUp 0.8s ease-out;
 }
 
+/* Dashboard specific padding */
+body.dashboard .main-content {
+    padding: 0 0 120px;
+}
+
+/* Sub-pages without bottom nav */
+body:not(.dashboard) .main-content {
+    padding: 0;
+}
+
 @media (min-width: 768px) {
     .main-content {
         padding: 0 0 100px;
+    }
+    
+    body.dashboard .main-content {
+        padding: 0 0 100px;
+    }
+    
+    body:not(.dashboard) .main-content {
+        padding: 0;
     }
 }
 
 @media (min-width: 1024px) {
     .main-content {
         padding: 0 0 80px;
+        flex: 1;
+    }
+    
+    body.dashboard .main-content {
+        padding: 0 0 80px;
+    }
+    
+    body:not(.dashboard) .main-content {
+        padding: 0;
         flex: 1;
     }
 }
