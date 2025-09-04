@@ -54,28 +54,5 @@
             <p>المبالغ المستحقة علينا</p>
         </a>
     </div>
-
-    <!-- Stats Cards -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon new-order">
-                <i data-lucide="plus-circle"></i>
-            </div>
-            <div class="stat-info">
-                <h3>{{ $stats['new_orders'] }}</h3>
-                <p>طلبيات جديدة</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon receipts">
-                <i data-lucide="banknote"></i>
-            </div>
-            <div class="stat-info">
-                <h3>${{ number_format($stats['total_receipts_usd'], 2) }}</h3>
-                <p>إجمالي المقبوضات</p>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
