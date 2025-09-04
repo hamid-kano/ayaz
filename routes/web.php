@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
+    
     // Users (Admin only)
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class);

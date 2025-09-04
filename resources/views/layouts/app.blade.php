@@ -114,7 +114,7 @@
                     <span class="nav-label">التقارير</span>
                 </a>
                 
-                <a href="#" class="modern-nav-item">
+                <a href="{{ route('settings.index') }}" class="modern-nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                     <i data-lucide="settings"></i>
                     <span class="nav-label">الإعدادات</span>
                 </a>
