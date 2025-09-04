@@ -1956,7 +1956,10 @@ body {
     line-height: 1.4;
 }
 
-.purchase-attachments {
+.purchase-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding-top: 15px;
     border-top: 1px solid #f1f5f9;
 }
@@ -1971,6 +1974,35 @@ body {
 
 .attachment-count i {
     font-size: 16px;
+}
+
+.purchase-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.purchase-actions .action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.purchase-actions .action-btn.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.purchase-actions .action-btn.edit:hover {
+    background: rgba(245, 158, 11, 0.2);
+    transform: scale(1.05);
 }
 
 /* Very Small Screens */
@@ -3324,6 +3356,12 @@ input:valid {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
+    }
+    
+    .purchase-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
     
     .debt-footer {

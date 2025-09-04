@@ -73,7 +73,7 @@ class PurchaseController extends Controller
 
         $purchase->update($validated);
 
-        return redirect()->route('purchases.show', $purchase)->with('success', 'تم تحديث المشترى بنجاح');
+        return redirect()->route('purchases.index')->with('success', 'تم تحديث المشترى بنجاح');
     }
 
     public function destroy(Purchase $purchase)

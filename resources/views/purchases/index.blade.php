@@ -39,14 +39,19 @@
                     <div class="purchase-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
                 </div>
             </div>
-            @if($purchase->attachments->count() > 0)
-                <div class="purchase-attachments">
+            <div class="purchase-footer">
+                @if($purchase->attachments->count() > 0)
                     <div class="attachment-count">
                         <i data-lucide="paperclip"></i>
                         <span>{{ $purchase->attachments->count() }} مرفقات</span>
                     </div>
+                @endif
+                <div class="purchase-actions">
+                    <a href="{{ route('purchases.edit', $purchase) }}" class="action-btn edit" title="تعديل">
+                        <i data-lucide="edit-2"></i>
+                    </a>
                 </div>
-            @endif
+            </div>
         </div>
     @empty
         <div class="empty-state">
