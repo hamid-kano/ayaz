@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'إضافة سند قبض - مطبعة آياز')
+@section('title', 'إضافة سند قبض - مطبعة ريناس')
 
 @section('content')
 <div class="page-header">

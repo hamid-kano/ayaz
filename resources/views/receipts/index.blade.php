@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'المقبوضات - مطبعة آياز')
+@section('title', 'المقبوضات - مطبعة ريناس')
 
 @section('content')
 <div class="page-header">

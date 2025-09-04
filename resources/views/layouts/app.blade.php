@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'مطبعة آياز')</title>
+    <title>@yield('title', 'مطبعة ريناس')</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1 class="app-title">مطبعة آياز</h1>
+                <h1 class="app-title">مطبعة ريناس</h1>
                 <div class="header-actions">
                     <div class="notification-btn" id="notificationBtn">
                         <i data-lucide="bell"></i>
@@ -83,20 +83,34 @@
         </main>
 
         @auth
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i data-lucide="home"></i>
-                <span>الرئيسية</span>
-            </a>
-            <a href="{{ route('orders.index') }}" class="nav-item {{ request()->routeIs('orders.*') ? 'active' : '' }}">
-                <i data-lucide="file-text"></i>
-                <span>الطلبات</span>
-            </a>
-            <a href="{{ route('receipts.index') }}" class="nav-item {{ request()->routeIs('receipts.*') ? 'active' : '' }}">
-                <i data-lucide="banknote"></i>
-                <span>المقبوضات</span>
-            </a>
+        <!-- Modern Bottom Navigation -->
+        <nav class="modern-bottom-nav">
+            <div class="nav-container">
+                <a href="{{ route('dashboard') }}" class="modern-nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <div class="nav-icon-wrapper">
+                        <i data-lucide="home"></i>
+                        <div class="nav-indicator"></div>
+                    </div>
+                    <span class="nav-label">الرئيسية</span>
+                </a>
+                
+                <a href="#" class="modern-nav-item">
+                    <div class="nav-icon-wrapper">
+                        <i data-lucide="bar-chart-3"></i>
+                        <div class="nav-indicator"></div>
+                    </div>
+                    <span class="nav-label">التقارير</span>
+                </a>
+                
+                <a href="#" class="modern-nav-item">
+                    <div class="nav-icon-wrapper">
+                        <i data-lucide="settings"></i>
+                        <div class="nav-indicator"></div>
+                    </div>
+                    <span class="nav-label">الإعدادات</span>
+                </a>
+            </div>
+            <div class="nav-background"></div>
         </nav>
         @endauth
     </div>
