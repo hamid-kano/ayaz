@@ -1,0 +1,419 @@
+@extends('layouts.app')
+
+@section('title', 'التقارير - مطبعة ريناس')
+
+@section('content')
+<div class="page-header">
+    <h2>التقارير والإحصائيات</h2>
+    <div class="report-filters">
+        <select class="filter-select">
+            <option>آخر 30 يوم</option>
+            <option>آخر 3 أشهر</option>
+            <option>آخر 6 أشهر</option>
+            <option>السنة الحالية</option>
+        </select>
+        <button class="export-btn">
+            <i data-lucide="download"></i>
+            تصدير PDF
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card revenue">
+        <div class="stat-icon">
+            <i data-lucide="trending-up"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ number_format($stats['total_revenue']) }} ل.س</h3>
+            <p>إجمالي الإيرادات</p>
+            <span class="stat-change positive">+12%</span>
+        </div>
+    </div>
+
+    <div class="stat-card expenses">
+        <div class="stat-icon">
+            <i data-lucide="trending-down"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ number_format($stats['total_expenses']) }} ل.س</h3>
+            <p>إجمالي المصروفات</p>
+            <span class="stat-change negative">+5%</span>
+        </div>
+    </div>
+
+    <div class="stat-card profit">
+        <div class="stat-icon">
+            <i data-lucide="dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ number_format($stats['net_profit']) }} ل.س</h3>
+            <p>صافي الربح</p>
+            <span class="stat-change positive">+18%</span>
+        </div>
+    </div>
+
+    <div class="stat-card orders">
+        <div class="stat-icon">
+            <i data-lucide="package"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ $stats['total_orders'] }}</h3>
+            <p>إجمالي الطلبات</p>
+            <span class="stat-change positive">+8%</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-section">
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>الإيرادات والمصروفات الشهرية</h3>
+        </div>
+        <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>توزيع الطلبات</h3>
+        </div>
+        <div class="chart-container">
+            <canvas id="ordersChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Tables Section -->
+<div class="tables-section">
+    <div class="table-card">
+        <div class="table-header">
+            <h3>أفضل العملاء</h3>
+        </div>
+        <div class="table-container">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>اسم العميل</th>
+                        <th>عدد الطلبات</th>
+                        <th>إجمالي المبلغ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($topCustomers as $customer)
+                    <tr>
+                        <td>{{ $customer['name'] }}</td>
+                        <td>{{ $customer['orders'] }}</td>
+                        <td>{{ number_format($customer['total']) }} ل.س</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <h3>الديون والمستحقات</h3>
+        </div>
+        <div class="debt-summary">
+            <div class="debt-item">
+                <span class="debt-label">ديون علينا</span>
+                <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us']) }} ل.س</span>
+            </div>
+            <div class="debt-item">
+                <span class="debt-label">ديون لنا</span>
+                <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts']) }} ل.س</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('styles')
+<style>
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.report-filters {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+}
+
+.export-btn {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-card.revenue .stat-icon {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.stat-card.expenses .stat-icon {
+    background: #fecaca;
+    color: #ef4444;
+}
+
+.stat-card.profit .stat-icon {
+    background: #dcfce7;
+    color: #22c55e;
+}
+
+.stat-card.orders .stat-icon {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.stat-content h3 {
+    margin: 0 0 4px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.stat-content p {
+    margin: 0 0 8px 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.stat-change {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.stat-change.positive {
+    background: #dcfce7;
+    color: #22c55e;
+}
+
+.stat-change.negative {
+    background: #fecaca;
+    color: #ef4444;
+}
+
+.charts-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart-header h3 {
+    margin: 0 0 20px 0;
+    color: #111827;
+    font-size: 18px;
+}
+
+.chart-container {
+    height: 300px;
+    position: relative;
+}
+
+.tables-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.table-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.table-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.table-header h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table th,
+.report-table td {
+    padding: 12px 24px;
+    text-align: right;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.report-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.debt-summary {
+    padding: 24px;
+}
+
+.debt-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.debt-item:last-child {
+    border-bottom: none;
+}
+
+.debt-label {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.debt-amount {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.debt-on-us {
+    color: #ef4444;
+}
+
+.debt-for-us {
+    color: #22c55e;
+}
+
+@media (max-width: 768px) {
+    .charts-section,
+    .tables-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Monthly Revenue/Expenses Chart
+const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(monthlyCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode(array_column($monthlyData, 'month')) !!},
+        datasets: [{
+            label: 'الإيرادات',
+            data: {!! json_encode(array_column($monthlyData, 'revenue')) !!},
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'المصروفات',
+            data: {!! json_encode(array_column($monthlyData, 'expenses')) !!},
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        }
+    }
+});
+
+// Orders Distribution Chart
+const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+new Chart(ordersCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['مكتملة', 'قيد التنفيذ', 'ملغاة'],
+        datasets: [{
+            data: [{{ $stats['completed_orders'] }}, {{ $stats['pending_orders'] }}, 5],
+            backgroundColor: ['#22c55e', '#f59e0b', '#ef4444']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+            }
+        }
+    }
+});
+</script>
+@endpush
+@endsection

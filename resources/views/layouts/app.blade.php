@@ -130,7 +130,7 @@
                     <span class="nav-label">الرئيسية</span>
                 </a>
                 
-                <a href="#" class="modern-nav-item">
+                <a href="{{ route('reports.index') }}" class="modern-nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                     <i data-lucide="bar-chart-3"></i>
                     <span class="nav-label">التقارير</span>
                 </a>
