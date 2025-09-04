@@ -83,34 +83,24 @@
         </main>
 
         @auth
-        <!-- Modern Bottom Navigation -->
+        <!-- Simple Bottom Navigation -->
         <nav class="modern-bottom-nav">
             <div class="nav-container">
                 <a href="{{ route('dashboard') }}" class="modern-nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <div class="nav-icon-wrapper">
-                        <i data-lucide="home"></i>
-                        <div class="nav-indicator"></div>
-                    </div>
+                    <i data-lucide="home"></i>
                     <span class="nav-label">الرئيسية</span>
                 </a>
                 
                 <a href="#" class="modern-nav-item">
-                    <div class="nav-icon-wrapper">
-                        <i data-lucide="bar-chart-3"></i>
-                        <div class="nav-indicator"></div>
-                    </div>
+                    <i data-lucide="bar-chart-3"></i>
                     <span class="nav-label">التقارير</span>
                 </a>
                 
                 <a href="#" class="modern-nav-item">
-                    <div class="nav-icon-wrapper">
-                        <i data-lucide="settings"></i>
-                        <div class="nav-indicator"></div>
-                    </div>
+                    <i data-lucide="settings"></i>
                     <span class="nav-label">الإعدادات</span>
                 </a>
             </div>
-            <div class="nav-background"></div>
         </nav>
         @endauth
     </div>
