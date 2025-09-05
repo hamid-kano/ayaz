@@ -130,7 +130,7 @@
     </div>
     
     <div class="audio-list">
-        @foreach($order->audioRecordings as $audio)
+        @forelse($order->audioRecordings as $audio)
             <div class="audio-item">
                 <span>{{ $audio->file_name }}</span>
                 <audio controls>
@@ -142,7 +142,52 @@
                     <button type="button" onclick="showDeleteModal('{{ route('audio.destroy', $audio) }}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
                 </form>
             </div>
-        @endforeach
+        @empty
+            <div class="empty-audio">
+                <i data-lucide="mic"></i>
+                <p>لا توجد تسجيلات صوتية</p>
+            </div>
+        @endforelse
+    </div>
+    
+    <!-- Audio Recording Interface -->
+    <div class="audio-recorder" x-data="audioRecorder()">
+        <div class="recorder-controls">
+            <button type="button" 
+                    x-show="!isRecording && !hasRecording" 
+                    @click="startRecording()" 
+                    class="btn-primary">
+                <i data-lucide="mic"></i>
+                بدء التسجيل
+            </button>
+            
+            <button type="button" 
+                    x-show="isRecording" 
+                    @click="stopRecording()" 
+                    class="btn-danger">
+                <i data-lucide="square"></i>
+                إيقاف التسجيل
+            </button>
+            
+            <div x-show="hasRecording" class="recording-preview">
+                <audio x-ref="audioPlayer" controls></audio>
+                <div class="recording-actions">
+                    <button type="button" @click="saveRecording()" class="btn-success">
+                        <i data-lucide="save"></i>
+                        حفظ
+                    </button>
+                    <button type="button" @click="discardRecording()" class="btn-secondary">
+                        <i data-lucide="x"></i>
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div x-show="isRecording" class="recording-indicator">
+            <div class="pulse-dot"></div>
+            <span>جاري التسجيل...</span>
+        </div>
     </div>
 </div>
 @endsection

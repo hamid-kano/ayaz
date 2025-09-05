@@ -163,6 +163,7 @@
     </script>
     
     <script src="{{ asset('js/delete-modal.js') }}"></script>
+    <script src="{{ asset('js/audio-recorder.js') }}"></script>
     
     <style>
     [x-cloak] {
@@ -269,6 +270,73 @@
     
     .view-all-notifications:hover {
         color: #2563eb;
+    }
+    
+    /* Audio Recorder Styles */
+    .audio-recorder {
+        margin-top: 20px;
+        padding: 20px;
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    .recording-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: #ef4444;
+        font-weight: 500;
+    }
+    
+    .pulse-dot {
+        width: 12px;
+        height: 12px;
+        background: #ef4444;
+        border-radius: 50%;
+        animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    .recording-preview {
+        margin-top: 15px;
+    }
+    
+    .recording-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+    
+    .btn-success {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
     </style>
     @stack('scripts')
