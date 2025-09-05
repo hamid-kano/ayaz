@@ -174,15 +174,16 @@ function audioRecorder() {
             
             const audioItem = document.createElement('div');
             audioItem.className = 'audio-item';
+            const audioRoute = '{{ route('audio.destroy', 'AUDIO_ID') }}'.replace('AUDIO_ID', audio.id);
             audioItem.innerHTML = `
                 <span>${audio.file_name}</span>
                 <audio controls>
                     <source src="{{ url('${audio.file_path}') }}" type="audio/webm">
                 </audio>
-                <form method="POST" action="{{ route('audio.destroy', '') }}/${audio.id}" style="display: inline;">
+                <form method="POST" action="${audioRoute}" style="display: inline;">
                     <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                     <input type="hidden" name="_method" value="DELETE">
-                    <button type="button" onclick="showDeleteModal('{{ route('audio.destroy', '') }}/${audio.id}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
+                    <button type="button" onclick="showDeleteModal('${audioRoute}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
                 </form>
             `;
             

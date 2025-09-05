@@ -93,6 +93,7 @@ function fileUploader() {
             
             const attachmentItem = document.createElement('div');
             attachmentItem.className = 'attachment-item';
+            const attachmentRoute = '{{ route('attachments.destroy', 'ATTACHMENT_ID') }}'.replace('ATTACHMENT_ID', attachment.id);
             attachmentItem.innerHTML = `
                 <div class="attachment-info">
                     <i data-lucide="file"></i>
@@ -105,10 +106,10 @@ function fileUploader() {
                     <a href="{{ url('/') }}/${attachment.file_path}" class="view-attachment" target="_blank" title="عرض">
                         <i data-lucide="eye"></i>
                     </a>
-                    <form method="POST" action="{{ route('attachments.destroy', '') }}/${attachment.id}" style="display: inline;">
+                    <form method="POST" action="${attachmentRoute}" style="display: inline;">
                         <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" onclick="showDeleteModal('{{ route('attachments.destroy', '') }}/${attachment.id}', 'المرفق', this.closest('form'))" title="حذف">
+                        <button type="button" onclick="showDeleteModal('${attachmentRoute}', 'المرفق', this.closest('form'))" title="حذف">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </form>
