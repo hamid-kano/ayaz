@@ -172,7 +172,7 @@ class OrderController extends Controller
     public function uploadAudio(Request $request, Order $order)
     {
         $request->validate([
-            'audio' => 'required|file|mimes:wav,mp3,m4a|max:5120'
+            'audio' => 'required|file|mimes:wav,mp3,m4a,webm|max:5120'
         ]);
 
         if ($request->hasFile('audio')) {
@@ -183,7 +183,7 @@ class OrderController extends Controller
             $audio = $order->audioRecordings()->create([
                 'file_name' => $file->getClientOriginalName(),
                 'file_path' => 'audio/' . $fileName,
-                'file_size' => $file->getSize(),
+                'file_size' => filesize(public_path('audio/' . $fileName)),
             ]);
             
             return response()->json([
