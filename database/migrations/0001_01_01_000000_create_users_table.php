@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->boolean('is_active')->default(true);
             $table->string('player_id')->nullable();
+            $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

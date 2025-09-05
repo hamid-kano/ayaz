@@ -124,7 +124,7 @@
     @include('components.delete-modal-script')
     @auth
     @include('components.player-id-sync')
-    @include('components.notifications-script')
+    @include('components.notifications-test')
     @endauth
     
 

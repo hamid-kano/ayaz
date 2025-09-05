@@ -67,6 +67,11 @@ Route::middleware('auth')->group(function () {
     // Update player ID for notifications
     Route::post('/user/update-player-id', [UserController::class, 'updatePlayerId'])->name('user.update-player-id');
     
+    // Profile routes
+    Route::get('/user-profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/user-profile/avatar', [\App\Http\Controllers\ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
+    Route::post('/user-profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    
     // OneSignal Notifications
     Route::post('/notifications/send-to-user', [NotificationController::class, 'sendToUser'])->name('notifications.send-to-user');
     Route::post('/notifications/send-to-users', [NotificationController::class, 'sendToUsers'])->name('notifications.send-to-users');

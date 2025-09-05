@@ -13,6 +13,8 @@ class NotificationManager {
         this.notificationsList = document.querySelector('.notifications-list');
         this.markAllReadBtn = document.querySelector('.mark-all-read');
         
+
+        
         this.bindEvents();
     }
 
@@ -31,7 +33,7 @@ class NotificationManager {
         }
 
         document.addEventListener('click', (e) => {
-            if (!this.notificationsDropdown?.contains(e.target)) {
+            if (!this.notificationsDropdown?.contains(e.target) && !this.notificationBtn?.contains(e.target)) {
                 this.closeDropdown();
             }
         });
@@ -39,16 +41,8 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
-            console.log('Loading notifications...');
             const response = await fetch('{{ route("notifications.recent") }}');
-            console.log('Response status:', response.status);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-            
             const data = await response.json();
-            console.log('Notifications data:', data);
             
             this.updateBadge(data.unread_count);
             this.renderNotifications(data.notifications);

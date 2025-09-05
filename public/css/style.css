@@ -4189,11 +4189,16 @@ button:disabled {
     min-width: 35px;
 }
 
-/* Notifications Dropdown */
+/* Notifications Dropdown Override */
 .notifications-dropdown {
-    width: 320px;
+    top: 90px;
+    right: 60px;
+    left: auto;
+    min-width: 320px;
     max-height: 400px;
-    overflow-y: auto;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    padding: 0;
 }
 
 .dropdown-header {

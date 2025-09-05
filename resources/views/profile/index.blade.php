@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <a href="{{ route('home') }}" class="back-btn">
+    <a href="{{ route('dashboard') }}" class="back-btn">
         <i data-lucide="arrow-right"></i>
     </a>
     <h2>الملف الشخصي</h2>
@@ -14,7 +14,7 @@
     <!-- Profile Picture Section -->
     <div class="profile-picture-section" x-data="profilePicture()">
         <div class="profile-avatar">
-            <img x-ref="avatarImg" src="{{ auth()->user()->avatar ? asset('storage/avatars/' . auth()->user()->avatar) : asset('images/default-avatar.png') }}" alt="الصورة الشخصية">
+            <img x-ref="avatarImg" src="{{ auth()->user()->avatar ? asset('profile/' . auth()->user()->avatar) : 'https://via.placeholder.com/150' }}" alt="الصورة الشخصية">
             <div class="avatar-overlay" @click="$refs.fileInput.click()">
                 <i class="fas fa-camera"></i>
             </div>

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -13,46 +12,47 @@ class ProfileController extends Controller
         return view('profile.index');
     }
 
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        if (!Hash::check($request->current_password, auth()->user()->password)) {
-            return back()->with('error', 'كلمة المرور الحالية غير صحيحة');
-        }
-
-        auth()->user()->update([
-            'password' => Hash::make($request->password)
-        ]);
-
-        return back()->with('success', 'تم تحديث كلمة المرور بنجاح');
-    }
-
-    public function updateAvatar(Request $request)
+    public function uploadAvatar(Request $request)
     {
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
         
-        // Delete old avatar
-        if ($user->avatar && Storage::exists('public/avatars/' . $user->avatar)) {
-            Storage::delete('public/avatars/' . $user->avatar);
+        // حذف الصورة القديمة
+        if ($user->avatar && file_exists(public_path('profile/' . $user->avatar))) {
+            unlink(public_path('profile/' . $user->avatar));
         }
 
-        // Upload new avatar
-        $fileName = time() . '_' . $request->file('avatar')->getClientOriginalName();
-        $request->file('avatar')->storeAs('public/avatars', $fileName);
+        // رفع الصورة الجديدة
+        $fileName = $user->id . '_' . time() . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('profile'), $fileName);
 
+        // تحديث قاعدة البيانات
         $user->update(['avatar' => $fileName]);
 
         return response()->json([
             'success' => true,
-            'avatar_url' => asset('storage/avatars/' . $fileName)
+            'avatar_url' => asset('profile/' . $fileName)
         ]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        $user = Auth::user();
+
+        if (!password_verify($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة']);
+        }
+
+        $user->update(['password' => bcrypt($request->password)]);
+
+        return back()->with('success', 'تم تغيير كلمة المرور بنجاح');
     }
 }
