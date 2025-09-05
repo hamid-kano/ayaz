@@ -133,6 +133,9 @@ function audioRecorder() {
             try {
                 const response = await fetch('{{ route("orders.audio", $order->id ?? 0) }}', {
                     method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
                     body: formData
                 });
 
