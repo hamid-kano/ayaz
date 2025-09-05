@@ -8,6 +8,14 @@ function audioRecorder() {
 
         async startRecording() {
             try {
+                // Show loading state
+                const startBtn = document.querySelector('[x-on\\:click="startRecording()"]');
+                if (startBtn) {
+                    startBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> جاري التحضير...';
+                    startBtn.disabled = true;
+                    lucide.createIcons();
+                }
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 this.mediaRecorder = new MediaRecorder(stream);
                 this.audioChunks = [];
@@ -25,8 +33,20 @@ function audioRecorder() {
 
                 this.mediaRecorder.start();
                 this.isRecording = true;
+                
+                // Reset button
+                if (startBtn) {
+                    startBtn.disabled = false;
+                }
             } catch (error) {
                 alert('خطأ في الوصول للميكروفون');
+                // Reset button on error
+                const startBtn = document.querySelector('[x-on\\:click="startRecording()"]');
+                if (startBtn) {
+                    startBtn.innerHTML = '<i data-lucide="mic"></i> بدء التسجيل';
+                    startBtn.disabled = false;
+                    lucide.createIcons();
+                }
             }
         },
 
@@ -41,11 +61,19 @@ function audioRecorder() {
         async saveRecording() {
             if (!this.audioBlob) return;
 
+            const saveBtn = document.querySelector('[x-on\\:click="saveRecording()"]');
+            if (saveBtn) {
+                saveBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> جاري الحفظ...';
+                saveBtn.disabled = true;
+                lucide.createIcons();
+            }
+
             const formData = new FormData();
             formData.append('audio', this.audioBlob, `recording-${Date.now()}.wav`);
             formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
-            const orderId = window.location.pathname.split('/')[2];
+            const pathParts = window.location.pathname.split('/').filter(Boolean);
+            const orderId = pathParts[pathParts.indexOf('orders') + 1];
             
             try {
                 const response = await fetch(`/orders/${orderId}/audio`, {
@@ -57,9 +85,19 @@ function audioRecorder() {
                     location.reload();
                 } else {
                     alert('خطأ في حفظ التسجيل');
+                    if (saveBtn) {
+                        saveBtn.innerHTML = '<i data-lucide="save"></i> حفظ التسجيل';
+                        saveBtn.disabled = false;
+                        lucide.createIcons();
+                    }
                 }
             } catch (error) {
                 alert('خطأ في الشبكة');
+                if (saveBtn) {
+                    saveBtn.innerHTML = '<i data-lucide="save"></i> حفظ التسجيل';
+                    saveBtn.disabled = false;
+                    lucide.createIcons();
+                }
             }
         },
 

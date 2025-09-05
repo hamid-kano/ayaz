@@ -58,4 +58,13 @@ Route::middleware('auth')->group(function () {
     // Audio
     Route::post('/orders/{order}/audio', [OrderController::class, 'uploadAudio'])->name('orders.audio');
     Route::delete('/audio/{audio}', [OrderController::class, 'deleteAudio'])->name('audio.destroy');
+    
+    // Audio file serving
+    Route::get('/audio/{filename}', function($filename) {
+        $path = public_path('audio/' . $filename);
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->file($path);
+    })->name('audio.serve');
 });

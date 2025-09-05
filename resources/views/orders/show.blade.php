@@ -153,7 +153,7 @@
             <div class="audio-item">
                 <span>{{ $audio->file_name }}</span>
                 <audio controls>
-                    <source src="{{ asset($audio->file_path) }}" type="audio/wav">
+                    <source src="{{ route('audio.serve', basename($audio->file_path)) }}" type="audio/wav">
                 </audio>
                 <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
                     @csrf

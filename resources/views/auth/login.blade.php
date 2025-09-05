@@ -72,7 +72,69 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
+            
+            // Loading states for submit buttons
+            const forms = document.querySelectorAll('form');
+            
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitBtn && !submitBtn.disabled) {
+                        const originalText = submitBtn.innerHTML || submitBtn.value;
+                        const loadingText = getLoadingText(form, submitBtn);
+                        
+                        submitBtn.disabled = true;
+                        if (submitBtn.innerHTML !== undefined) {
+                            submitBtn.innerHTML = `<i data-lucide="loader-2" class="animate-spin"></i> ${loadingText}`;
+                            lucide.createIcons();
+                        } else {
+                            submitBtn.value = loadingText;
+                        }
+                        
+                        // Re-enable after 10 seconds as fallback
+                        setTimeout(() => {
+                            submitBtn.disabled = false;
+                            if (submitBtn.innerHTML !== undefined) {
+                                submitBtn.innerHTML = originalText;
+                                lucide.createIcons();
+                            } else {
+                                submitBtn.value = originalText;
+                            }
+                        }, 10000);
+                    }
+                });
+            });
+            
+            function getLoadingText(form, button) {
+                const action = form.action.toLowerCase();
+                const buttonText = (button.innerHTML || button.value).toLowerCase();
+                
+                if (action.includes('login') || buttonText.includes('دخول')) {
+                    return 'جاري تسجيل الدخول...';
+                }
+                if (action.includes('register') || buttonText.includes('إنشاء') || buttonText.includes('تسجيل')) {
+                    return 'جاري التسجيل...';
+                }
+                return 'جاري المعالجة...';
+            }
         });
+        
+        // Add CSS for loading states
+        const style = document.createElement('style');
+        style.textContent = `
+            .animate-spin {
+                animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            button:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        `;
+        document.head.appendChild(style);
         
         function togglePassword() {
             const passwordInput = document.getElementById('password');
