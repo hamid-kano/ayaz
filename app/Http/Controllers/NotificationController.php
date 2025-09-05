@@ -29,34 +29,45 @@ class NotificationController extends Controller
 
     public function getUnreadCount()
     {
-        $count = Auth::user()->notifications()->unread()->count();
-        return response()->json(['count' => $count]);
+        try {
+            $count = Auth::user()->notifications()->unread()->count();
+            return response()->json(['count' => $count]);
+        } catch (\Exception $e) {
+            return response()->json(['count' => 0]);
+        }
     }
 
     public function getRecent()
     {
-        $notifications = Auth::user()->notifications()
-            ->orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(function ($notification) {
-                return [
-                    'id' => $notification->id,
-                    'title' => $notification->title,
-                    'message' => $notification->message,
-                    'type' => $notification->type,
-                    'read' => $notification->isRead(),
-                    'time' => $notification->created_at->diffForHumans(),
-                    'icon' => $this->getIconForType($notification->type)
-                ];
-            });
+        try {
+            $notifications = Auth::user()->notifications()
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
+                ->map(function ($notification) {
+                    return [
+                        'id' => $notification->id,
+                        'title' => $notification->title,
+                        'message' => $notification->message,
+                        'type' => $notification->type,
+                        'read' => $notification->isRead(),
+                        'time' => $notification->created_at->diffForHumans(),
+                        'icon' => $this->getIconForType($notification->type)
+                    ];
+                });
 
-        $unreadCount = Auth::user()->notifications()->unread()->count();
+            $unreadCount = Auth::user()->notifications()->unread()->count();
 
-        return response()->json([
-            'notifications' => $notifications,
-            'unread_count' => $unreadCount
-        ]);
+            return response()->json([
+                'notifications' => $notifications,
+                'unread_count' => $unreadCount
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'notifications' => [],
+                'unread_count' => 0
+            ]);
+        }
     }
 
     public function markAsRead($id)
