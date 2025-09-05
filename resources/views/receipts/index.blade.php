@@ -15,8 +15,8 @@
 
 <div class="stats-cards">
     <div class="stat-card">
-        <div class="stat-icon">
-            <i data-lucide="trending-up"></i>
+        <div class="stat-icon" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+            <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-info">
             <h3>${{ number_format($receipts->where('currency', 'usd')->sum('amount'), 2) }}</h3>
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);">
             <i data-lucide="banknote"></i>
         </div>
         <div class="stat-info">
