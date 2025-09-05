@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div class="attachment-actions">
-                    <a href="{{ Storage::url($attachment->file_path) }}" class="view-attachment" target="_blank" title="عرض">
+                    <a href="{{ asset($attachment->file_path) }}" class="view-attachment" target="_blank" title="عرض">
                         <i data-lucide="eye"></i>
                     </a>
                     <form method="POST" action="{{ route('attachments.destroy', $attachment) }}" style="display: inline;">
@@ -153,7 +153,7 @@
             <div class="audio-item">
                 <span>{{ $audio->file_name }}</span>
                 <audio controls>
-                    <source src="{{ Storage::url($audio->file_path) }}" type="audio/wav">
+                    <source src="{{ asset($audio->file_path) }}" type="audio/wav">
                 </audio>
                 <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
                     @csrf

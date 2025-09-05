@@ -132,10 +132,12 @@ class OrderController extends Controller
         
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments', 'public');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('attachments'), $fileName);
+                
                 $attachment = $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
+                    'file_path' => 'attachments/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
                     'file_size' => $file->getSize(),
                 ]);
@@ -156,7 +158,9 @@ class OrderController extends Controller
 
     public function deleteAttachment(Attachment $attachment)
     {
-        Storage::disk('public')->delete($attachment->file_path);
+        if (file_exists(public_path($attachment->file_path))) {
+            unlink(public_path($attachment->file_path));
+        }
         $attachment->delete();
         
         return back()->with('success', 'تم حذف المرفق بنجاح');
@@ -170,11 +174,12 @@ class OrderController extends Controller
 
         if ($request->hasFile('audio')) {
             $file = $request->file('audio');
-            $path = $file->store('audio', 'public');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('audio'), $fileName);
             
             $order->audioRecordings()->create([
                 'file_name' => $file->getClientOriginalName(),
-                'file_path' => $path,
+                'file_path' => 'audio/' . $fileName,
                 'file_size' => $file->getSize(),
             ]);
         }
@@ -184,7 +189,9 @@ class OrderController extends Controller
 
     public function deleteAudio(AudioRecording $audio)
     {
-        Storage::disk('public')->delete($audio->file_path);
+        if (file_exists(public_path($audio->file_path))) {
+            unlink(public_path($audio->file_path));
+        }
         $audio->delete();
         
         return back()->with('success', 'تم حذف التسجيل بنجاح');
