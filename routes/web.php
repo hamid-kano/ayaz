@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
     });
     
+    // Update player ID for notifications
+    Route::post('/user/update-player-id', [UserController::class, 'updatePlayerId'])->name('user.update-player-id');
+    
     // Attachments
     Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');
     Route::delete('/attachments/{attachment}', [OrderController::class, 'deleteAttachment'])->name('attachments.destroy');

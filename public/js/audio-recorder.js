@@ -76,7 +76,7 @@ function audioRecorder() {
             const orderId = pathParts[pathParts.indexOf('orders') + 1];
             
             try {
-                const response = await fetch(`/orders/${orderId}/audio`, {
+                const response = await fetch(`/ayaz/public/orders/${orderId}/audio`, {
                     method: 'POST',
                     body: formData
                 });

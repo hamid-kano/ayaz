@@ -80,4 +80,17 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'تم حذف المستخدم بنجاح');
     }
+
+    public function updatePlayerId(Request $request)
+    {
+        $request->validate([
+            'player_id' => 'required|string|max:255',
+        ]);
+
+        auth()->user()->update([
+            'player_id' => $request->player_id
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'تم تحديث معرف الإشعارات بنجاح']);
+    }
 }

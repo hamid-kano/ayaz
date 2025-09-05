@@ -165,6 +165,9 @@
     <script src="{{ asset('js/delete-modal.js') }}"></script>
     <script src="{{ asset('js/audio-recorder.js') }}"></script>
     <script src="{{ asset('js/file-uploader.js') }}"></script>
+    @auth
+    <script src="{{ asset('js/player-id-sync.js') }}"></script>
+    @endauth
     
     <script>
     // Loading states for submit buttons
