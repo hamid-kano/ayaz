@@ -6,27 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const badge = document.querySelector('.notification-badge');
     const markAllReadBtn = document.querySelector('.mark-all-read');
     
-    console.log('Notifications script loaded');
-    console.log('Elements found:', {
-        notificationBtn: !!notificationBtn,
-        dropdown: !!dropdown,
-        notificationsList: !!notificationsList,
-        badge: !!badge
-    });
-    
-    if (notificationBtn) {
-        console.log('Notification button classes:', notificationBtn.className);
-    }
-    if (dropdown) {
-        console.log('Dropdown classes:', dropdown.className);
-    }
+
     
     if (notificationBtn && dropdown) {
         // Toggle dropdown
         notificationBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             dropdown.classList.toggle('show');
-            console.log('Dropdown toggled, visible:', dropdown.classList.contains('show'));
+
             
             // Load notifications when dropdown opens
             if (dropdown.classList.contains('show')) {
@@ -58,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('{{ route("notifications.unread-count") }}')
             .then(response => response.json())
             .then(data => {
-                console.log('Unread count:', data.count);
                 if (badge) {
                     if (data.count > 0) {
                         badge.textContent = data.count;

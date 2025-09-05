@@ -4194,7 +4194,7 @@ button:disabled {
     min-width: 35px;
 }
 
-/* Notifications Dropdown Override */
+/* Notifications Dropdown */
 .notifications-dropdown {
     position: absolute;
     top: 90px;
