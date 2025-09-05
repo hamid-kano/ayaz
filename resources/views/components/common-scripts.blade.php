@@ -145,7 +145,9 @@ function audioRecorder() {
                     this.addAudioToList(data.audio);
                     this.discardRecording();
                 } else {
-                    alert('خطأ في حفظ التسجيل');
+                    const errorData = await response.json();
+                    console.error('Server Error:', errorData);
+                    alert('خطأ في حفظ التسجيل: ' + (errorData.message || 'خطأ غير معروف'));
                     if (saveBtn) {
                         saveBtn.innerHTML = '<i data-lucide="save"></i> حفظ التسجيل';
                         saveBtn.disabled = false;
