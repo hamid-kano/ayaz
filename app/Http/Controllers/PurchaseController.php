@@ -36,10 +36,12 @@ class PurchaseController extends Controller
         // Handle file uploads
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('purchase_attachments', 'public');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('purchase_attachments'), $fileName);
+                
                 $purchase->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
+                    'file_path' => 'purchase_attachments/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
                     'file_size' => $file->getSize(),
                 ]);
