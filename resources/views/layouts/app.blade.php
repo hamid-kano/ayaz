@@ -102,6 +102,9 @@
 
         <!-- Delete Modal -->
         @include('components.delete-modal')
+        
+        <!-- Toast System -->
+        @include('components.toast-system')
 
         @auth
         <!-- Simple Bottom Navigation -->

@@ -31,7 +31,7 @@ function syncPlayerId() {
 
 function startPeriodicSync() {
     syncPlayerId();
-    syncInterval = setInterval(syncPlayerId, 30000);
+    syncInterval = setInterval(syncPlayerId, 5000);
 }
 
 function stopPeriodicSync() {
