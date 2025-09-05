@@ -18,17 +18,26 @@
 
 <div class="notifications-container">
     @forelse($notifications as $notification)
-        <div class="notification-card {{ !$notification['read'] ? 'unread' : '' }}" data-id="{{ $notification['id'] }}">
-            <div class="notification-icon {{ $notification['type'] }}">
-                <i data-lucide="{{ $notification['icon'] }}"></i>
+        <div class="notification-card {{ !$notification->isRead() ? 'unread' : '' }}" data-id="{{ $notification->id }}">
+            <div class="notification-icon {{ $notification->type }}">
+                <i data-lucide="{{ 
+                    match($notification->type) {
+                        'new_order' => 'package',
+                        'delivery_reminder' => 'clock',
+                        'order_completed' => 'check-circle',
+                        'payment_received' => 'banknote',
+                        'debt_reminder' => 'alert-circle',
+                        default => 'bell'
+                    }
+                }}"></i>
             </div>
             <div class="notification-content">
-                <h4>{{ $notification['title'] }}</h4>
-                <p>{{ $notification['message'] }}</p>
-                <span class="notification-time">{{ $notification['time'] }}</span>
+                <h4>{{ $notification->title }}</h4>
+                <p>{{ $notification->message }}</p>
+                <span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
             </div>
-            @if(!$notification['read'])
-                <button class="mark-read-btn" onclick="markAsRead({{ $notification['id'] }})">
+            @if(!$notification->isRead())
+                <button class="mark-read-btn" onclick="markAsRead({{ $notification->id }})">
                     <i data-lucide="check"></i>
                 </button>
             @endif
@@ -41,6 +50,12 @@
         </div>
     @endforelse
 </div>
+
+@if($notifications->hasPages())
+    <div class="pagination-wrapper">
+        {{ $notifications->links() }}
+    </div>
+@endif
 
 @push('styles')
 <style>
@@ -121,6 +136,11 @@
 .notification-icon.payment_received {
     background: #f3e8ff;
     color: #8b5cf6;
+}
+
+.notification-icon.debt_reminder {
+    background: #fef2f2;
+    color: #ef4444;
 }
 
 .notification-content {

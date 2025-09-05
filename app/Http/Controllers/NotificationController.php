@@ -2,67 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\OneSignalService;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function index()
-    {
-        $notifications = [
-            [
-                'id' => 1,
-                'type' => 'new_order',
-                'title' => 'طلبية جديدة',
-                'message' => 'طلبية جديدة من أحمد محمد',
-                'icon' => 'package',
-                'time' => 'منذ 5 دقائق',
-                'read' => false,
-                'created_at' => now()->subMinutes(5)
-            ],
-            [
-                'id' => 2,
-                'type' => 'delivery_reminder',
-                'title' => 'موعد تسليم',
-                'message' => 'موعد تسليم طلبية #1001',
-                'icon' => 'clock',
-                'time' => 'منذ ساعة',
-                'read' => false,
-                'created_at' => now()->subHour()
-            ],
-            [
-                'id' => 3,
-                'type' => 'order_completed',
-                'title' => 'تم التسليم',
-                'message' => 'تم تسليم طلبية #999',
-                'icon' => 'check-circle',
-                'time' => 'منذ 3 ساعات',
-                'read' => true,
-                'created_at' => now()->subHours(3)
-            ],
-            [
-                'id' => 4,
-                'type' => 'payment_received',
-                'title' => 'دفعة جديدة',
-                'message' => 'تم استلام دفعة 500 دولار',
-                'icon' => 'banknote',
-                'time' => 'منذ يوم',
-                'read' => true,
-                'created_at' => now()->subDay()
-            ]
-        ];
+    private $oneSignal;
 
-        return view('notifications.index', compact('notifications'));
+    public function __construct(OneSignalService $oneSignal)
+    {
+        $this->oneSignal = $oneSignal;
     }
 
-    public function markAsRead($id)
+    /**
+     * إرسال إشعار لمستخدم واحد
+     */
+    public function sendToUser(Request $request)
     {
-        // Mark notification as read logic here
-        return response()->json(['success' => true]);
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'title' => 'required|string',
+            'message' => 'required|string',
+            'data' => 'array'
+        ]);
+
+        $user = User::find($request->user_id);
+        
+        if (!$user->player_id) {
+            return response()->json(['error' => 'المستخدم لا يملك player_id'], 400);
+        }
+
+        $result = $this->oneSignal->sendToUser(
+            $user->player_id,
+            $request->title,
+            $request->message,
+            $request->data ?? []
+        );
+
+        return response()->json($result ? ['success' => true] : ['error' => 'فشل في الإرسال']);
     }
 
-    public function markAllAsRead()
+    /**
+     * إرسال إشعار لعدة مستخدمين
+     */
+    public function sendToUsers(Request $request)
     {
-        // Mark all notifications as read logic here
-        return response()->json(['success' => true]);
+        $request->validate([
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id',
+            'title' => 'required|string',
+            'message' => 'required|string',
+            'data' => 'array'
+        ]);
+
+        $playerIds = User::whereIn('id', $request->user_ids)
+            ->whereNotNull('player_id')
+            ->pluck('player_id')
+            ->toArray();
+
+        if (empty($playerIds)) {
+            return response()->json(['error' => 'لا يوجد مستخدمين بـ player_id صالح'], 400);
+        }
+
+        $result = $this->oneSignal->sendToUsers(
+            $playerIds,
+            $request->title,
+            $request->message,
+            $request->data ?? []
+        );
+
+        return response()->json($result ? ['success' => true] : ['error' => 'فشل في الإرسال']);
+    }
+
+    /**
+     * إرسال إشعار لجميع المستخدمين
+     */
+    public function sendToAll(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string',
+            'message' => 'required|string',
+            'data' => 'array'
+        ]);
+
+        $result = $this->oneSignal->sendToAll(
+            $request->title,
+            $request->message,
+            $request->data ?? []
+        );
+
+        return response()->json($result ? ['success' => true] : ['error' => 'فشل في الإرسال']);
     }
 }

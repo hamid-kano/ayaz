@@ -47,30 +47,12 @@
         <div class="dropdown-menu notifications-dropdown" id="notificationsDropdown">
             <div class="dropdown-header">
                 <h4>الإشعارات</h4>
-                <span class="notifications-count">3</span>
+                <button class="mark-all-read" title="قراءة الكل">
+                    <i data-lucide="check-double"></i>
+                </button>
             </div>
             <div class="notifications-list">
-                <div class="notification-item unread">
-                    <i data-lucide="package"></i>
-                    <div class="notification-content">
-                        <p>طلبية جديدة من أحمد محمد</p>
-                        <span class="notification-time">منذ 5 دقائق</span>
-                    </div>
-                </div>
-                <div class="notification-item unread">
-                    <i data-lucide="clock"></i>
-                    <div class="notification-content">
-                        <p>موعد تسليم طلبية #1001</p>
-                        <span class="notification-time">منذ ساعة</span>
-                    </div>
-                </div>
-                <div class="notification-item">
-                    <i data-lucide="check-circle"></i>
-                    <div class="notification-content">
-                        <p>تم تسليم طلبية #999</p>
-                        <span class="notification-time">منذ 3 ساعات</span>
-                    </div>
-                </div>
+                <!-- سيتم تحميل الإشعارات هنا عبر JavaScript -->
             </div>
             <div class="dropdown-footer">
                 <a href="{{ route('notifications.index') }}" class="view-all-notifications">عرض جميع الإشعارات</a>
@@ -83,6 +65,11 @@
                 <i data-lucide="user-circle"></i>
                 <span>{{ auth()->user()->name }}</span>
             </div>
+            <div class="dropdown-divider"></div>
+            <a href="{{ route('profile.index') }}" class="dropdown-item">
+                <i data-lucide="user"></i>
+                <span>الملف الشخصي</span>
+            </a>
             <div class="dropdown-divider"></div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -137,6 +124,7 @@
     @include('components.delete-modal-script')
     @auth
     @include('components.player-id-sync')
+    <script src="{{ asset('js/notifications.js') }}"></script>
     @endauth
     
 

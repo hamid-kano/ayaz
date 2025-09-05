@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Attachment;
 use App\Models\AudioRecording;
+use App\Services\OneSignalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -54,6 +55,17 @@ class OrderController extends Controller
         $validated['order_date'] = now()->toDateString();
 
         $order = Order::create($validated);
+
+        // إرسال إشعار للمنفذ عند تعيين طلبية جديدة
+        if ($order->executor_id && $order->executor->player_id) {
+            $oneSignal = new OneSignalService();
+            $oneSignal->sendToUser(
+                $order->executor->player_id,
+                'طلبية جديدة',
+                "تم تعيين طلبية جديدة لك: {$order->order_number}",
+                ['order_id' => $order->id, 'type' => 'new_order']
+            );
+        }
 
         // Handle file uploads
         if ($request->hasFile('attachments')) {
@@ -105,7 +117,39 @@ class OrderController extends Controller
             'executor_id' => 'nullable|exists:users,id',
         ]);
 
+        $oldExecutorId = $order->executor_id;
         $order->update($validated);
+
+        // إرسال إشعار عند تغيير المنفذ
+        if ($oldExecutorId != $validated['executor_id']) {
+            $oneSignal = new OneSignalService();
+            
+            // إشعار للمنفذ الجديد
+            if ($validated['executor_id']) {
+                $newExecutor = User::find($validated['executor_id']);
+                if ($newExecutor && $newExecutor->player_id) {
+                    $oneSignal->sendToUser(
+                        $newExecutor->player_id,
+                        'طلبية جديدة',
+                        "تم تعيين طلبية لك: {$order->order_number}",
+                        ['order_id' => $order->id, 'type' => 'assigned_order']
+                    );
+                }
+            }
+            
+            // إشعار للمنفذ السابق
+            if ($oldExecutorId) {
+                $oldExecutor = User::find($oldExecutorId);
+                if ($oldExecutor && $oldExecutor->player_id) {
+                    $oneSignal->sendToUser(
+                        $oldExecutor->player_id,
+                        'تغيير في الطلبية',
+                        "تم إلغاء تعيين الطلبية: {$order->order_number}",
+                        ['order_id' => $order->id, 'type' => 'unassigned_order']
+                    );
+                }
+            }
+        }
 
         return redirect()->route('orders.show', $order)->with('success', 'تم تحديث الطلبية بنجاح');
     }

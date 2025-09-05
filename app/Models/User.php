@@ -59,4 +59,14 @@ class User extends Authenticatable
     {
         return $this->isAdmin();
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->unread();
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 // Authentication Routes
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::get('/notifications/recent', [NotificationController::class, 'getRecent'])->name('notifications.recent');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     
@@ -46,6 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
     
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    
     // Users (Admin only)
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class);
@@ -53,6 +61,11 @@ Route::middleware('auth')->group(function () {
     
     // Update player ID for notifications
     Route::post('/user/update-player-id', [UserController::class, 'updatePlayerId'])->name('user.update-player-id');
+    
+    // OneSignal Notifications
+    Route::post('/notifications/send-to-user', [NotificationController::class, 'sendToUser'])->name('notifications.send-to-user');
+    Route::post('/notifications/send-to-users', [NotificationController::class, 'sendToUsers'])->name('notifications.send-to-users');
+    Route::post('/notifications/send-to-all', [NotificationController::class, 'sendToAll'])->name('notifications.send-to-all');
     
     // Attachments
     Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');
