@@ -1,8 +1,11 @@
+let syncInterval;
+let lastPlayerId = null;
+
 // تحديث معرف الإشعارات من localStorage
 function syncPlayerId() {
     const playerId = localStorage.getItem('player_id');
     
-    if (playerId) {
+    if (playerId && playerId !== lastPlayerId) {
         fetch('/user/update-player-id', {
             method: 'POST',
             headers: {
@@ -16,6 +19,7 @@ function syncPlayerId() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                lastPlayerId = playerId;
                 console.log('تم تحديث معرف الإشعارات بنجاح');
             }
         })
@@ -25,8 +29,24 @@ function syncPlayerId() {
     }
 }
 
+// بدء التحقق الدوري
+function startPeriodicSync() {
+    // تحقق فوري
+    syncPlayerId();
+    
+    // تحقق كل 30 ثانية
+    syncInterval = setInterval(syncPlayerId, 30000);
+}
+
+// إيقاف التحقق الدوري
+function stopPeriodicSync() {
+    if (syncInterval) {
+        clearInterval(syncInterval);
+    }
+}
+
 // تشغيل التحديث عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', syncPlayerId);
+document.addEventListener('DOMContentLoaded', startPeriodicSync);
 
 // تشغيل التحديث عند تغيير localStorage
 window.addEventListener('storage', function(e) {
@@ -34,3 +54,6 @@ window.addEventListener('storage', function(e) {
         syncPlayerId();
     }
 });
+
+// إيقاف التحقق عند إغلاق الصفحة
+window.addEventListener('beforeunload', stopPeriodicSync);
