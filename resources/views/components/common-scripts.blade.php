@@ -199,40 +199,31 @@ function audioRecorder() {
     }
 }
 
-// Dropdown functionality
+// Initialize Lucide icons
 document.addEventListener('DOMContentLoaded', function() {
     lucide.createIcons();
     
-    // Notifications toggle
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationsDropdown = document.getElementById('notificationsDropdown');
-    
-    if (notificationBtn && notificationsDropdown) {
-        notificationBtn.addEventListener('click', function() {
-            notificationsDropdown.classList.toggle('show');
-            userDropdown?.classList.remove('show');
-        });
-    }
-    
-    // User menu toggle
+    // User menu toggle (notifications are handled in notifications-test.blade.php)
     const userMenu = document.getElementById('userMenu');
     const userDropdown = document.getElementById('userDropdown');
     
     if (userMenu && userDropdown) {
-        userMenu.addEventListener('click', function() {
+        userMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
             userDropdown.classList.toggle('show');
-            notificationsDropdown?.classList.remove('show');
+            // Close notifications dropdown if open
+            const notificationsDropdown = document.getElementById('notificationsDropdown');
+            if (notificationsDropdown) {
+                notificationsDropdown.classList.remove('show');
+            }
+        });
+        
+        // Close user dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenu.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
         });
     }
-    
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!userMenu?.contains(e.target)) {
-            userDropdown?.classList.remove('show');
-        }
-        if (!notificationBtn?.contains(e.target)) {
-            notificationsDropdown?.classList.remove('show');
-        }
-    });
 });
 </script>
