@@ -90,14 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         notificationsList.innerHTML = notifications.map(notification => `
-            <div class="notification-item ${!notification.read ? 'unread' : ''}" data-id="${notification.id}">
+            <div class="notification-item ${!notification.read ? 'unread' : ''}" data-id="${notification.id}" onclick="markAsRead(${notification.id})">
                 <i class="fas fa-${notification.icon}"></i>
                 <div class="notification-content">
                     <h5>${notification.title}</h5>
                     <p>${notification.message}</p>
                     <span class="notification-time">${notification.time}</span>
                 </div>
-                ${!notification.read ? '<button class="mark-read-btn" onclick="markAsRead(' + notification.id + ')"><i class="fas fa-check"></i></button>' : ''}
+                ${!notification.read ? '<button class="mark-read-btn" onclick="event.stopPropagation(); markAsRead(' + notification.id + ')"><i class="fas fa-check"></i></button>' : ''}
             </div>
         `).join('');
     }
