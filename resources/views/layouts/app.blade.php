@@ -34,7 +34,7 @@
                 <div class="header-actions">
                     <div class="notification-btn" id="notificationBtn">
                         <i data-lucide="bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" style="display: none;">0</span>
                     </div>
                     <div class="user-avatar" id="userMenu">
                         <i data-lucide="user"></i>

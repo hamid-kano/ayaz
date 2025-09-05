@@ -39,8 +39,16 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
+            console.log('Loading notifications...');
             const response = await fetch('{{ route("notifications.recent") }}');
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
             const data = await response.json();
+            console.log('Notifications data:', data);
             
             this.updateBadge(data.unread_count);
             this.renderNotifications(data.notifications);
