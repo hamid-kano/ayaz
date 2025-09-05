@@ -98,7 +98,7 @@ function audioRecorder() {
                     startBtn.disabled = false;
                 }
             } catch (error) {
-                alert('خطأ في الوصول للميكروفون');
+                toast.error('خطأ في الوصول للميكروفون');
                 const startBtn = document.querySelector('[x-on\\:click="startRecording()"]');
                 if (startBtn) {
                     startBtn.innerHTML = '<i data-lucide="mic"></i> بدء التسجيل';
@@ -147,7 +147,7 @@ function audioRecorder() {
                 } else {
                     const errorData = await response.json();
                     console.error('Server Error:', errorData);
-                    alert('خطأ في حفظ التسجيل: ' + (errorData.message || 'خطأ غير معروف'));
+                    toast.error('خطأ في حفظ التسجيل: ' + (errorData.message || 'خطأ غير معروف'));
                     if (saveBtn) {
                         saveBtn.innerHTML = '<i data-lucide="save"></i> حفظ التسجيل';
                         saveBtn.disabled = false;
@@ -155,7 +155,7 @@ function audioRecorder() {
                     }
                 }
             } catch (error) {
-                alert('خطأ في الشبكة');
+                toast.error('خطأ في الشبكة');
                 if (saveBtn) {
                     saveBtn.innerHTML = '<i data-lucide="save"></i> حفظ التسجيل';
                     saveBtn.disabled = false;

@@ -105,6 +105,9 @@
         
         <!-- Toast System -->
         @include('components.toast-system')
+        
+        <!-- Backend Messages as Toast -->
+        @include('components.backend-toast')
 
         @auth
         <!-- Simple Bottom Navigation -->
