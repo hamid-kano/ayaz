@@ -179,10 +179,10 @@ function audioRecorder() {
                 <audio controls>
                     <source src="{{ url('${audio.file_path}') }}" type="audio/webm">
                 </audio>
-                <form method="POST" action="/audio/${audio.id}" style="display: inline;">
+                <form method="POST" action="{{ route('audio.destroy', '') }}/${audio.id}" style="display: inline;">
                     <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                     <input type="hidden" name="_method" value="DELETE">
-                    <button type="button" onclick="showDeleteModal('/audio/${audio.id}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
+                    <button type="button" onclick="showDeleteModal('{{ route('audio.destroy', '') }}/${audio.id}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
                 </form>
             `;
             
