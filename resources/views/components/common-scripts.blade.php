@@ -127,7 +127,8 @@ function audioRecorder() {
             }
 
             const formData = new FormData();
-            formData.append('audio', this.audioBlob, `recording-${Date.now()}.wav`);
+            const audioFile = new File([this.audioBlob], `recording-${Date.now()}.wav`, { type: 'audio/wav' });
+            formData.append('audio', audioFile);
             formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
             
             try {
