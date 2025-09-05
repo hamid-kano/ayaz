@@ -128,16 +128,27 @@ class OrderController extends Controller
             'attachments.*' => 'required|file|max:10240'
         ]);
 
+        $uploaded = [];
+        
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $path = $file->store('attachments', 'public');
-                $order->attachments()->create([
+                $attachment = $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
                     'file_path' => $path,
                     'file_type' => $file->getClientMimeType(),
                     'file_size' => $file->getSize(),
                 ]);
+                $uploaded[] = $attachment;
             }
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'تم رفع المرفقات بنجاح',
+                'attachments' => $uploaded
+            ]);
         }
 
         return redirect()->route('orders.show', $order)->with('success', 'تم رفع المرفقات بنجاح');

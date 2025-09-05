@@ -34,15 +34,16 @@ function fileUploader() {
         async uploadFiles() {
             this.isUploading = true;
             const orderId = window.location.pathname.split('/')[2];
-
-            for (let fileObj of this.files) {
-                if (fileObj.uploaded) continue;
-
-                const formData = new FormData();
-                formData.append('attachments[]', fileObj.file);
-                formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-
-                try {
+            
+            // Upload all files in parallel
+            const uploadPromises = this.files.map(fileObj => {
+                if (fileObj.uploaded) return Promise.resolve();
+                
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append('attachments[]', fileObj.file);
+                    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+                    
                     const xhr = new XMLHttpRequest();
                     
                     xhr.upload.addEventListener('progress', (e) => {
@@ -50,31 +51,32 @@ function fileUploader() {
                             fileObj.progress = Math.round((e.loaded / e.total) * 100);
                         }
                     });
-
+                    
                     xhr.onload = () => {
                         if (xhr.status === 200) {
                             fileObj.uploaded = true;
                             fileObj.progress = 100;
+                            resolve();
+                        } else {
+                            reject(new Error('Upload failed'));
                         }
                     };
-
+                    
+                    xhr.onerror = () => reject(new Error('Network error'));
+                    
                     xhr.open('POST', `/orders/${orderId}/attachments`);
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                     xhr.send(formData);
-
-                    await new Promise(resolve => {
-                        xhr.onloadend = resolve;
-                    });
-
-                } catch (error) {
-                    console.error('Upload failed:', error);
-                }
-            }
-
-            this.isUploading = false;
+                });
+            });
             
-            // Reload page after all uploads complete
-            if (this.files.every(f => f.uploaded)) {
+            try {
+                await Promise.all(uploadPromises);
                 setTimeout(() => location.reload(), 500);
+            } catch (error) {
+                console.error('Some uploads failed:', error);
+            } finally {
+                this.isUploading = false;
             }
         }
     }
