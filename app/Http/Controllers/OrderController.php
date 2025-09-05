@@ -180,14 +180,23 @@ class OrderController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('audio'), $fileName);
             
-            $order->audioRecordings()->create([
+            $audio = $order->audioRecordings()->create([
                 'file_name' => $file->getClientOriginalName(),
                 'file_path' => 'audio/' . $fileName,
                 'file_size' => $file->getSize(),
             ]);
+            
+            return response()->json([
+                'success' => true,
+                'audio' => [
+                    'id' => $audio->id,
+                    'file_name' => $audio->file_name,
+                    'filename' => $fileName
+                ]
+            ]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => false]);
     }
 
     public function deleteAudio(AudioRecording $audio)
