@@ -151,6 +151,26 @@ class OrderController extends Controller
         return back()->with('success', 'تم حذف المرفق بنجاح');
     }
 
+    public function uploadAudio(Request $request, Order $order)
+    {
+        $request->validate([
+            'audio' => 'required|file|mimes:wav,mp3,m4a|max:5120'
+        ]);
+
+        if ($request->hasFile('audio')) {
+            $file = $request->file('audio');
+            $path = $file->store('audio', 'public');
+            
+            $order->audioRecordings()->create([
+                'file_name' => $file->getClientOriginalName(),
+                'file_path' => $path,
+                'file_size' => $file->getSize(),
+            ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     public function deleteAudio(AudioRecording $audio)
     {
         Storage::disk('public')->delete($audio->file_path);

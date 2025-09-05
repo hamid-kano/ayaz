@@ -54,5 +54,8 @@ Route::middleware('auth')->group(function () {
     // Attachments
     Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');
     Route::delete('/attachments/{attachment}', [OrderController::class, 'deleteAttachment'])->name('attachments.destroy');
+    
+    // Audio
+    Route::post('/orders/{order}/audio', [OrderController::class, 'uploadAudio'])->name('orders.audio');
     Route::delete('/audio/{audio}', [OrderController::class, 'deleteAudio'])->name('audio.destroy');
 });
