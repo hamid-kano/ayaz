@@ -59,13 +59,19 @@ class OrderController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('attachments'), $fileName);
+                $orderPath = 'attachments/' . $order->id;
+                
+                if (!file_exists(public_path($orderPath))) {
+                    mkdir(public_path($orderPath), 0755, true);
+                }
+                
+                $file->move(public_path($orderPath), $fileName);
 
                 $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => 'attachments/' . $fileName,
+                    'file_path' => $orderPath . '/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
-                    'file_size' => $file->getSize(),
+                    'file_size' => filesize(public_path($orderPath . '/' . $fileName)),
                 ]);
             }
         }
@@ -136,15 +142,26 @@ class OrderController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('attachments'), $fileName);
-
+                $orderPath = 'attachments/' . $order->id;
+                
+                if (!file_exists(public_path($orderPath))) {
+                    mkdir(public_path($orderPath), 0755, true);
+                }
+                
+                $file->move(public_path($orderPath), $fileName);
+                
                 $attachment = $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => 'attachments/' . $fileName,
+                    'file_path' => $orderPath . '/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
-                    'file_size' => $file->getSize(),
+                    'file_size' => filesize(public_path($orderPath . '/' . $fileName)),
                 ]);
-                $uploaded[] = $attachment;
+                $uploaded[] = [
+                    'id' => $attachment->id,
+                    'file_name' => $attachment->file_name,
+                    'file_path' => $attachment->file_path,
+                    'file_size' => $attachment->file_size
+                ];
             }
         }
 

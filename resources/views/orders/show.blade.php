@@ -159,7 +159,7 @@
             </button>
         </div>
 
-        @include('components.file-uploader', ['orderId' => $order->id])
+        @include('components.file-uploader')
 
         <!-- Audio Section -->
         <div class="section-header">

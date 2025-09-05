@@ -55,8 +55,10 @@ function fileUploader() {
                     
                     xhr.onload = () => {
                         if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
                             fileObj.uploaded = true;
                             fileObj.progress = 100;
+                            this.addAttachmentToList(response.attachments[0]);
                             resolve();
                         } else {
                             reject(new Error('Upload failed'));
@@ -65,7 +67,7 @@ function fileUploader() {
                     
                     xhr.onerror = () => reject(new Error('Network error'));
                     
-                    xhr.open('POST', '{{ route("orders.attachments", $orderId) }}');
+                    xhr.open('POST', '{{ route("orders.attachments", $order->id ?? 0) }}');
                     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                     xhr.send(formData);
                 });
@@ -73,12 +75,48 @@ function fileUploader() {
             
             try {
                 await Promise.all(uploadPromises);
-                setTimeout(() => location.reload(), 500);
+                this.files = [];
             } catch (error) {
                 console.error('Some uploads failed:', error);
             } finally {
                 this.isUploading = false;
             }
+        },
+        
+        addAttachmentToList(attachment) {
+            const attachmentsList = document.querySelector('.attachments-list');
+            const emptyState = attachmentsList.querySelector('.empty-attachments');
+            
+            if (emptyState) {
+                emptyState.remove();
+            }
+            
+            const attachmentItem = document.createElement('div');
+            attachmentItem.className = 'attachment-item';
+            attachmentItem.innerHTML = `
+                <div class="attachment-info">
+                    <i data-lucide="file"></i>
+                    <div class="attachment-details">
+                        <span class="attachment-name">${attachment.file_name}</span>
+                        <small class="attachment-size">${(attachment.file_size / 1024).toFixed(1)} KB</small>
+                    </div>
+                </div>
+                <div class="attachment-actions">
+                    <a href="{{ url('/') }}/${attachment.file_path}" class="view-attachment" target="_blank" title="عرض">
+                        <i data-lucide="eye"></i>
+                    </a>
+                    <form method="POST" action="/attachments/${attachment.id}" style="display: inline;">
+                        <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" onclick="showDeleteModal('/attachments/${attachment.id}', 'المرفق', this.closest('form'))" title="حذف">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            attachmentsList.appendChild(attachmentItem);
+            lucide.createIcons();
         }
     }
 }
