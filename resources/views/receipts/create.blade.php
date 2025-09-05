@@ -35,13 +35,6 @@
 
 <form action="{{ route('receipts.store') }}" method="POST" class="form-container">
     @csrf
-    
-    <!-- Receipt Info Section -->
-    <div class="section-header">
-        <i data-lucide="banknote"></i>
-        <h3>بيانات السند</h3>
-    </div>
-    
     <div class="form-group">
         <label>رقم الطلبية</label>
         <select name="order_id" required id="orderSelect">

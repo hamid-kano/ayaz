@@ -2595,6 +2595,29 @@ body {
     .stats-cards,
     .stats-grid {
         grid-template-columns: 1fr;
+        padding: 0 15px;
+        gap: 10px;
+    }
+    
+    .summary-card {
+        padding: 15px;
+        gap: 12px;
+        width: 100%;
+        margin: 0;
+    }
+    
+    .summary-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .summary-info h3 {
+        font-size: 16px;
+    }
+    
+    .summary-info p {
+        font-size: 11px;
     }
 }
 

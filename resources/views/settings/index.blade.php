@@ -17,12 +17,6 @@
     <form method="POST" action="{{ route('settings.update') }}" class="form-card">
         @csrf
         @method('PUT')
-        
-        <div class="section-header">
-            <i data-lucide="bell"></i>
-            <h3>إعدادات الإشعارات</h3>
-        </div>
-
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
                 <input type="checkbox" name="notification_enabled" {{ $settings['notification_enabled'] ? 'checked' : '' }}>
