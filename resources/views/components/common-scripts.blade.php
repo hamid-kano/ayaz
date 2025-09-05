@@ -130,10 +130,8 @@ function audioRecorder() {
             formData.append('audio', this.audioBlob, `recording-${Date.now()}.wav`);
             formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
             
-            const orderId = window.location.pathname.split('/')[2];
-            
             try {
-                const response = await fetch(`/orders/${orderId}/audio`, {
+                const response = await fetch('{{ route("orders.audio", $order->id ?? 0) }}', {
                     method: 'POST',
                     body: formData
                 });

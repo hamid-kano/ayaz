@@ -211,6 +211,6 @@
         </div>
     </div>
     
-    @include('components.audio-recorder', ['orderId' => $order->id])
+    @include('components.audio-recorder')
 </div>
 @endsection
