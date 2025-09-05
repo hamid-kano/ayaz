@@ -178,12 +178,18 @@ class OrderController extends Controller
         if ($request->hasFile('audio')) {
             $file = $request->file('audio');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('audio'), $fileName);
+            $orderPath = 'audio/' . $order->id;
+            
+            if (!file_exists(public_path($orderPath))) {
+                mkdir(public_path($orderPath), 0755, true);
+            }
+            
+            $file->move(public_path($orderPath), $fileName);
             
             $audio = $order->audioRecordings()->create([
                 'file_name' => $file->getClientOriginalName(),
-                'file_path' => 'audio/' . $fileName,
-                'file_size' => filesize(public_path('audio/' . $fileName)),
+                'file_path' => $orderPath . '/' . $fileName,
+                'file_size' => filesize(public_path($orderPath . '/' . $fileName)),
             ]);
             
             return response()->json([
