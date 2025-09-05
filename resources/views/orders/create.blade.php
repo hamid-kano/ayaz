@@ -128,10 +128,10 @@
         <h3>المرفقات</h3>
     </div>
     
-    <div class="form-group">
+    <div class="form-group" x-data="{ files: [] }">
         <label>رفع ملفات</label>
         <div class="file-upload-area">
-            <input type="file" class="file-upload-input" name="attachments[]" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd">
+            <input type="file" class="file-upload-input" name="attachments[]" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd" @change="files = Array.from($event.target.files)">
             <div class="file-upload-content">
                 <div class="file-upload-icon">
                     <i data-lucide="upload"></i>
@@ -142,7 +142,16 @@
                 </div>
             </div>
         </div>
-        <div class="uploaded-files"></div>
+        <div x-show="files.length > 0" class="selected-files">
+            <h5>الملفات المختارة (<span x-text="files.length"></span>):</h5>
+            <template x-for="(file, index) in files" :key="index">
+                <div class="selected-file">
+                    <i data-lucide="file"></i>
+                    <span x-text="file.name"></span>
+                    <small x-text="(file.size / 1024).toFixed(1) + ' KB'"></small>
+                </div>
+            </template>
+        </div>
     </div>
     
     <!-- Action Buttons -->
