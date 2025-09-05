@@ -11,7 +11,7 @@
 
 <div class="form-container">
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+
     @endif
 
     <form method="POST" action="{{ route('settings.update') }}" class="form-card">

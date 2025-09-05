@@ -10,28 +10,7 @@
     <h2>إضافة سند قبض</h2>
 </div>
 
-<!-- Alerts -->
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 
-@if(session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if($errors->any())
-    <div class="alert alert-error">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 <form action="{{ route('receipts.store') }}" method="POST" class="form-container">
     @csrf
