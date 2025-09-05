@@ -24,7 +24,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'usd',
                 'status' => 'new',
                 'delivery_date' => Carbon::now()->addDays(3),
-                'reviewer_id' => $users->first()->id,
+                'reviewer_name' => 'علي أحمد',
                 'executor_id' => $users->skip(1)->first()->id,
             ],
             [
@@ -37,7 +37,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'syp',
                 'status' => 'in-progress',
                 'delivery_date' => Carbon::now()->addDays(2),
-                'reviewer_id' => $users->skip(1)->first()->id,
+                'reviewer_name' => 'محمد خالد',
                 'executor_id' => $users->last()->id,
             ],
             [
@@ -50,7 +50,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'usd',
                 'status' => 'delivered',
                 'delivery_date' => Carbon::now()->subDay(),
-                'reviewer_id' => $users->last()->id,
+                'reviewer_name' => 'سارة محمد',
                 'executor_id' => $users->first()->id,
             ],
             [
@@ -63,7 +63,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'usd',
                 'status' => 'cancelled',
                 'delivery_date' => Carbon::now()->addDays(5),
-                'reviewer_id' => $users->first()->id,
+                'reviewer_name' => 'أحمد علي',
                 'executor_id' => $users->skip(1)->first()->id,
             ],
             [
@@ -76,7 +76,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'syp',
                 'status' => 'new',
                 'delivery_date' => Carbon::now()->addDays(7),
-                'reviewer_id' => $users->skip(1)->first()->id,
+                'reviewer_name' => 'نور الدين',
                 'executor_id' => $users->last()->id,
             ],
             [
@@ -89,7 +89,7 @@ class OrderSeeder extends Seeder
                 'currency' => 'usd',
                 'status' => 'in-progress',
                 'delivery_date' => Carbon::now()->addDays(4),
-                'reviewer_id' => $users->last()->id,
+                'reviewer_name' => 'فاطمة حسن',
                 'executor_id' => $users->first()->id,
             ],
         ];

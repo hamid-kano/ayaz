@@ -88,14 +88,10 @@
     <div class="form-row">
         <div class="form-group">
             <label>مدقق الطلب</label>
-            <select name="reviewer_id">
-                <option value="">اختر مدقق</option>
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ $order->reviewer_id == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }}
-                    </option>
-                @endforeach
-            </select>
+            <input type="text" name="reviewer_name" value="{{ old('reviewer_name', $order->reviewer_name) }}" placeholder="أدخل اسم المدقق">
+            @error('reviewer_name')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
         </div>
         <div class="form-group">
             <label>المنفذ للطلبية</label>

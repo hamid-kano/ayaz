@@ -19,7 +19,7 @@ class Order extends Model
         'currency',
         'status',
         'delivery_date',
-        'reviewer_id',
+        'reviewer_name',
         'executor_id',
     ];
 
@@ -29,10 +29,7 @@ class Order extends Model
         'cost' => 'decimal:2',
     ];
 
-    public function reviewer()
-    {
-        return $this->belongsTo(User::class, 'reviewer_id');
-    }
+
 
     public function executor()
     {

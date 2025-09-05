@@ -52,7 +52,7 @@
         </div>
         <div class="info-item">
             <label>مدقق الطلب</label>
-            <span>{{ $order->reviewer->name ?? 'غير محدد' }}</span>
+            <span>{{ $order->reviewer_name ?? 'غير محدد' }}</span>
         </div>
         <div class="info-item">
             <label>المنفذ</label>

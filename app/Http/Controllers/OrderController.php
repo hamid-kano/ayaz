@@ -14,14 +14,15 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['reviewer', 'executor']);
+        $query = Order::with(['executor']);
         
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('order_number', 'like', "%{$search}%")
                   ->orWhere('customer_name', 'like', "%{$search}%")
-                  ->orWhere('order_type', 'like', "%{$search}%");
+                  ->orWhere('order_type', 'like', "%{$search}%")
+                  ->orWhere('reviewer_name', 'like', "%{$search}%");
             });
         }
         
@@ -45,7 +46,7 @@ class OrderController extends Controller
             'cost' => 'required|numeric|min:0',
             'currency' => 'required|in:syp,usd',
             'delivery_date' => 'required|date',
-            'reviewer_id' => 'nullable|exists:users,id',
+            'reviewer_name' => 'nullable|string|max:255',
             'executor_id' => 'nullable|exists:users,id',
         ]);
 
@@ -74,7 +75,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['reviewer', 'executor', 'attachments', 'audioRecordings', 'receipts']);
+        $order->load(['executor', 'attachments', 'audioRecordings', 'receipts']);
         return view('orders.show', compact('order'));
     }
 
@@ -94,7 +95,7 @@ class OrderController extends Controller
             'currency' => 'required|in:syp,usd',
             'status' => 'required|in:new,in-progress,delivered,cancelled',
             'delivery_date' => 'required|date',
-            'reviewer_id' => 'nullable|exists:users,id',
+            'reviewer_name' => 'nullable|string|max:255',
             'executor_id' => 'nullable|exists:users,id',
         ]);
 

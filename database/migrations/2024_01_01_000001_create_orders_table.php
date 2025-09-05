@@ -19,11 +19,10 @@ return new class extends Migration
             $table->enum('currency', ['syp', 'usd']);
             $table->enum('status', ['new', 'in-progress', 'delivered', 'cancelled'])->default('new');
             $table->date('delivery_date');
-            $table->unsignedBigInteger('reviewer_id')->nullable();
+            $table->string('reviewer_name')->nullable();
             $table->unsignedBigInteger('executor_id')->nullable();
             $table->timestamps();
-            
-            $table->foreign('reviewer_id')->references('id')->on('users')->onDelete('set null');
+
             $table->foreign('executor_id')->references('id')->on('users')->onDelete('set null');
         });
     }
