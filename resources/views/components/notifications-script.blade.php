@@ -1,3 +1,4 @@
+<script>
 class NotificationManager {
     constructor() {
         this.init();
@@ -29,7 +30,6 @@ class NotificationManager {
             });
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!this.notificationsDropdown?.contains(e.target)) {
                 this.closeDropdown();
@@ -39,7 +39,7 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
-            const response = await fetch('/notifications/recent');
+            const response = await fetch('{{ route("notifications.recent") }}');
             const data = await response.json();
             
             this.updateBadge(data.unread_count);
@@ -51,7 +51,7 @@ class NotificationManager {
 
     async markAsRead(notificationId) {
         try {
-            const response = await fetch(`/notifications/${notificationId}/read`, {
+            const response = await fetch(`{{ route("notifications.read", ":id") }}`.replace(':id', notificationId), {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
@@ -72,7 +72,7 @@ class NotificationManager {
 
     async markAllAsRead() {
         try {
-            const response = await fetch('/notifications/mark-all-read', {
+            const response = await fetch('{{ route("notifications.mark-all-read") }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
@@ -131,7 +131,6 @@ class NotificationManager {
             </div>
         `).join('');
 
-        // Re-initialize Lucide icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
@@ -172,14 +171,13 @@ class NotificationManager {
     }
 
     startPolling() {
-        // Poll for new notifications every 30 seconds
         setInterval(() => {
             this.loadNotifications();
         }, 30000);
     }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.notificationManager = new NotificationManager();
 });
+</script>

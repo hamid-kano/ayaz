@@ -124,7 +124,7 @@
     @include('components.delete-modal-script')
     @auth
     @include('components.player-id-sync')
-    <script src="{{ asset('js/notifications.js') }}"></script>
+    @include('components.notifications-script')
     @endauth
     
 
