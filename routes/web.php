@@ -67,6 +67,11 @@ Route::middleware('auth')->group(function () {
     // Update player ID for notifications
     Route::post('/user/update-player-id', [UserController::class, 'updatePlayerId'])->name('user.update-player-id');
     
+    // Test notifications page
+    Route::get('/test-notifications', function() {
+        return view('test-notifications');
+    })->name('test.notifications');
+    
     // Profile routes
     Route::get('/user-profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::post('/user-profile/avatar', [\App\Http\Controllers\ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
