@@ -101,26 +101,45 @@
         @endforelse
     </div>
     
-    <div class="add-attachment">
-        <form method="POST" action="{{ route('orders.attachments', $order) }}" enctype="multipart/form-data">
-            @csrf
-            <div class="file-upload-area">
-                <input type="file" class="file-upload-input" name="attachments[]" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd">
-                <div class="file-upload-content">
-                    <div class="file-upload-icon">
-                        <i data-lucide="upload"></i>
-                    </div>
-                    <div class="file-upload-text">
-                        <h4>اسحب الملفات هنا أو اضغط للتحديد</h4>
-                        <p>PDF, Word, صور, Excel, Photoshop</p>
-                    </div>
+    <div class="add-attachment" x-data="fileUploader()">
+        <div class="file-upload-area" @drop.prevent="handleDrop($event)" @dragover.prevent @dragenter.prevent>
+            <input type="file" x-ref="fileInput" @change="handleFiles($event.target.files)" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd" style="display: none;">
+            <div class="file-upload-content" @click="$refs.fileInput.click()">
+                <div class="file-upload-icon">
+                    <i data-lucide="upload"></i>
+                </div>
+                <div class="file-upload-text">
+                    <h4>اسحب الملفات هنا أو اضغط للتحديد</h4>
+                    <p>PDF, Word, صور, Excel, Photoshop</p>
                 </div>
             </div>
-            <button type="submit" class="btn-secondary" style="margin-top: 10px;">
-                <i data-lucide="plus"></i>
-                إضافة مرفق
-            </button>
-        </form>
+        </div>
+        
+        <div x-show="files.length > 0" class="upload-queue">
+            <template x-for="(file, index) in files" :key="index">
+                <div class="upload-item">
+                    <div class="file-info">
+                        <i data-lucide="file"></i>
+                        <span x-text="file.name"></span>
+                        <small x-text="formatFileSize(file.size)"></small>
+                    </div>
+                    <div class="upload-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" :style="`width: ${file.progress}%`"></div>
+                        </div>
+                        <span class="progress-text" x-text="file.progress + '%'"></span>
+                    </div>
+                    <button type="button" @click="removeFile(index)" class="remove-file" x-show="file.progress === 0">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+            </template>
+        </div>
+        
+        <button type="button" @click="uploadFiles()" x-show="files.length > 0 && !isUploading" class="btn-primary">
+            <i data-lucide="upload"></i>
+            رفع الملفات
+        </button>
     </div>
     
     <!-- Audio Section -->

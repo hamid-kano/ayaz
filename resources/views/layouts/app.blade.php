@@ -164,6 +164,7 @@
     
     <script src="{{ asset('js/delete-modal.js') }}"></script>
     <script src="{{ asset('js/audio-recorder.js') }}"></script>
+    <script src="{{ asset('js/file-uploader.js') }}"></script>
     
     <style>
     [x-cloak] {
@@ -337,6 +338,80 @@
         display: flex;
         align-items: center;
         gap: 5px;
+    }
+    
+    /* File Upload Styles */
+    .file-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+    
+    .file-upload-area:hover {
+        border-color: #3b82f6;
+    }
+    
+    .upload-queue {
+        margin-top: 20px;
+    }
+    
+    .upload-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+    
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+    }
+    
+    .file-info small {
+        color: #6b7280;
+    }
+    
+    .upload-progress {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+    }
+    
+    .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #f3f4f6;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: #10b981;
+        transition: width 0.3s;
+    }
+    
+    .progress-text {
+        font-size: 12px;
+        color: #6b7280;
+        min-width: 35px;
+    }
+    
+    .remove-file {
+        background: none;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        padding: 5px;
     }
     </style>
     @stack('scripts')
