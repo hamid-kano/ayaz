@@ -7,15 +7,32 @@ use App\Models\User;
 
 class NotificationHelper
 {
-    public static function createForUser($userId, $type, $title, $message, $data = null)
+    public static function createForUser($userId, $type, $title, $message, $data = null, $sendPush = true)
     {
-        return Notification::create([
+        // Create local notification
+        $notification = Notification::create([
             'user_id' => $userId,
             'type' => $type,
             'title' => $title,
             'message' => $message,
             'data' => $data
         ]);
+
+        // Send push notification if enabled
+        if ($sendPush) {
+            try {
+                $response = \Illuminate\Support\Facades\Http::post(route('notifications.send-to-user'), [
+                    'user_id' => $userId,
+                    'title' => $title,
+                    'message' => $message,
+                    'data' => array_merge($data ?? [], ['type' => $type])
+                ]);
+            } catch (\Exception $e) {
+                // Silent fail for push notifications
+            }
+        }
+
+        return $notification;
     }
 
     public static function createForAllUsers($type, $title, $message, $data = null)
@@ -34,7 +51,8 @@ class NotificationHelper
             'new_order',
             'طلبية جديدة',
             "طلبية جديدة #{$orderNumber} من {$customerName}",
-            ['order_number' => $orderNumber, 'customer' => $customerName]
+            ['order_number' => $orderNumber, 'customer' => $customerName],
+            false // Don't send push to avoid duplicate
         );
     }
 

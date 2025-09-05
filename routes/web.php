@@ -42,6 +42,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     
+    // Push Notifications (OneSignal)
+    Route::post('/notifications/send-to-user', [NotificationController::class, 'sendToUser'])->name('notifications.send-to-user');
+    Route::post('/notifications/send-to-users', [NotificationController::class, 'sendToUsers'])->name('notifications.send-to-users');
+    Route::post('/notifications/send-to-all', [NotificationController::class, 'sendToAll'])->name('notifications.send-to-all');
+    
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     
