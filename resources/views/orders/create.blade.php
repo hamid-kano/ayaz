@@ -128,7 +128,34 @@
         <h3>المرفقات</h3>
     </div>
     
-    <div class="form-group" x-data="{ files: [] }">
+    <div class="form-group" x-data="{ 
+        files: [],
+        getFileIcon(fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            if (['pdf'].includes(ext)) return 'fas fa-file-pdf';
+            if (['doc', 'docx'].includes(ext)) return 'fas fa-file-word';
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'fas fa-file-image';
+            if (['xls', 'xlsx'].includes(ext)) return 'fas fa-file-excel';
+            if (['psd'].includes(ext)) return 'fas fa-palette';
+            return 'fas fa-file';
+        },
+        getFileType(fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            if (['pdf'].includes(ext)) return 'pdf';
+            if (['doc', 'docx'].includes(ext)) return 'word';
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'image';
+            if (['xls', 'xlsx'].includes(ext)) return 'excel';
+            if (['psd'].includes(ext)) return 'photoshop';
+            return 'default';
+        },
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+    }">
         <label>رفع ملفات</label>
         <div class="file-upload-area">
             <input type="file" class="file-upload-input" name="attachments[]" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls,.psd" @change="files = Array.from($event.target.files)">
@@ -143,14 +170,24 @@
             </div>
         </div>
         <div x-show="files.length > 0" class="selected-files">
-            <h5>الملفات المختارة (<span x-text="files.length"></span>):</h5>
-            <template x-for="(file, index) in files" :key="index">
-                <div class="selected-file">
-                    <i data-lucide="file"></i>
-                    <span x-text="file.name"></span>
-                    <small x-text="(file.size / 1024).toFixed(1) + ' KB'"></small>
-                </div>
-            </template>
+            <div class="files-header">
+                <i class="fas fa-folder"></i>
+                <h5>الملفات المختارة</h5>
+                <span class="files-count" x-text="files.length"></span>
+            </div>
+            <div class="files-grid">
+                <template x-for="(file, index) in files" :key="index">
+                    <div class="file-card">
+                        <div class="file-icon" :class="getFileType(file.name)">
+                            <i :class="getFileIcon(file.name)"></i>
+                        </div>
+                        <div class="file-info">
+                            <span class="file-name" x-text="file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name"></span>
+                            <small class="file-size" x-text="formatFileSize(file.size)"></small>
+                        </div>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
     
