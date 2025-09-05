@@ -2,6 +2,10 @@
 
 @section('title', 'الملف الشخصي - مطبعة ريناس')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+@endpush
+
 @section('content')
 <div class="page-header">
     <a href="{{ route('dashboard') }}" class="back-btn">
@@ -14,7 +18,7 @@
     <!-- Profile Picture Section -->
     <div class="profile-picture-section" x-data="profilePicture()">
         <div class="profile-avatar">
-            <img x-ref="avatarImg" src="{{ auth()->user()->avatar ? asset('profile/' . auth()->user()->avatar) : 'https://via.placeholder.com/150' }}" alt="الصورة الشخصية">
+            <img x-ref="avatarImg" src="{{ auth()->user()->avatar ? asset('profile/' . auth()->user()->avatar) : asset('images/default-avatar.svg') }}" alt="الصورة الشخصية">
             <div class="avatar-overlay" @click="$refs.fileInput.click()">
                 <i class="fas fa-camera"></i>
             </div>
@@ -36,24 +40,27 @@
             <div class="form-group">
                 <label>كلمة المرور الحالية</label>
                 <div class="input-group">
-                    <input type="password" name="current_password" required>
+                    <input type="password" name="current_password" placeholder="أدخل كلمة المرور الحالية" required>
                     <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>كلمة المرور الجديدة</label>
                 <div class="input-group">
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" placeholder="أدخل كلمة المرور الجديدة" required>
                     <i class="fas fa-key input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>تأكيد كلمة المرور الجديدة</label>
                 <div class="input-group">
-                    <input type="password" name="password_confirmation" required>
+                    <input type="password" name="password_confirmation" placeholder="أعد إدخال كلمة المرور الجديدة" required>
                     <i class="fas fa-key input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
                 </div>
             </div>
 
@@ -93,6 +100,19 @@ function profilePicture() {
                 toast.error('خطأ في الشبكة');
             }
         }
+    }
+}
+
+function togglePassword(icon) {
+    const input = icon.parentElement.querySelector('input');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
     }
 }
 </script>
