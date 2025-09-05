@@ -142,6 +142,8 @@
         </button>
     </div>
     
+    @include('components.file-uploader', ['orderId' => $order->id])
+    
     <!-- Audio Section -->
     <div class="section-header">
         <i data-lucide="mic"></i>
@@ -208,5 +210,7 @@
             <span>جاري التسجيل...</span>
         </div>
     </div>
+    
+    @include('components.audio-recorder', ['orderId' => $order->id])
 </div>
 @endsection

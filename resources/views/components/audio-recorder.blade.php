@@ -1,3 +1,6 @@
+@props(['orderId'])
+
+<script>
 function audioRecorder() {
     return {
         isRecording: false,
@@ -8,7 +11,6 @@ function audioRecorder() {
 
         async startRecording() {
             try {
-                // Show loading state
                 const startBtn = document.querySelector('[x-on\\:click="startRecording()"]');
                 if (startBtn) {
                     startBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> جاري التحضير...';
@@ -34,13 +36,11 @@ function audioRecorder() {
                 this.mediaRecorder.start();
                 this.isRecording = true;
                 
-                // Reset button
                 if (startBtn) {
                     startBtn.disabled = false;
                 }
             } catch (error) {
                 alert('خطأ في الوصول للميكروفون');
-                // Reset button on error
                 const startBtn = document.querySelector('[x-on\\:click="startRecording()"]');
                 if (startBtn) {
                     startBtn.innerHTML = '<i data-lucide="mic"></i> بدء التسجيل';
@@ -71,12 +71,9 @@ function audioRecorder() {
             const formData = new FormData();
             formData.append('audio', this.audioBlob, `recording-${Date.now()}.wav`);
             formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-
-            const pathParts = window.location.pathname.split('/').filter(Boolean);
-            const orderId = pathParts[pathParts.indexOf('orders') + 1];
             
             try {
-                const response = await fetch(`/ayaz/public/orders/${orderId}/audio`, {
+                const response = await fetch('{{ route("orders.audio", $orderId) }}', {
                     method: 'POST',
                     body: formData
                 });
@@ -109,3 +106,4 @@ function audioRecorder() {
         }
     }
 }
+</script>

@@ -212,7 +212,7 @@
 @push('scripts')
 <script>
 function markAsRead(id) {
-    fetch(`/notifications/${id}/read`, {
+    fetch('{{ route("notifications.read", ":id") }}'.replace(':id', id), {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -230,7 +230,7 @@ function markAsRead(id) {
 }
 
 function markAllAsRead() {
-    fetch('/notifications/mark-all-read', {
+    fetch('{{ route("notifications.mark-all-read") }}', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

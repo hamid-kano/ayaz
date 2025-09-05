@@ -1,6 +1,5 @@
-// Delete Modal Helper
+<script>
 function showDeleteModal(deleteUrl, itemName = 'العنصر', formElement = null) {
-    // Update modal content
     const modal = document.querySelector('[x-data*="open: false"]');
     if (modal) {
         const message = modal.querySelector('p');
@@ -9,16 +8,12 @@ function showDeleteModal(deleteUrl, itemName = 'العنصر', formElement = nul
         }
     }
     
-    // Show modal
     window.dispatchEvent(new CustomEvent('delete-modal'));
     
-    // Handle confirmation
     const handleConfirm = (e) => {
         if (formElement) {
-            // Submit the form
             formElement.submit();
         } else {
-            // Create and submit form for DELETE request
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = deleteUrl;
@@ -47,9 +42,7 @@ function showDeleteModal(deleteUrl, itemName = 'العنصر', formElement = nul
     window.addEventListener('confirm-delete', handleConfirm);
 }
 
-// Replace all confirm dialogs
 document.addEventListener('DOMContentLoaded', function() {
-    // Replace onclick confirm
     document.querySelectorAll('[onclick*="confirm"]').forEach(element => {
         const onclick = element.getAttribute('onclick');
         const match = onclick.match(/confirm\(['"]([^'"]+)['"]\)/);
@@ -72,3 +65,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+</script>

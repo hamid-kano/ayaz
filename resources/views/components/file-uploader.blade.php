@@ -1,3 +1,6 @@
+@props(['orderId'])
+
+<script>
 function fileUploader() {
     return {
         files: [],
@@ -33,9 +36,7 @@ function fileUploader() {
 
         async uploadFiles() {
             this.isUploading = true;
-            const orderId = window.location.pathname.split('/')[2];
             
-            // Upload all files in parallel
             const uploadPromises = this.files.map(fileObj => {
                 if (fileObj.uploaded) return Promise.resolve();
                 
@@ -64,7 +65,7 @@ function fileUploader() {
                     
                     xhr.onerror = () => reject(new Error('Network error'));
                     
-                    xhr.open('POST', `/orders/${orderId}/attachments`);
+                    xhr.open('POST', '{{ route("orders.attachments", $orderId) }}');
                     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                     xhr.send(formData);
                 });
@@ -81,3 +82,4 @@ function fileUploader() {
         }
     }
 }
+</script>
