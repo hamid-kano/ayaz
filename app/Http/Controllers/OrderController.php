@@ -57,10 +57,12 @@ class OrderController extends Controller
         // Handle file uploads
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments', 'public');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('attachments'), $fileName);
+                
                 $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
+                    'file_path' => 'attachments/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
                     'file_size' => $file->getSize(),
                 ]);
