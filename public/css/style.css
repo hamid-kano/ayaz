@@ -2594,7 +2594,7 @@ body {
     .summary-cards,
     .stats-cards,
     .stats-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr ;
         padding: 0 15px;
         gap: 10px;
     }
