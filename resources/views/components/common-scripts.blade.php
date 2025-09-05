@@ -177,7 +177,7 @@ function audioRecorder() {
             audioItem.innerHTML = `
                 <span>${audio.file_name}</span>
                 <audio controls>
-                    <source src="/audio/${audio.filename}" type="audio/wav">
+                    <source src="{{ url('${audio.file_path}') }}" type="audio/webm">
                 </audio>
                 <form method="POST" action="/audio/${audio.id}" style="display: inline;">
                     <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">

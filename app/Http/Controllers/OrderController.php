@@ -15,19 +15,19 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $query = Order::with(['executor']);
-        
+
         if ($request->has('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('order_number', 'like', "%{$search}%")
-                  ->orWhere('customer_name', 'like', "%{$search}%")
-                  ->orWhere('order_type', 'like', "%{$search}%")
-                  ->orWhere('reviewer_name', 'like', "%{$search}%");
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('order_type', 'like', "%{$search}%")
+                    ->orWhere('reviewer_name', 'like', "%{$search}%");
             });
         }
-        
+
         $orders = $query->latest()->get();
-        
+
         return view('orders.index', compact('orders'));
     }
 
@@ -60,7 +60,7 @@ class OrderController extends Controller
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->move(public_path('attachments'), $fileName);
-                
+
                 $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
                     'file_path' => 'attachments/' . $fileName,
@@ -113,7 +113,7 @@ class OrderController extends Controller
     public function debts()
     {
         $orders = Order::with('receipts')
-            ->whereHas('receipts', function($query) {
+            ->whereHas('receipts', function ($query) {
                 $query->havingRaw('SUM(amount) < orders.cost');
             })
             ->orWhereDoesntHave('receipts')
@@ -132,12 +132,12 @@ class OrderController extends Controller
         ]);
 
         $uploaded = [];
-        
+
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->move(public_path('attachments'), $fileName);
-                
+
                 $attachment = $order->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
                     'file_path' => 'attachments/' . $fileName,
@@ -165,7 +165,7 @@ class OrderController extends Controller
             unlink(public_path($attachment->file_path));
         }
         $attachment->delete();
-        
+
         return back()->with('success', 'تم حذف المرفق بنجاح');
     }
 
@@ -179,25 +179,27 @@ class OrderController extends Controller
             $file = $request->file('audio');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $orderPath = 'audio/' . $order->id;
-            
+
             if (!file_exists(public_path($orderPath))) {
                 mkdir(public_path($orderPath), 0755, true);
             }
-            
+
             $file->move(public_path($orderPath), $fileName);
-            
+
             $audio = $order->audioRecordings()->create([
                 'file_name' => $file->getClientOriginalName(),
                 'file_path' => $orderPath . '/' . $fileName,
                 'file_size' => filesize(public_path($orderPath . '/' . $fileName)),
             ]);
-            
+
             return response()->json([
                 'success' => true,
                 'audio' => [
                     'id' => $audio->id,
                     'file_name' => $audio->file_name,
-                    'filename' => $fileName
+                    'filename' => $fileName,
+                    'file_path' =>  $audio->file_path
+
                 ]
             ]);
         }
@@ -211,7 +213,7 @@ class OrderController extends Controller
             unlink(public_path($audio->file_path));
         }
         $audio->delete();
-        
+
         return back()->with('success', 'تم حذف التسجيل بنجاح');
     }
 }
