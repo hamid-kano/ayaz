@@ -57,14 +57,26 @@ class OrderController extends Controller
         $order = Order::create($validated);
 
         // إرسال إشعار للمنفذ عند تعيين طلبية جديدة
-        if ($order->executor_id && $order->executor->player_id) {
-            $oneSignal = new OneSignalService();
-            $oneSignal->sendToUser(
-                $order->executor->player_id,
-                'طلبية جديدة',
-                "تم تعيين طلبية جديدة لك: {$order->order_number}",
-                ['order_id' => $order->id, 'type' => 'new_order']
-            );
+        if ($order->executor_id) {
+            // إضافة إشعار محلي
+            \App\Models\Notification::create([
+                'user_id' => $order->executor_id,
+                'type' => 'new_order',
+                'title' => 'طلبية جديدة',
+                'message' => "تم تعيين طلبية جديدة لك: {$order->order_number}",
+                'data' => ['order_id' => $order->id]
+            ]);
+            
+            // إرسال push notification
+            if ($order->executor->player_id) {
+                $oneSignal = new OneSignalService();
+                $oneSignal->sendToUser(
+                    $order->executor->player_id,
+                    'طلبية جديدة',
+                    "تم تعيين طلبية جديدة لك: {$order->order_number}",
+                    ['order_id' => $order->id, 'type' => 'new_order']
+                );
+            }
         }
 
         // Handle file uploads
@@ -126,6 +138,15 @@ class OrderController extends Controller
             
             // إشعار للمنفذ الجديد
             if ($validated['executor_id']) {
+                // إضافة إشعار محلي
+                \App\Models\Notification::create([
+                    'user_id' => $validated['executor_id'],
+                    'type' => 'assigned_order',
+                    'title' => 'طلبية جديدة',
+                    'message' => "تم تعيين طلبية لك: {$order->order_number}",
+                    'data' => ['order_id' => $order->id]
+                ]);
+                
                 $newExecutor = User::find($validated['executor_id']);
                 if ($newExecutor && $newExecutor->player_id) {
                     $oneSignal->sendToUser(
@@ -139,6 +160,15 @@ class OrderController extends Controller
             
             // إشعار للمنفذ السابق
             if ($oldExecutorId) {
+                // إضافة إشعار محلي
+                \App\Models\Notification::create([
+                    'user_id' => $oldExecutorId,
+                    'type' => 'unassigned_order',
+                    'title' => 'تغيير في الطلبية',
+                    'message' => "تم إلغاء تعيين الطلبية: {$order->order_number}",
+                    'data' => ['order_id' => $order->id]
+                ]);
+                
                 $oldExecutor = User::find($oldExecutorId);
                 if ($oldExecutor && $oldExecutor->player_id) {
                     $oneSignal->sendToUser(

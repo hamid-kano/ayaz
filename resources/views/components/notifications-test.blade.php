@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('{{ route("notifications.recent") }}')
             .then(response => response.json())
             .then(data => {
-                console.log('Notifications loaded:', data);
+                // console.log('Notifications loaded:', data);
                 displayNotifications(data.notifications);
                 updateUnreadCount(data.unread_count);
             })
