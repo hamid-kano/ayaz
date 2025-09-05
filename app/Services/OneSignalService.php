@@ -62,6 +62,10 @@ class OneSignalService
     private function sendNotification($payload)
     {
         try {
+            if (!$this->appId || !$this->restApiKey) {
+                return false;
+            }
+
             $response = Http::withHeaders([
                 'Authorization' => 'Basic ' . $this->restApiKey,
                 'Content-Type' => 'application/json'
@@ -70,11 +74,8 @@ class OneSignalService
             ]));
 
             if ($response->successful()) {
-                Log::info('OneSignal notification sent successfully', $response->json());
                 return $response->json();
             }
-
-            Log::error('OneSignal notification failed', $response->json());
             return false;
         } catch (\Exception $e) {
             Log::error('OneSignal error: ' . $e->getMessage());

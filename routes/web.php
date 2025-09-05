@@ -91,4 +91,6 @@ Route::middleware('auth')->group(function () {
         }
         return response()->file($path);
     })->name('audio.serve');
+    
+
 });
