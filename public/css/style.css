@@ -2211,6 +2211,15 @@ body {
     transform: scale(1.05);
 }
 
+.purchase-actions .action-btn.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.purchase-actions .action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
 /* Very Small Screens */
 @media (max-width: 320px) {
     .app-container {

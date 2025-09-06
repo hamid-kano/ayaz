@@ -50,6 +50,14 @@
                     <a href="{{ route('purchases.edit', $purchase) }}" class="action-btn edit" title="تعديل">
                         <i data-lucide="edit-2"></i>
                     </a>
+                    <form method="POST" action="{{ route('purchases.destroy', $purchase) }}" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="action-btn delete" title="حذف" 
+                            onclick="showDeleteModal('{{ route('purchases.destroy', $purchase) }}', 'المشترى #{{ $purchase->purchase_number }}', this.closest('form'))">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -65,6 +73,9 @@
         </div>
     @endforelse
 </div>
+
+@include('components.delete-modal')
+@include('components.delete-modal-script')
 
 @push('scripts')
 <script>
