@@ -636,6 +636,10 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// تطبيق الخط العربي على المخططات
+Chart.defaults.font.family = 'Cairo, Tajawal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+Chart.defaults.font.size = 12;
+
 // Monthly Revenue/Expenses Chart
 const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
 new Chart(monthlyCtx, {
@@ -662,6 +666,30 @@ new Chart(monthlyCtx, {
         plugins: {
             legend: {
                 position: 'top',
+                labels: {
+                    font: {
+                        family: 'Cairo, Tajawal, sans-serif',
+                        size: 13
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    font: {
+                        family: 'Cairo, Tajawal, sans-serif',
+                        size: 11
+                    }
+                }
+            },
+            y: {
+                ticks: {
+                    font: {
+                        family: 'Cairo, Tajawal, sans-serif',
+                        size: 11
+                    }
+                }
             }
         }
     }
@@ -684,6 +712,12 @@ new Chart(ordersCtx, {
         plugins: {
             legend: {
                 position: 'bottom',
+                labels: {
+                    font: {
+                        family: 'Cairo, Tajawal, sans-serif',
+                        size: 12
+                    }
+                }
             }
         }
     }
