@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طباعة الطلبية #{{ $order->order_number }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Cairo', 'Arial', sans-serif;
             line-height: 1.6;
             color: #333;
             background: white;
@@ -35,15 +36,13 @@
         .logo {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0 auto 15px;
-            color: white;
-            font-size: 32px;
-            font-weight: bold;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         .company-name {
@@ -164,7 +163,9 @@
     
     <div class="print-container">
         <div class="header">
-            <div class="logo">ر</div>
+            <div class="logo">
+                <img src="{{ asset('images/logo.png') }}" alt="مطبعة ريناس">
+            </div>
             <div class="company-name">مطبعة ريناس</div>
             <div class="company-subtitle">للطباعة والتصميم</div>
         </div>
