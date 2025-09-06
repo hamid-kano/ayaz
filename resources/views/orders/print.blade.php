@@ -137,13 +137,8 @@
 
 
         .cost-highlight {
-            font-size: 22px;
-            font-weight: 700;
-            color: #059669;
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            padding: 8px 16px;
-            border-radius: 8px;
-            display: inline-block;
+            font-weight: bold;
+            color: #000;
         }
 
         .details-section {
