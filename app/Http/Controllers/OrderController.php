@@ -223,11 +223,10 @@ class OrderController extends Controller
     public function debts()
     {
         $orders = Order::with('receipts')
-            ->whereHas('receipts', function ($query) {
-                $query->havingRaw('SUM(amount) < orders.cost');
-            })
-            ->orWhereDoesntHave('receipts')
-            ->get();
+            ->get()
+            ->filter(function($order) {
+                return $order->remaining_amount > 0;
+            });
 
         $totalUsd = $orders->where('currency', 'usd')->sum('remaining_amount');
         $totalSyp = $orders->where('currency', 'syp')->sum('remaining_amount');
