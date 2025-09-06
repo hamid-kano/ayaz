@@ -251,7 +251,7 @@
         </div>
 
         <div class="content">
-            <div class="order-title">تفاصيل الطلبية #{{ $order->order_number }}</div>
+
 
             <table class="info-table">
                 <tr>
