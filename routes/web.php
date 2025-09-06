@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     // Orders
     Route::resource('orders', OrderController::class);
+    Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     Route::get('/debts', [OrderController::class, 'debts'])->name('orders.debts');
 
     // Receipts

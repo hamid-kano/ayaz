@@ -332,4 +332,10 @@ class OrderController extends Controller
 
         return back()->with('success', 'تم حذف التسجيل بنجاح');
     }
+
+    public function print(Order $order)
+    {
+        $order->load(['executor', 'receipts']);
+        return view('orders.print', compact('order'));
+    }
 }

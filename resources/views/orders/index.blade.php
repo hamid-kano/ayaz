@@ -60,6 +60,9 @@
                 <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
                     <i data-lucide="eye"></i>
                 </a>
+                <a href="{{ route('orders.print', $order) }}" class="action-btn print" title="طباعة" target="_blank">
+                    <i data-lucide="printer"></i>
+                </a>
                 <a href="{{ route('receipts.index', ['order_id' => $order->id]) }}" class="action-btn receipts" title="المقبوضات">
                     <i data-lucide="credit-card"></i>
                 </a>
