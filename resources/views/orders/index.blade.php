@@ -28,7 +28,19 @@
                 <i data-lucide="search"></i>
             </button>
         </div>
+        @if(request('status'))
+            <input type="hidden" name="status" value="{{ request('status') }}">
+        @endif
     </form>
+</div>
+
+<!-- Filter Tabs -->
+<div class="filter-tabs">
+    <button class="tab-btn {{ request('status') == '' ? 'active' : '' }}" onclick="filterOrders('')">الكل</button>
+    <button class="tab-btn {{ request('status') == 'new' ? 'active' : '' }}" onclick="filterOrders('new')">جديدة</button>
+    <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}" onclick="filterOrders('in-progress')">قيد التنفيذ</button>
+    <button class="tab-btn {{ request('status') == 'delivered' ? 'active' : '' }}" onclick="filterOrders('delivered')">تم التسليم</button>
+    <button class="tab-btn {{ request('status') == 'cancelled' ? 'active' : '' }}" onclick="filterOrders('cancelled')">ملغاة</button>
 </div>
 
 <!-- Orders Grid -->
@@ -110,4 +122,17 @@
 @include('components.delete-modal')
 @include('components.delete-modal-script')
 
+@push('scripts')
+<script>
+function filterOrders(status) {
+    const url = new URL(window.location);
+    if (status) {
+        url.searchParams.set('status', status);
+    } else {
+        url.searchParams.delete('status');
+    }
+    window.location = url;
+}
+</script>
+@endpush
 @endsection

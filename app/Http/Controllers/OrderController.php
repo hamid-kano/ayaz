@@ -22,6 +22,11 @@ class OrderController extends Controller
             $query->where('executor_id', auth()->id());
         }
 
+        // فلتر حسب الحالة
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {

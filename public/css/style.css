@@ -2429,34 +2429,103 @@ body {
 /* Filter Tabs */
 .filter-tabs {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     padding: 0 20px;
     margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .tab-btn {
     flex: 1;
-    padding: 12px 16px;
+    min-width: 80px;
+    padding: 10px 12px;
     background: #f8f9fa;
     border: 2px solid #e9ecef;
-    border-radius: 25px;
-    font-size: 14px;
+    border-radius: 20px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Cairo', sans-serif;
     color: #6c757d;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .tab-btn.active {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-color: #667eea;
     color: white;
+    transform: scale(1.02);
 }
 
 .tab-btn:hover:not(.active) {
     background: #e9ecef;
     border-color: #dee2e6;
+    transform: translateY(-1px);
+}
+
+@media (min-width: 480px) {
+    .filter-tabs {
+        gap: 10px;
+    }
+    
+    .tab-btn {
+        min-width: 90px;
+        padding: 12px 14px;
+        font-size: 13px;
+        border-radius: 22px;
+    }
+}
+
+@media (min-width: 768px) {
+    .filter-tabs {
+        gap: 12px;
+        padding: 0 30px;
+        justify-content: center;
+        overflow-x: visible;
+    }
+    
+    .tab-btn {
+        flex: 0 0 auto;
+        min-width: 100px;
+        padding: 14px 18px;
+        font-size: 14px;
+        border-radius: 25px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .filter-tabs {
+        gap: 15px;
+        padding: 0 40px;
+    }
+    
+    .tab-btn {
+        min-width: 120px;
+        padding: 16px 22px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 375px) {
+    .filter-tabs {
+        gap: 6px;
+        padding: 0 15px;
+    }
+    
+    .tab-btn {
+        min-width: 70px;
+        padding: 8px 10px;
+        font-size: 11px;
+        border-radius: 18px;
+    }
 }
 
 /* List Styles */
