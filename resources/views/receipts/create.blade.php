@@ -22,7 +22,7 @@
                 <option value="{{ $order->id }}" 
                         data-currency="{{ $order->currency }}"
                         data-remaining="{{ $order->remaining_amount }}"
-                        {{ old('order_id') == $order->id ? 'selected' : '' }}>
+                        {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
                     #{{ $order->order_number }} - {{ $order->customer_name }} 
                     (متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }})
                 </option>

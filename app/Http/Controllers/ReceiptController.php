@@ -16,7 +16,7 @@ class ReceiptController extends Controller
         return view('receipts.index', compact('receipts', 'totalAmount'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $orders = Order::whereIn('status', ['new', 'in-progress'])
             ->with('receipts')
@@ -24,8 +24,10 @@ class ReceiptController extends Controller
             ->filter(function($order) {
                 return $order->remaining_amount > 0;
             });
+        
+        $selectedOrderId = $request->get('order_id');
             
-        return view('receipts.create', compact('orders'));
+        return view('receipts.create', compact('orders', 'selectedOrderId'));
     }
 
     public function store(Request $request)
