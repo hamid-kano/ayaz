@@ -42,7 +42,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
-            'order_type' => 'required|string',
+            'order_type' => 'required|string|max:255',
             'order_details' => 'required|string',
             'cost' => 'required|numeric|min:0',
             'currency' => 'required|in:syp,usd',
@@ -119,7 +119,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
-            'order_type' => 'required|string',
+            'order_type' => 'required|string|max:255',
             'order_details' => 'required|string',
             'cost' => 'required|numeric|min:0',
             'currency' => 'required|in:syp,usd',

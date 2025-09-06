@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->date('order_date');
             $table->string('customer_name');
-            $table->string('order_type');
+            $table->text('order_type');
             $table->text('order_details');
             $table->decimal('cost', 10, 2);
             $table->enum('currency', ['syp', 'usd']);

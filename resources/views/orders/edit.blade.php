@@ -34,14 +34,10 @@
     
     <div class="form-group">
         <label>النوع</label>
-        <select name="order_type" required>
-            <option value="business-cards" {{ $order->order_type == 'business-cards' ? 'selected' : '' }}>بطاقات عمل</option>
-            <option value="flyers" {{ $order->order_type == 'flyers' ? 'selected' : '' }}>فلايرز</option>
-            <option value="brochures" {{ $order->order_type == 'brochures' ? 'selected' : '' }}>بروشورات</option>
-            <option value="banners" {{ $order->order_type == 'banners' ? 'selected' : '' }}>لافتات</option>
-            <option value="books" {{ $order->order_type == 'books' ? 'selected' : '' }}>كتب ومجلات</option>
-            <option value="other" {{ $order->order_type == 'other' ? 'selected' : '' }}>أخرى</option>
-        </select>
+        <input type="text" name="order_type" value="{{ old('order_type', $order->order_type) }}" placeholder="أدخل نوع الطلبية" required>
+        @error('order_type')
+            <span class="error-message">{{ $message }}</span>
+        @enderror
     </div>
     
     <div class="form-group">

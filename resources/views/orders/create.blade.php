@@ -24,15 +24,7 @@
     
     <div class="form-group">
         <label>النوع</label>
-        <select name="order_type" required>
-            <option value="">اختر نوع الطلبية</option>
-            <option value="business-cards" {{ old('order_type') == 'business-cards' ? 'selected' : '' }}>بطاقات عمل</option>
-            <option value="flyers" {{ old('order_type') == 'flyers' ? 'selected' : '' }}>فلايرز</option>
-            <option value="brochures" {{ old('order_type') == 'brochures' ? 'selected' : '' }}>بروشورات</option>
-            <option value="banners" {{ old('order_type') == 'banners' ? 'selected' : '' }}>لافتات</option>
-            <option value="books" {{ old('order_type') == 'books' ? 'selected' : '' }}>كتب ومجلات</option>
-            <option value="other" {{ old('order_type') == 'other' ? 'selected' : '' }}>أخرى</option>
-        </select>
+        <input type="text" name="order_type" value="{{ old('order_type') }}" placeholder="أدخل نوع الطلبية" required>
         @error('order_type')
             <span class="error-message">{{ $message }}</span>
         @enderror
