@@ -67,6 +67,44 @@ class ReceiptController extends Controller
         return view('receipts.show', compact('receipt'));
     }
 
+    public function edit(Receipt $receipt)
+    {
+        $orders = Order::whereIn('status', ['new', 'in-progress'])
+            ->with('receipts')
+            ->get()
+            ->filter(function($order) use ($receipt) {
+                return $order->id === $receipt->order_id || $order->remaining_amount > 0;
+            });
+            
+        return view('receipts.edit', compact('receipt', 'orders'));
+    }
+
+    public function update(Request $request, Receipt $receipt)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:0.01',
+            'receipt_date' => 'required|date',
+            'notes' => 'nullable|string',
+        ], [
+            'amount.min' => 'يجب أن يكون المبلغ أكبر من صفر'
+        ]);
+
+        $order = $receipt->order;
+        $oldAmount = $receipt->amount;
+        $newAmount = $validated['amount'];
+        
+        // حساب المبلغ المتبقي مع استثناء المقبوض الحالي
+        $availableAmount = $order->remaining_amount + $oldAmount;
+        
+        if ($newAmount > $availableAmount) {
+            return back()->withErrors(['amount' => 'المبلغ يتجاوز المبلغ المتبقي']);
+        }
+
+        $receipt->update($validated);
+
+        return redirect()->route('receipts.index')->with('success', 'تم تحديث سند القبض بنجاح');
+    }
+
     public function destroy(Receipt $receipt)
     {
         $receipt->delete();

@@ -1943,6 +1943,7 @@ body {
 .receipt-actions {
     display: flex;
     justify-content: center;
+    gap: 8px;
     padding-top: 10px;
     border-top: 1px solid #f8f9fa;
 }
@@ -1963,6 +1964,15 @@ body {
 .receipt-actions .action-btn.delete {
     background: rgba(239, 68, 68, 0.1);
     color: #ef4444;
+}
+
+.receipt-actions .action-btn.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.receipt-actions .action-btn.edit:hover {
+    background: rgba(245, 158, 11, 0.2);
 }
 
 .receipt-actions .action-btn.delete:hover {

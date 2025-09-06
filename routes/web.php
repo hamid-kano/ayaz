@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/debts', [OrderController::class, 'debts'])->name('orders.debts');
 
     // Receipts
-    Route::resource('receipts', ReceiptController::class)->except(['edit', 'update']);
+    Route::resource('receipts', ReceiptController::class);
 
     // Purchases
     Route::resource('purchases', PurchaseController::class);

@@ -56,6 +56,9 @@
                 <div class="receipt-date">{{ $receipt->receipt_date->format('Y-m-d') }}</div>
             </div>
             <div class="receipt-actions">
+                <a href="{{ route('receipts.edit', $receipt) }}" class="action-btn edit" title="تعديل">
+                    <i data-lucide="edit-2"></i>
+                </a>
                 <form method="POST" action="{{ route('receipts.destroy', $receipt) }}" style="display: inline;">
                     @csrf
                     @method('DELETE')

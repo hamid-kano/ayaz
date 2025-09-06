@@ -102,6 +102,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedOrderInfo = document.getElementById('selectedOrderInfo');
     const remainingAmount = document.getElementById('remainingAmount');
     
+    // تفعيل الاختيار التلقائي عند تحميل الصفحة
+    if (orderSelect.value) {
+        orderSelect.dispatchEvent(new Event('change'));
+    }
+    
     orderSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         
