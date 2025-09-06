@@ -109,8 +109,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const currency = selectedOption.dataset.currency;
             const remaining = selectedOption.dataset.remaining;
             
-            // Update currency select
+            // Update currency select and disable it
             currencySelect.value = currency;
+            currencySelect.disabled = true;
             
             // Show order info
             selectedOrderInfo.style.display = 'block';
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             amountInput.value = remaining;
         } else {
             selectedOrderInfo.style.display = 'none';
+            currencySelect.disabled = false;
             amountInput.removeAttribute('max');
             amountInput.value = '';
         }

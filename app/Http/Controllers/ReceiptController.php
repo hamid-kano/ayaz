@@ -32,13 +32,22 @@ class ReceiptController extends Controller
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0.01',
             'currency' => 'required|in:syp,usd',
             'receipt_date' => 'required|date',
             'notes' => 'nullable|string',
+        ], [
+            'amount.min' => 'يجب أن يكون المبلغ أكبر من صفر',
+            'currency.required' => 'يجب اختيار العملة',
+            'order_id.required' => 'يجب اختيار رقم الطلبية'
         ]);
 
         $order = Order::findOrFail($validated['order_id']);
+        
+        // Check currency matches order currency
+        if ($validated['currency'] !== $order->currency) {
+            return back()->withErrors(['currency' => 'يجب أن تكون العملة مطابقة لعملة الطلبية']);
+        }
         
         // Check if amount doesn't exceed remaining
         if ($validated['amount'] > $order->remaining_amount) {
