@@ -47,6 +47,12 @@
                         <i data-lucide="edit"></i>
                     </a>
                     @if($user->id !== auth()->id())
+                        <form method="POST" action="{{ route('users.login-as', $user) }}" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-login" title="تسجيل الدخول بحسابه">
+                                <i data-lucide="log-in"></i>
+                            </button>
+                        </form>
                         <form method="POST" action="{{ route('users.destroy', $user) }}" class="delete-form">
                             @csrf
                             @method('DELETE')
@@ -93,6 +99,14 @@ function copyToClipboard(text) {
 .player-id-empty {
     color: #999;
     font-style: italic;
+}
+.btn-login {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+.btn-login:hover {
+    background: rgba(34, 197, 94, 0.2);
 }
 </style>
 @endsection

@@ -93,4 +93,23 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'message' => 'تم تحديث معرف الإشعارات بنجاح']);
     }
+
+    public function loginAs(User $user)
+    {
+        if (!auth()->user()->isAdmin()) {
+            abort(403);
+        }
+
+        if ($user->id === auth()->id()) {
+            return redirect()->route('users.index')->with('error', 'لا يمكنك تسجيل الدخول بحسابك الخاص');
+        }
+
+        // حفظ معرف المدير في الجلسة
+        session(['original_user_id' => auth()->id()]);
+        
+        // تسجيل الدخول بحساب المستخدم
+        auth()->login($user);
+
+        return redirect()->route('dashboard')->with('success', "تم تسجيل الدخول بحساب {$user->name}");
+    }
 }

@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
     // Users (Admin only)
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class);
+        Route::post('/users/{user}/login-as', [UserController::class, 'loginAs'])->name('users.login-as');
     });
 
     // Update player ID for notifications
