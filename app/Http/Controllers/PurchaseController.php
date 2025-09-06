@@ -80,6 +80,13 @@ class PurchaseController extends Controller
 
     public function destroy(Purchase $purchase)
     {
+        // حذف المرفقات من الملفات
+        foreach ($purchase->attachments as $attachment) {
+            if (file_exists(public_path($attachment->file_path))) {
+                unlink(public_path($attachment->file_path));
+            }
+        }
+
         $purchase->delete();
         return redirect()->route('purchases.index')->with('success', 'تم حذف المشترى بنجاح');
     }
