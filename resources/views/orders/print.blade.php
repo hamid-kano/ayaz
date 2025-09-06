@@ -148,6 +148,8 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            font-family: 'Cairo', 'Arial', sans-serif;
+            font-weight: 600;
             z-index: 1000;
         }
         
