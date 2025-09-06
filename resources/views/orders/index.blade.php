@@ -8,9 +8,13 @@
         <i data-lucide="arrow-right"></i>
     </a>
     <h2>الطلبات</h2>
-    <a href="{{ route('orders.create') }}" class="add-btn">
-        <i data-lucide="plus"></i>
-    </a>
+    @if(auth()->user()->isAdmin())
+        <a href="{{ route('orders.create') }}" class="add-btn">
+            <i data-lucide="plus"></i>
+        </a>
+    @else
+        <div></div>
+    @endif
 </div>
 
 
@@ -63,21 +67,23 @@
                 <a href="{{ route('orders.print', $order) }}" class="action-btn print" title="طباعة" target="_blank">
                     <i data-lucide="printer"></i>
                 </a>
-                <a href="{{ route('receipts.index', ['order_id' => $order->id]) }}" class="action-btn receipts" title="المقبوضات">
-                    <i data-lucide="credit-card"></i>
-                </a>
-                <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
-                    <i data-lucide="edit-2"></i>
-                </a>
-                @if($order->status !== 'delivered' && $order->receipts->isEmpty())
-                    <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="action-btn delete" title="حذف" 
-                            onclick="showDeleteModal('{{ route('orders.destroy', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
-                            <i data-lucide="trash-2"></i>
-                        </button>
-                    </form>
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('receipts.index', ['order_id' => $order->id]) }}" class="action-btn receipts" title="المقبوضات">
+                        <i data-lucide="credit-card"></i>
+                    </a>
+                    <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
+                        <i data-lucide="edit-2"></i>
+                    </a>
+                    @if($order->status !== 'delivered' && $order->receipts->isEmpty())
+                        <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="action-btn delete" title="حذف" 
+                                onclick="showDeleteModal('{{ route('orders.destroy', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </form>
+                    @endif
                 @endif
             </div>
         </div>
@@ -85,11 +91,15 @@
         <div class="empty-state">
             <i data-lucide="file-text"></i>
             <h3>لا توجد طلبيات</h3>
-            <p>ابدأ بإضافة طلبية جديدة</p>
-            <a href="{{ route('orders.create') }}" class="btn-primary">
-                <i data-lucide="plus"></i>
-                إضافة طلبية
-            </a>
+            @if(auth()->user()->isAdmin())
+                <p>ابدأ بإضافة طلبية جديدة</p>
+                <a href="{{ route('orders.create') }}" class="btn-primary">
+                    <i data-lucide="plus"></i>
+                    إضافة طلبية
+                </a>
+            @else
+                <p>لم يتم تعيين أي طلبيات لك بعد</p>
+            @endif
         </div>
     @endforelse
 </div>

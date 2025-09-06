@@ -17,6 +17,11 @@ class OrderController extends Controller
     {
         $query = Order::with(['executor']);
 
+        // إذا كان المستخدم عادي، إظهار طلبياته فقط
+        if (!auth()->user()->isAdmin()) {
+            $query->where('executor_id', auth()->id());
+        }
+
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
