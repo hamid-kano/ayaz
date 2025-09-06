@@ -79,7 +79,7 @@
         }
 
         .content {
-            padding: 40px;
+            padding: 10px;
         }
 
         .order-title {
@@ -134,35 +134,7 @@
             font-weight: 500;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
 
-        .status-new {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-        }
-
-        .status-in-progress {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .status-delivered {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .status-cancelled {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
 
         .cost-highlight {
             font-size: 22px;
@@ -314,30 +286,7 @@
                     <td><span class="cost-highlight">{{ number_format($order->cost, 2) }}
                             {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span></td>
                 </tr>
-                <tr>
-                    <td>حالة الطلبية</td>
-                    <td>
-                        <span class="status-badge status-{{ $order->status }}">
-                            @switch($order->status)
-                                @case('new')
-                                    جديدة
-                                @break
 
-                                @case('in-progress')
-                                    قيد التنفيذ
-                                @break
-
-                                @case('delivered')
-                                    تم التسليم
-                                @break
-
-                                @case('cancelled')
-                                    ملغاة
-                                @break
-                            @endswitch
-                        </span>
-                    </td>
-                </tr>
                 <tr>
                     <td>تاريخ التسليم</td>
                     <td>{{ $order->delivery_date->format('Y-m-d') }}</td>
