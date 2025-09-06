@@ -51,6 +51,11 @@ class Order extends Model
         return $this->hasMany(AudioRecording::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class, 'data->order_id', 'id');
+    }
+
     public function getTotalPaidAttribute()
     {
         return $this->receipts()->where('currency', $this->currency)->sum('amount');
