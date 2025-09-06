@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class ReceiptController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $receipts = Receipt::with('order')->latest()->get();
+        $query = Receipt::with('order');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->whereHas('order', function ($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%");
+            })->orWhere('notes', 'like', "%{$search}%");
+        }
+
+        $receipts = $query->latest()->get();
         $totalAmount = $receipts->sum('amount');
         
         return view('receipts.index', compact('receipts', 'totalAmount'));

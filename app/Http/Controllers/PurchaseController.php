@@ -7,9 +7,24 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $purchases = Purchase::with('attachments')->latest()->get();
+        $query = Purchase::with('attachments');
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('purchase_number', 'like', "%{$search}%")
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('details', 'like', "%{$search}%");
+            });
+        }
+
+        $purchases = $query->latest()->get();
         return view('purchases.index', compact('purchases'));
     }
 
@@ -91,9 +106,20 @@ class PurchaseController extends Controller
         return redirect()->route('purchases.index')->with('success', 'تم حذف المشترى بنجاح');
     }
 
-    public function debts()
+    public function debts(Request $request)
     {
-        $purchases = Purchase::where('status', 'debt')->latest()->get();
+        $query = Purchase::where('status', 'debt');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('purchase_number', 'like', "%{$search}%")
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('details', 'like', "%{$search}%");
+            });
+        }
+
+        $purchases = $query->latest()->get();
         
         $totalUsd = $purchases->where('currency', 'usd')->sum('amount');
         $totalSyp = $purchases->where('currency', 'syp')->sum('amount');

@@ -6,37 +6,83 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Purchase;
 use App\Models\Receipt;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
     public function index()
     {
+        // حساب الإحصائيات الحقيقية
+        $totalOrders = Order::count();
+        $completedOrders = Order::where('status', 'delivered')->count();
+        $pendingOrders = Order::whereIn('status', ['new', 'in-progress'])->count();
+        
+        // حساب الإيرادات (مجموع المدفوعات)
+        $totalRevenue = Receipt::sum('amount');
+        
+        // حساب المصروفات
+        $totalExpenses = Purchase::sum('amount');
+        
+        // صافي الربح
+        $netProfit = $totalRevenue - $totalExpenses;
+        
+        // الديون المستحقة (الطلبات غير المدفوعة بالكامل)
+        $outstandingDebts = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id), 0)) as debt')
+            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id), 0)')
+            ->value('debt') ?? 0;
+        
+        // الديون علينا (المشتريات غير المدفوعة)
+        $debtsOnUs = Purchase::where('status', 'debt')->sum('amount');
+        
         $stats = [
-            'total_orders' => 45,
-            'completed_orders' => 32,
-            'pending_orders' => 13,
-            'total_revenue' => 125000,
-            'total_expenses' => 45000,
-            'net_profit' => 80000,
-            'outstanding_debts' => 25000,
-            'debts_on_us' => 15000
+            'total_orders' => $totalOrders,
+            'completed_orders' => $completedOrders,
+            'pending_orders' => $pendingOrders,
+            'total_revenue' => $totalRevenue,
+            'total_expenses' => $totalExpenses,
+            'net_profit' => $netProfit,
+            'outstanding_debts' => $outstandingDebts,
+            'debts_on_us' => $debtsOnUs
         ];
 
-        $monthlyData = [
-            ['month' => 'يناير', 'revenue' => 15000, 'expenses' => 8000],
-            ['month' => 'فبراير', 'revenue' => 18000, 'expenses' => 9500],
-            ['month' => 'مارس', 'revenue' => 22000, 'expenses' => 11000],
-            ['month' => 'أبريل', 'revenue' => 19000, 'expenses' => 8500],
-            ['month' => 'مايو', 'revenue' => 25000, 'expenses' => 12000],
-            ['month' => 'يونيو', 'revenue' => 26000, 'expenses' => 13500]
-        ];
+        // البيانات الشهرية للرسم البياني
+        $monthlyData = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthName = $date->locale('ar')->translatedFormat('F');
+            
+            $monthlyRevenue = Receipt::whereYear('receipt_date', $date->year)
+                ->whereMonth('receipt_date', $date->month)
+                ->sum('amount');
+                
+            $monthlyExpenses = Purchase::whereYear('purchase_date', $date->year)
+                ->whereMonth('purchase_date', $date->month)
+                ->sum('amount');
+                
+            $monthlyData[] = [
+                'month' => $monthName,
+                'revenue' => $monthlyRevenue,
+                'expenses' => $monthlyExpenses
+            ];
+        }
 
-        $topCustomers = [
-            ['name' => 'أحمد محمد', 'orders' => 8, 'total' => 15000],
-            ['name' => 'سارة أحمد', 'orders' => 6, 'total' => 12000],
-            ['name' => 'محمد علي', 'orders' => 5, 'total' => 9500],
-            ['name' => 'فاطمة حسن', 'orders' => 4, 'total' => 8000]
-        ];
+        // أفضل العملاء
+        $topCustomers = Order::select('customer_name')
+            ->selectRaw('COUNT(*) as orders_count')
+            ->selectRaw('SUM(cost) as total_amount')
+            ->groupBy('customer_name')
+            ->orderByDesc('total_amount')
+            ->limit(5)
+            ->get()
+            ->map(function ($customer) {
+                return [
+                    'name' => $customer->customer_name,
+                    'orders' => $customer->orders_count,
+                    'total' => $customer->total_amount
+                ];
+            })
+            ->toArray();
 
         return view('reports.index', compact('stats', 'monthlyData', 'topCustomers'));
     }

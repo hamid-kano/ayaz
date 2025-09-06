@@ -225,10 +225,20 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->with('success', 'تم حذف الطلبية بنجاح');
     }
 
-    public function debts()
+    public function debts(Request $request)
     {
-        $orders = Order::with('receipts')
-            ->get()
+        $query = Order::with('receipts');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('order_type', 'like', "%{$search}%");
+            });
+        }
+
+        $orders = $query->get()
             ->filter(function($order) {
                 return $order->remaining_amount > 0;
             });

@@ -13,6 +13,21 @@
     </a>
 </div>
 
+<!-- Search Section -->
+<div class="search-container">
+    <form method="GET" action="{{ route('purchases.index') }}">
+        <div class="search-group">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في المشتريات...">
+            <button type="submit" class="search-btn">
+                <i data-lucide="search"></i>
+            </button>
+        </div>
+        @if(request('status'))
+            <input type="hidden" name="status" value="{{ request('status') }}">
+        @endif
+    </form>
+</div>
+
 <!-- Filter Tabs -->
 <div class="filter-tabs">
     <button class="tab-btn {{ request('status') == '' ? 'active' : '' }}" onclick="filterPurchases('')">الكل</button>

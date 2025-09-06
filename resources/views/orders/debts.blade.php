@@ -10,6 +10,18 @@
     <h2>ديون لنا</h2>
 </div>
 
+<!-- Search Section -->
+<div class="search-container">
+    <form method="GET" action="{{ route('orders.debts') }}">
+        <div class="search-group">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في الديون لنا...">
+            <button type="submit" class="search-btn">
+                <i data-lucide="search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
 <!-- Summary Cards -->
 <div class="summary-cards">
     <div class="summary-card">

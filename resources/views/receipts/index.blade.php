@@ -13,6 +13,18 @@
     </a>
 </div>
 
+<!-- Search Section -->
+<div class="search-container">
+    <form method="GET" action="{{ route('receipts.index') }}">
+        <div class="search-group">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث في المقبوضات...">
+            <button type="submit" class="search-btn">
+                <i data-lucide="search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
 <div class="stats-cards">
     <div class="stat-card">
         <div class="stat-icon" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
