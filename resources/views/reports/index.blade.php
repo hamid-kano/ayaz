@@ -126,23 +126,47 @@
         </div>
     </div>
 
-    <div class="table-card">
-        <div class="table-header">
-            <h3>الديون والمستحقات</h3>
+    <div class="debt-card">
+        <div class="debt-header">
+            <div class="debt-title">
+                <i data-lucide="credit-card"></i>
+                <h3>الديون والمستحقات</h3>
+            </div>
         </div>
-        <div class="debt-summary">
-            <div class="debt-item">
-                <span class="debt-label">ديون علينا</span>
-                <div class="debt-currencies">
-                    <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us_syp']) }} ل.س</span>
-                    <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us_usd']) }} $</span>
+        <div class="debt-content">
+            <div class="debt-section">
+                <div class="debt-type-header">
+                    <i data-lucide="arrow-up-circle" class="debt-icon debt-owed"></i>
+                    <span class="debt-type-title">ديون علينا</span>
+                </div>
+                <div class="debt-amounts">
+                    <div class="debt-amount-item">
+                        <span class="amount debt-on-us">{{ number_format($stats['debts_on_us_syp']) }}</span>
+                        <span class="currency">ليرة سورية</span>
+                    </div>
+                    <div class="debt-amount-item">
+                        <span class="amount debt-on-us">{{ number_format($stats['debts_on_us_usd']) }}</span>
+                        <span class="currency">دولار أمريكي</span>
+                    </div>
                 </div>
             </div>
-            <div class="debt-item">
-                <span class="debt-label">ديون لنا</span>
-                <div class="debt-currencies">
-                    <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts_syp']) }} ل.س</span>
-                    <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts_usd']) }} $</span>
+            
+            <div class="debt-divider"></div>
+            
+            <div class="debt-section">
+                <div class="debt-type-header">
+                    <i data-lucide="arrow-down-circle" class="debt-icon debt-receivable"></i>
+                    <span class="debt-type-title">ديون لنا</span>
+                </div>
+                <div class="debt-amounts">
+                    <div class="debt-amount-item">
+                        <span class="amount debt-for-us">{{ number_format($stats['outstanding_debts_syp']) }}</span>
+                        <span class="currency">ليرة سورية</span>
+                    </div>
+                    <div class="debt-amount-item">
+                        <span class="amount debt-for-us">{{ number_format($stats['outstanding_debts_usd']) }}</span>
+                        <span class="currency">دولار أمريكي</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -386,37 +410,98 @@
     font-size: 14px;
 }
 
-.debt-summary {
+.debt-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.debt-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.debt-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.debt-title i {
+    color: #3b82f6;
+    font-size: 20px;
+}
+
+.debt-title h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.debt-content {
     padding: 24px;
 }
 
-.debt-item {
+.debt-section {
+    margin-bottom: 24px;
+}
+
+.debt-section:last-child {
+    margin-bottom: 0;
+}
+
+.debt-type-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.debt-icon {
+    font-size: 18px;
+}
+
+.debt-icon.debt-owed {
+    color: #ef4444;
+}
+
+.debt-icon.debt-receivable {
+    color: #22c55e;
+}
+
+.debt-type-title {
+    font-weight: 600;
+    color: #374151;
+    font-size: 15px;
+}
+
+.debt-amounts {
+    display: grid;
+    gap: 12px;
+}
+
+.debt-amount-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid #f3f4f6;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 4px solid transparent;
 }
 
-.debt-item:last-child {
-    border-bottom: none;
-}
-
-.debt-label {
-    color: #6b7280;
-    font-weight: 500;
-}
-
-.debt-currencies {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    text-align: left;
-}
-
-.debt-amount {
+.debt-amount-item .amount {
     font-weight: 700;
-    font-size: 14px;
+    font-size: 16px;
+}
+
+.debt-amount-item .currency {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .debt-on-us {
@@ -425,6 +510,22 @@
 
 .debt-for-us {
     color: #22c55e;
+}
+
+.debt-amount-item:has(.debt-on-us) {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+}
+
+.debt-amount-item:has(.debt-for-us) {
+    border-left-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.debt-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #e5e7eb 50%, transparent 100%);
+    margin: 24px 0;
 }
 
 @media (max-width: 1024px) {
@@ -508,10 +609,16 @@
         padding: 6px 8px;
     }
     
-    .debt-item {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
+    .debt-content {
+        padding: 16px;
+    }
+    
+    .debt-amount-item {
+        padding: 10px 12px;
+    }
+    
+    .debt-amount-item .amount {
+        font-size: 14px;
     }
     
     .search-group {
