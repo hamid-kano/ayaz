@@ -11,18 +11,24 @@ use Carbon\Carbon;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // تحديد الفترة الزمنية
+        $period = $request->get('period', 180); // افتراضي 6 أشهر
+        $startDate = Carbon::now()->subDays($period);
+        
         // حساب الإحصائيات الحقيقية
-        $totalOrders = Order::count();
-        $completedOrders = Order::where('status', 'delivered')->count();
-        $pendingOrders = Order::whereIn('status', ['new', 'in-progress'])->count();
+        $totalOrders = Order::where('order_date', '>=', $startDate)->count();
+        $completedOrders = Order::where('status', 'delivered')
+            ->where('order_date', '>=', $startDate)->count();
+        $pendingOrders = Order::whereIn('status', ['new', 'in-progress'])
+            ->where('order_date', '>=', $startDate)->count();
         
         // حساب الإيرادات (مجموع المدفوعات)
-        $totalRevenue = Receipt::sum('amount');
+        $totalRevenue = Receipt::where('receipt_date', '>=', $startDate)->sum('amount');
         
         // حساب المصروفات
-        $totalExpenses = Purchase::sum('amount');
+        $totalExpenses = Purchase::where('purchase_date', '>=', $startDate)->sum('amount');
         
         // صافي الربح
         $netProfit = $totalRevenue - $totalExpenses;
@@ -30,17 +36,25 @@ class ReportController extends Controller
         // الديون المستحقة (الطلبات غير المدفوعة بالكامل)
         $outstandingDebtsSyp = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
             ->where('currency', 'syp')
+            ->where('order_date', '>=', $startDate)
             ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
             ->value('debt') ?? 0;
             
         $outstandingDebtsUsd = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
             ->where('currency', 'usd')
+            ->where('order_date', '>=', $startDate)
             ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
             ->value('debt') ?? 0;
         
         // الديون علينا (المشتريات غير المدفوعة)
-        $debtsOnUsSyp = Purchase::where('status', 'debt')->where('currency', 'syp')->sum('amount');
-        $debtsOnUsUsd = Purchase::where('status', 'debt')->where('currency', 'usd')->sum('amount');
+        $debtsOnUsSyp = Purchase::where('status', 'debt')
+            ->where('currency', 'syp')
+            ->where('purchase_date', '>=', $startDate)
+            ->sum('amount');
+        $debtsOnUsUsd = Purchase::where('status', 'debt')
+            ->where('currency', 'usd')
+            ->where('purchase_date', '>=', $startDate)
+            ->sum('amount');
         
         $stats = [
             'total_orders' => $totalOrders,
@@ -56,17 +70,20 @@ class ReportController extends Controller
         ];
 
         // البيانات الشهرية للرسم البياني
+        $monthsCount = min(6, ceil($period / 30));
         $monthlyData = [];
-        for ($i = 5; $i >= 0; $i--) {
+        for ($i = $monthsCount - 1; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
             $monthName = $date->locale('ar')->translatedFormat('F');
             
             $monthlyRevenue = Receipt::whereYear('receipt_date', $date->year)
                 ->whereMonth('receipt_date', $date->month)
+                ->where('receipt_date', '>=', $startDate)
                 ->sum('amount');
                 
             $monthlyExpenses = Purchase::whereYear('purchase_date', $date->year)
                 ->whereMonth('purchase_date', $date->month)
+                ->where('purchase_date', '>=', $startDate)
                 ->sum('amount');
                 
             $monthlyData[] = [
@@ -80,6 +97,7 @@ class ReportController extends Controller
         $topCustomers = Order::select('customer_name')
             ->selectRaw('COUNT(*) as orders_count')
             ->selectRaw('SUM(cost) as total_amount')
+            ->where('order_date', '>=', $startDate)
             ->groupBy('customer_name')
             ->orderByDesc('total_amount')
             ->limit(5)

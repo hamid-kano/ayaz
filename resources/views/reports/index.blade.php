@@ -14,19 +14,16 @@
 </div>
 
 <!-- Filters Section -->
-<div class="search-container">
+<form method="GET" action="{{ route('reports.index') }}" class="search-container">
     <div class="search-group">
-        <select class="filter-select">
-            <option>آخر 30 يوم</option>
-            <option>آخر 3 أشهر</option>
-            <option>آخر 6 أشهر</option>
-            <option>السنة الحالية</option>
+        <select name="period" class="filter-select" onchange="this.form.submit()">
+            <option value="30" {{ request('period') == '30' ? 'selected' : '' }}>آخر 30 يوم</option>
+            <option value="90" {{ request('period') == '90' ? 'selected' : '' }}>آخر 3 أشهر</option>
+            <option value="180" {{ request('period') == '180' ? 'selected' : '' }}>آخر 6 أشهر</option>
+            <option value="365" {{ request('period') == '365' ? 'selected' : '' }}>السنة الحالية</option>
         </select>
-        <button class="filter-btn">
-            <i data-lucide="filter"></i>
-        </button>
     </div>
-</div>
+</form>
 
 
 
