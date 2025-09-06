@@ -14,12 +14,22 @@
 
 <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="form-container">
     @csrf
-    <div class="form-group">
-        <label>اسم العميل</label>
-        <input type="text" name="customer_name" value="{{ old('customer_name') }}" placeholder="أدخل اسم العميل" required>
-        @error('customer_name')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
+    <div class="form-row">
+        <div class="form-group">
+            <label>اسم العميل</label>
+            <input type="text" name="customer_name" value="{{ old('customer_name') }}" placeholder="أدخل اسم العميل" required>
+            @error('customer_name')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label>رقم هاتف العميل</label>
+            <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" placeholder="اختياري">
+            @error('customer_phone')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
     </div>
     
     <div class="form-group">

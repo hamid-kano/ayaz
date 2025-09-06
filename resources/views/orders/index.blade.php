@@ -48,6 +48,9 @@
             </div>
             <div class="order-info">
                 <h4>{{ $order->customer_name }}</h4>
+                @if($order->customer_phone)
+                    <p class="order-phone">{{ $order->customer_phone }}</p>
+                @endif
                 <p class="order-type">{{ $order->order_type }}</p>
                 <p class="order-details">{{ Str::limit($order->order_details, 50) }}</p>
             </div>

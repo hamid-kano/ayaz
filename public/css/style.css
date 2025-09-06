@@ -1633,6 +1633,15 @@ body {
     margin-bottom: 8px;
 }
 
+.order-phone {
+    font-size: 13px;
+    color: #059669;
+    font-weight: 500;
+    margin-bottom: 5px;
+    direction: ltr;
+    text-align: right;
+}
+
 .order-type {
     font-size: 14px;
     color: #667eea;

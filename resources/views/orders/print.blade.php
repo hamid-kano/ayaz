@@ -274,6 +274,12 @@
                     <td>اسم العميل</td>
                     <td>{{ $order->customer_name }}</td>
                 </tr>
+                @if($order->customer_phone)
+                <tr>
+                    <td>رقم هاتف العميل</td>
+                    <td>{{ $order->customer_phone }}</td>
+                </tr>
+                @endif
                 <tr>
                     <td>نوع الطلبية</td>
                     <td>{{ $order->order_type }}</td>
