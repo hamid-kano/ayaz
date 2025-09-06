@@ -62,6 +62,16 @@
                     <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
                         <i data-lucide="edit-2"></i>
                     </a>
+                    @if($order->status !== 'delivered' && $order->receipts->isEmpty())
+                        <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="action-btn delete" title="حذف" 
+                                onclick="showDeleteModal('{{ route('orders.destroy', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -77,4 +87,8 @@
         </div>
     @endforelse
 </div>
+
+@include('components.delete-modal')
+@include('components.delete-modal-script')
+
 @endsection

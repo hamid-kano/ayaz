@@ -186,6 +186,31 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
+        // تحقق من عدم وجود مقبوضات
+        if ($order->receipts()->count() > 0) {
+            return redirect()->route('orders.index')
+                ->with('error', 'لا يمكن حذف الطلبية لوجود مقبوضات مرتبطة بها');
+        }
+
+        // تحقق من عدم كون الطلبية مسلمة
+        if ($order->status === 'delivered') {
+            return redirect()->route('orders.index')
+                ->with('error', 'لا يمكن حذف طلبية مسلمة');
+        }
+
+        // حذف المرفقات والتسجيلات الصوتية
+        foreach ($order->attachments as $attachment) {
+            if (file_exists(public_path($attachment->file_path))) {
+                unlink(public_path($attachment->file_path));
+            }
+        }
+        
+        foreach ($order->audioRecordings as $audio) {
+            if (file_exists(public_path($audio->file_path))) {
+                unlink(public_path($audio->file_path));
+            }
+        }
+
         $order->delete();
         return redirect()->route('orders.index')->with('success', 'تم حذف الطلبية بنجاح');
     }
