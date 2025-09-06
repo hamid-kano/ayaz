@@ -15,148 +15,234 @@
         body {
             font-family: 'Cairo', 'Arial', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: white;
+            color: #1a202c;
+            background: #f7fafc;
         }
         
         .print-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 900px;
+            margin: 20px auto;
             background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
         }
         
         .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
             text-align: center;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid #764ba2;
         }
         
         .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            padding: 10px;
+            backdrop-filter: blur(10px);
         }
         
         .logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            border-radius: 50%;
         }
         
         .company-name {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 5px;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .company-subtitle {
-            font-size: 16px;
-            color: #718096;
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .content {
+            padding: 40px;
         }
         
         .order-title {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 700;
             text-align: center;
-            margin: 30px 0;
-            color: #667eea;
+            margin-bottom: 40px;
+            color: #2d3748;
+            position: relative;
         }
         
-        .order-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+        .order-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
         }
         
-        .info-group {
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .info-table tr:nth-child(even) {
             background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-right: 4px solid #667eea;
         }
         
-        .info-label {
-            font-weight: bold;
+        .info-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        
+        .info-table td:first-child {
+            font-weight: 600;
             color: #4a5568;
-            margin-bottom: 5px;
+            background: #edf2f7;
+            width: 35%;
         }
         
-        .info-value {
-            font-size: 16px;
+        .info-table td:last-child {
             color: #2d3748;
-        }
-        
-        .details-section {
-            margin: 30px 0;
-        }
-        
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2d3748;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .details-content {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            line-height: 1.8;
+            font-weight: 500;
         }
         
         .status-badge {
             display: inline-block;
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 25px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .status-new { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-        .status-in-progress { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-        .status-delivered { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
-        .status-cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .status-new { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+        .status-in-progress { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .status-delivered { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .status-cancelled { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
         
         .cost-highlight {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 700;
             color: #059669;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .details-section {
+            margin: 40px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+            color: white;
+            padding: 20px 24px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 24px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .payments-list {
+            list-style: none;
+        }
+        
+        .payments-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .payments-list li:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            background: #e6fffa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
         }
         
         .footer {
-            margin-top: 50px;
+            background: #2d3748;
+            color: white;
             text-align: center;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-            color: #718096;
+            padding: 30px;
+            font-size: 14px;
         }
         
         .print-btn {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #667eea;
+            top: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 25px;
+            border-radius: 50px;
             cursor: pointer;
             font-size: 16px;
             font-family: 'Cairo', 'Arial', sans-serif;
             font-weight: 600;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
         
         @media print {
             .print-btn { display: none; }
-            body { margin: 0; }
-            .print-container { max-width: none; margin: 0; padding: 0; }
+            body { background: white; margin: 0; }
+            .print-container { 
+                max-width: none; 
+                margin: 0; 
+                box-shadow: none; 
+                border-radius: 0;
+            }
+            .header::after { display: none; }
         }
     </style>
 </head>
@@ -172,85 +258,78 @@
             <div class="company-subtitle">للطباعة والتصميم</div>
         </div>
         
-        <div class="order-title">تفاصيل الطلبية #{{ $order->order_number }}</div>
-        
-        <div class="order-info">
-            <div class="info-group">
-                <div class="info-label">رقم الطلبية</div>
-                <div class="info-value">#{{ $order->order_number }}</div>
+        <div class="content">
+            <div class="order-title">تفاصيل الطلبية #{{ $order->order_number }}</div>
+            
+            <table class="info-table">
+                <tr>
+                    <td>رقم الطلبية</td>
+                    <td>#{{ $order->order_number }}</td>
+                </tr>
+                <tr>
+                    <td>تاريخ الطلب</td>
+                    <td>{{ $order->order_date->format('Y-m-d') }}</td>
+                </tr>
+                <tr>
+                    <td>اسم العميل</td>
+                    <td>{{ $order->customer_name }}</td>
+                </tr>
+                <tr>
+                    <td>نوع الطلبية</td>
+                    <td>{{ $order->order_type }}</td>
+                </tr>
+                <tr>
+                    <td>الكلفة الإجمالية</td>
+                    <td><span class="cost-highlight">{{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span></td>
+                </tr>
+                <tr>
+                    <td>حالة الطلبية</td>
+                    <td>
+                        <span class="status-badge status-{{ $order->status }}">
+                            @switch($order->status)
+                                @case('new') جديدة @break
+                                @case('in-progress') قيد التنفيذ @break
+                                @case('delivered') تم التسليم @break
+                                @case('cancelled') ملغاة @break
+                            @endswitch
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>تاريخ التسليم</td>
+                    <td>{{ $order->delivery_date->format('Y-m-d') }}</td>
+                </tr>
+                <tr>
+                    <td>المنفذ</td>
+                    <td>{{ $order->executor->name ?? 'غير محدد' }}</td>
+                </tr>
+            </table>
+            
+            <div class="details-section">
+                <div class="section-header">تفاصيل الطلبية</div>
+                <div class="section-content">{{ $order->order_details }}</div>
             </div>
             
-            <div class="info-group">
-                <div class="info-label">تاريخ الطلب</div>
-                <div class="info-value">{{ $order->order_date->format('Y-m-d') }}</div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">اسم العميل</div>
-                <div class="info-value">{{ $order->customer_name }}</div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">نوع الطلبية</div>
-                <div class="info-value">{{ $order->order_type }}</div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">الكلفة الإجمالية</div>
-                <div class="info-value cost-highlight">
-                    {{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+            @if($order->receipts->count() > 0)
+            <div class="details-section">
+                <div class="section-header">المدفوعات</div>
+                <div class="section-content">
+                    <ul class="payments-list">
+                        @foreach($order->receipts as $receipt)
+                            <li>
+                                <span>{{ $receipt->receipt_date->format('Y-m-d') }}</span>
+                                <span>{{ number_format($receipt->amount, 2) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                            </li>
+                        @endforeach
+                        <li>
+                            <span>المبلغ المتبقي</span>
+                            <span>{{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="info-group">
-                <div class="info-label">حالة الطلبية</div>
-                <div class="info-value">
-                    <span class="status-badge status-{{ $order->status }}">
-                        @switch($order->status)
-                            @case('new') جديدة @break
-                            @case('in-progress') قيد التنفيذ @break
-                            @case('delivered') تم التسليم @break
-                            @case('cancelled') ملغاة @break
-                        @endswitch
-                    </span>
-                </div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">تاريخ التسليم</div>
-                <div class="info-value">{{ $order->delivery_date->format('Y-m-d') }}</div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">المنفذ</div>
-                <div class="info-value">{{ $order->executor->name ?? 'غير محدد' }}</div>
-            </div>
+            @endif
         </div>
-        
-        <div class="details-section">
-            <div class="section-title">تفاصيل الطلبية</div>
-            <div class="details-content">
-                {{ $order->order_details }}
-            </div>
-        </div>
-        
-        @if($order->receipts->count() > 0)
-        <div class="details-section">
-            <div class="section-title">المدفوعات</div>
-            <div class="details-content">
-                @foreach($order->receipts as $receipt)
-                    <div style="margin-bottom: 10px;">
-                        • {{ number_format($receipt->amount, 2) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }} 
-                        - {{ $receipt->receipt_date->format('Y-m-d') }}
-                    </div>
-                @endforeach
-                <hr style="margin: 15px 0;">
-                <div style="font-weight: bold;">
-                    المبلغ المتبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
-                </div>
-            </div>
-        </div>
-        @endif
         
         <div class="footer">
             <p>تم طباعة هذا المستند في {{ now()->format('Y-m-d H:i') }}</p>
