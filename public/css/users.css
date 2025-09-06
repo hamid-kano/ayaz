@@ -67,39 +67,51 @@
 
 .user-actions {
     display: flex;
+    justify-content: center;
     gap: 8px;
-    justify-content: flex-end;
+    padding-top: 10px;
+    border-top: 1px solid #f8f9fa;
 }
 
-.btn-edit {
-    background: #007bff;
-    color: white;
-    padding: 8px;
-    border-radius: 6px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.3s;
-}
-
-.btn-edit:hover {
-    background: #0056b3;
-}
-
-.btn-delete {
-    background: #dc3545;
-    color: white;
+.user-actions .btn {
+    width: 32px;
+    height: 32px;
     border: none;
-    padding: 8px;
     border-radius: 6px;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    transition: background-color 0.3s;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    text-decoration: none;
 }
 
-.btn-delete:hover {
-    background: #c82333;
+.user-actions .btn-edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.user-actions .btn-edit:hover {
+    background: rgba(245, 158, 11, 0.2);
+}
+
+.user-actions .btn-login {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.user-actions .btn-login:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.user-actions .btn-delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.user-actions .btn-delete:hover {
+    background: rgba(239, 68, 68, 0.2);
 }
 
 .delete-form {

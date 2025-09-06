@@ -105,15 +105,17 @@
                     <span class="nav-label">الرئيسية</span>
                 </a>
                 
-                <a href="{{ route('reports.index') }}" class="modern-nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
-                    <i data-lucide="bar-chart-3"></i>
-                    <span class="nav-label">التقارير</span>
-                </a>
-                
-                <a href="{{ route('settings.index') }}" class="modern-nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                    <i data-lucide="settings"></i>
-                    <span class="nav-label">الإعدادات</span>
-                </a>
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('reports.index') }}" class="modern-nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span class="nav-label">التقارير</span>
+                    </a>
+                    
+                    <a href="{{ route('settings.index') }}" class="modern-nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                        <i data-lucide="settings"></i>
+                        <span class="nav-label">الإعدادات</span>
+                    </a>
+                @endif
             </div>
         </nav>
         @endauth
