@@ -55,6 +55,16 @@
                 </div>
                 <div class="receipt-date">{{ $receipt->receipt_date->format('Y-m-d') }}</div>
             </div>
+            <div class="receipt-actions">
+                <form method="POST" action="{{ route('receipts.destroy', $receipt) }}" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="action-btn delete" title="حذف" 
+                        onclick="showDeleteModal('{{ route('receipts.destroy', $receipt) }}', 'سند القبض #{{ $receipt->id }}', this.closest('form'))">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     @empty
         <div class="empty-state">
@@ -68,4 +78,8 @@
         </div>
     @endforelse
 </div>
+
+@include('components.delete-modal')
+@include('components.delete-modal-script')
+
 @endsection

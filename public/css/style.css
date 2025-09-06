@@ -1923,6 +1923,35 @@ body {
     color: #6c757d;
 }
 
+.receipt-actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    border-top: 1px solid #f8f9fa;
+}
+
+.receipt-actions .action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.receipt-actions .action-btn.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.receipt-actions .action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
 /* Debts Grid */
 .debts-grid {
     display: flex;
