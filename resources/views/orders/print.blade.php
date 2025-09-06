@@ -255,11 +255,11 @@
 
             <table class="info-table">
                 <tr>
-                    <td>رقم الطلبية</td>
+                    <td>الرقم</td>
                     <td>#{{ $order->order_number }}</td>
                 </tr>
                 <tr>
-                    <td>تاريخ الطلب</td>
+                    <td>التاريخ</td>
                     <td>{{ $order->order_date->format('Y-m-d') }}</td>
                 </tr>
                 <tr>
@@ -268,22 +268,22 @@
                 </tr>
                 @if ($order->customer_phone)
                     <tr>
-                        <td>رقم هاتف العميل</td>
+                        <td>الهاتف</td>
                         <td>{{ $order->customer_phone }}</td>
                     </tr>
                 @endif
                 <tr>
-                    <td>نوع الطلبية</td>
+                    <td>النوع</td>
                     <td>{{ $order->order_type }}</td>
                 </tr>
                 <tr>
-                    <td>الكلفة الإجمالية</td>
+                    <td>الكلفة</td>
                     <td><span class="cost-highlight">{{ number_format($order->cost, 2) }}
                             {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span></td>
                 </tr>
 
                 <tr>
-                    <td>تاريخ التسليم</td>
+                    <td>التسليم</td>
                     <td>{{ $order->delivery_date->format('Y-m-d') }}</td>
                 </tr>
 
