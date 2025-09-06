@@ -16,7 +16,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>رقم الطلبية</label>
-            <input type="text" value="{{ $order->order_number }}" readonly>
+            <input type="text" value="{{ $order->order_number }}" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
         </div>
         <div class="form-group">
             <label>التاريخ</label>

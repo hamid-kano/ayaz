@@ -57,7 +57,10 @@ class OrderController extends Controller
             'executor_id' => 'nullable|exists:users,id',
         ]);
 
-        $validated['order_number'] = 'ORD-' . time();
+        // إنشاء رقم طلبية تلقائي
+        $lastOrder = Order::orderBy('id', 'desc')->first();
+        $nextNumber = $lastOrder ? ($lastOrder->id + 10001) : 10001;
+        $validated['order_number'] = 'ORD-' . $nextNumber;
         $validated['order_date'] = now()->toDateString();
 
         $order = Order::create($validated);
