@@ -2488,6 +2488,7 @@ body {
     .filter-tabs {
         gap: 12px;
         padding: 0 30px;
+        margin-bottom: 30px;
         justify-content: center;
         overflow-x: visible;
     }
@@ -2503,8 +2504,10 @@ body {
 
 @media (min-width: 1024px) {
     .filter-tabs {
-        gap: 15px;
         padding: 0 40px;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        gap: 15px;
     }
     
     .tab-btn {
