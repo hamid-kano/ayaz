@@ -291,10 +291,7 @@
                     <td>تاريخ التسليم</td>
                     <td>{{ $order->delivery_date->format('Y-m-d') }}</td>
                 </tr>
-                <tr>
-                    <td>المنفذ</td>
-                    <td>{{ $order->executor->name ?? 'غير محدد' }}</td>
-                </tr>
+
             </table>
 
             <div class="details-section">
