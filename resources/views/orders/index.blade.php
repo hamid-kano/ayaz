@@ -55,24 +55,27 @@
                     </div>
                     <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>
                 </div>
-                <div class="order-actions">
-                    <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
-                        <i data-lucide="eye"></i>
-                    </a>
-                    <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
-                        <i data-lucide="edit-2"></i>
-                    </a>
-                    @if($order->status !== 'delivered' && $order->receipts->isEmpty())
-                        <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="action-btn delete" title="حذف" 
-                                onclick="showDeleteModal('{{ route('orders.destroy', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
-                                <i data-lucide="trash-2"></i>
-                            </button>
-                        </form>
-                    @endif
-                </div>
+            </div>
+            <div class="order-actions">
+                <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
+                    <i data-lucide="eye"></i>
+                </a>
+                <a href="{{ route('receipts.index', ['order_id' => $order->id]) }}" class="action-btn receipts" title="المقبوضات">
+                    <i data-lucide="credit-card"></i>
+                </a>
+                <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
+                    <i data-lucide="edit-2"></i>
+                </a>
+                @if($order->status !== 'delivered' && $order->receipts->isEmpty())
+                    <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="action-btn delete" title="حذف" 
+                            onclick="showDeleteModal('{{ route('orders.destroy', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     @empty
