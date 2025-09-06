@@ -28,12 +28,19 @@ class ReportController extends Controller
         $netProfit = $totalRevenue - $totalExpenses;
         
         // الديون المستحقة (الطلبات غير المدفوعة بالكامل)
-        $outstandingDebts = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id), 0)) as debt')
-            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id), 0)')
+        $outstandingDebtsSyp = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
+            ->where('currency', 'syp')
+            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
+            ->value('debt') ?? 0;
+            
+        $outstandingDebtsUsd = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
+            ->where('currency', 'usd')
+            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
             ->value('debt') ?? 0;
         
         // الديون علينا (المشتريات غير المدفوعة)
-        $debtsOnUs = Purchase::where('status', 'debt')->sum('amount');
+        $debtsOnUsSyp = Purchase::where('status', 'debt')->where('currency', 'syp')->sum('amount');
+        $debtsOnUsUsd = Purchase::where('status', 'debt')->where('currency', 'usd')->sum('amount');
         
         $stats = [
             'total_orders' => $totalOrders,
@@ -42,8 +49,10 @@ class ReportController extends Controller
             'total_revenue' => $totalRevenue,
             'total_expenses' => $totalExpenses,
             'net_profit' => $netProfit,
-            'outstanding_debts' => $outstandingDebts,
-            'debts_on_us' => $debtsOnUs
+            'outstanding_debts_syp' => $outstandingDebtsSyp,
+            'outstanding_debts_usd' => $outstandingDebtsUsd,
+            'debts_on_us_syp' => $debtsOnUsSyp,
+            'debts_on_us_usd' => $debtsOnUsUsd
         ];
 
         // البيانات الشهرية للرسم البياني

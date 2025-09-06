@@ -133,11 +133,17 @@
         <div class="debt-summary">
             <div class="debt-item">
                 <span class="debt-label">ديون علينا</span>
-                <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us']) }} ل.س</span>
+                <div class="debt-currencies">
+                    <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us_syp']) }} ل.س</span>
+                    <span class="debt-amount debt-on-us">{{ number_format($stats['debts_on_us_usd']) }} $</span>
+                </div>
             </div>
             <div class="debt-item">
                 <span class="debt-label">ديون لنا</span>
-                <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts']) }} ل.س</span>
+                <div class="debt-currencies">
+                    <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts_syp']) }} ل.س</span>
+                    <span class="debt-amount debt-for-us">{{ number_format($stats['outstanding_debts_usd']) }} $</span>
+                </div>
             </div>
         </div>
     </div>
@@ -401,9 +407,16 @@
     font-weight: 500;
 }
 
+.debt-currencies {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
 .debt-amount {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .debt-on-us {
