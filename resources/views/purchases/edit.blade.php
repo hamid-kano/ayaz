@@ -162,13 +162,15 @@ function deleteAttachment(attachmentId) {
             if (attachmentsGrid && attachmentsGrid.children.length === 0) {
                 document.querySelector('.existing-attachments').style.display = 'none';
             }
+            showToast('تم حذف المرفق بنجاح', 'success');
+            showToast('تم حذف المرفق بنجاح', 'success');
         } else {
-            alert('حدث خطأ في حذف المرفق');
+            showToast('حدث خطأ في حذف المرفق', 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('حدث خطأ في حذف المرفق');
+        showToast('حدث خطأ في حذف المرفق', 'error');
     });
 }
 
