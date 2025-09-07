@@ -52,13 +52,19 @@ class PurchaseController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('purchase_attachments'), $fileName);
+                $purchasePath = 'purchase_attachments/' . $purchase->id;
+                
+                if (!file_exists(public_path($purchasePath))) {
+                    mkdir(public_path($purchasePath), 0755, true);
+                }
+                
+                $file->move(public_path($purchasePath), $fileName);
                 
                 $purchase->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => 'purchase_attachments/' . $fileName,
+                    'file_path' => $purchasePath . '/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
-                    'file_size' => $file->getSize(),
+                    'file_size' => filesize(public_path($purchasePath . '/' . $fileName)),
                 ]);
             }
         }
@@ -95,13 +101,19 @@ class PurchaseController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('purchase_attachments'), $fileName);
+                $purchasePath = 'purchase_attachments/' . $purchase->id;
+                
+                if (!file_exists(public_path($purchasePath))) {
+                    mkdir(public_path($purchasePath), 0755, true);
+                }
+                
+                $file->move(public_path($purchasePath), $fileName);
                 
                 $purchase->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => 'purchase_attachments/' . $fileName,
+                    'file_path' => $purchasePath . '/' . $fileName,
                     'file_type' => $file->getClientMimeType(),
-                    'file_size' => $file->getSize(),
+                    'file_size' => filesize(public_path($purchasePath . '/' . $fileName)),
                 ]);
             }
         }
