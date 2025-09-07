@@ -3392,6 +3392,48 @@ body {
 }
 
 /* Enhanced Attachments */
+.existing-attachments {
+    margin-bottom: 25px;
+}
+
+.existing-attachments h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.existing-attachments h4::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: #667eea;
+    border-radius: 2px;
+}
+
+.attachments-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+@media (min-width: 768px) {
+    .attachments-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .attachments-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
 .attachment-item {
     display: flex;
     justify-content: space-between;
@@ -3399,7 +3441,6 @@ body {
     padding: 15px;
     background: #f8f9fa;
     border-radius: 12px;
-    margin-bottom: 10px;
     border: 1px solid #e9ecef;
     transition: all 0.3s ease;
 }
@@ -3407,6 +3448,7 @@ body {
 .attachment-item:hover {
     background: #e9ecef;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .attachment-info {
@@ -3414,17 +3456,23 @@ body {
     align-items: center;
     gap: 12px;
     flex: 1;
+    min-width: 0;
 }
 
 .attachment-details {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
 }
 
 .attachment-name {
     font-weight: 600;
     color: #2d3748;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .attachment-size {
@@ -3435,9 +3483,10 @@ body {
 .attachment-actions {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
 }
 
-.view-attachment {
+.btn-view {
     width: 32px;
     height: 32px;
     background: rgba(59, 130, 246, 0.1);
@@ -3451,8 +3500,27 @@ body {
     transition: all 0.3s ease;
 }
 
-.view-attachment:hover {
+.btn-view:hover {
     background: rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+}
+
+.btn-delete {
+    width: 32px;
+    height: 32px;
+    background: rgba(239, 68, 68, 0.1);
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: rgba(239, 68, 68, 0.2);
     transform: scale(1.05);
 }
 

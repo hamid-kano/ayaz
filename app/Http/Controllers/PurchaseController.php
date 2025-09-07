@@ -74,6 +74,7 @@ class PurchaseController extends Controller
 
     public function edit(Purchase $purchase)
     {
+        $purchase->load('attachments');
         return view('purchases.edit', compact('purchase'));
     }
 
@@ -89,6 +90,21 @@ class PurchaseController extends Controller
         ]);
 
         $purchase->update($validated);
+
+        // Handle new file uploads
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('purchase_attachments'), $fileName);
+                
+                $purchase->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => 'purchase_attachments/' . $fileName,
+                    'file_type' => $file->getClientMimeType(),
+                    'file_size' => $file->getSize(),
+                ]);
+            }
+        }
 
         return redirect()->route('purchases.index')->with('success', 'تم تحديث المشترى بنجاح');
     }
@@ -125,5 +141,19 @@ class PurchaseController extends Controller
         $totalSyp = $purchases->where('currency', 'syp')->sum('amount');
 
         return view('purchases.debts', compact('purchases', 'totalUsd', 'totalSyp'));
+    }
+
+    public function deleteAttachment($id)
+    {
+        $attachment = \App\Models\Attachment::findOrFail($id);
+        
+        // Delete file from storage
+        if (file_exists(public_path($attachment->file_path))) {
+            unlink(public_path($attachment->file_path));
+        }
+        
+        $attachment->delete();
+        
+        return response()->json(['success' => true]);
     }
 }
