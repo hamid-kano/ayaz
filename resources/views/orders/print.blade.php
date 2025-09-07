@@ -21,7 +21,8 @@
         }
 
         .invoice {
-            width: 210mm;
+            width: 190mm;
+            max-width: 190mm;
             margin: 0 auto;
             background: white;
             border: 2px solid #000;
@@ -106,8 +107,9 @@
 
         @media print {
             .print-btn { display: none; }
+            @page { size: A4; margin: 10mm; }
             body { margin: 0; }
-            .invoice { margin: 0; border: none; }
+            .invoice { width: 190mm; margin: 0; border: 2px solid #000; }
         }
     </style>
 </head>
