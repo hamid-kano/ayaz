@@ -51,7 +51,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>الكلفة</label>
-            <input type="number" name="cost" value="{{ old('cost') }}" min="0" step="0.01" placeholder="0.00" required>
+            <input type="number" name="cost" value="{{ old('cost') }}" min="0" step="1" placeholder="0" required>
             @error('cost')
                 <span class="error-message">{{ $message }}</span>
             @enderror

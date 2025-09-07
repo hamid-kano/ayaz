@@ -48,7 +48,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>الكلفة</label>
-            <input type="number" name="cost" value="{{ old('cost', $order->cost) }}" min="0" step="0.01" required>
+            <input type="number" name="cost" value="{{ old('cost', $order->cost) }}" min="0" step="1" required>
         </div>
         <div class="form-group">
             <label>العملة</label>
