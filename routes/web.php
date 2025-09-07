@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
 
     // Attachments
     Route::post('/orders/{order}/attachments', [OrderController::class, 'uploadAttachment'])->name('orders.attachments');
-    Route::delete('/attachments/{attachment}', [OrderController::class, 'deleteAttachment'])->name('attachments.destroy');
+    Route::delete('/order-attachments/{attachment}', [OrderController::class, 'deleteAttachment'])->name('attachments.destroy');
     Route::delete('/purchase-attachments/{id}', [PurchaseController::class, 'deleteAttachment'])->name('purchase.attachments.destroy');
 
     // Audio
