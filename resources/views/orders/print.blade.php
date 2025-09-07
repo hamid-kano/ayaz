@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طباعة الطلبية #{{ $order->order_number }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,345 +13,179 @@
         }
 
         body {
-            font-family: 'Cairo', 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #1a202c;
-            background: #f7fafc;
+            font-family: 'Cairo', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #000;
+            background: white;
         }
 
-        .print-container {
-            max-width: 900px;
+        .invoice {
+            width: 210mm;
+            margin: 0 auto;
             background: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            border: 2px solid #000;
         }
 
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 20px solid #764ba2;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
             padding: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
+            text-align: center;
+            border-bottom: 2px solid #000;
+            color: white;
         }
 
         .company-name {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .company-subtitle {
-            font-size: 18px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .content {
-            padding: 10px;
-        }
-
-        .order-title {
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2d3748;
-            position: relative;
-        }
-
-        .order-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
-
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .info-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        .info-table td {
-            padding: 18px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            vertical-align: top;
-        }
-
-        .info-table td:first-child {
-            font-weight: 600;
-            color: #4a5568;
-            background: #edf2f7;
-            width: 35%;
-        }
-
-        .info-table td:last-child {
-            color: #2d3748;
-            font-weight: 500;
-        }
-
-
-
-        .cost-highlight {
+            font-size: 24px;
             font-weight: bold;
-            color: #000;
-        }
-
-        .details-section {
-            margin: 40px 0;
-            background: #f8f9fa;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .section-header {
-            background: linear-gradient(135deg, #4a5568, #2d3748);
             color: white;
-            padding: 20px 24px;
-            font-size: 18px;
-            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .section-content {
-            padding: 24px;
-            line-height: 1.8;
-            font-size: 16px;
+        .company-info {
+            font-size: 12px;
+            color: white;
         }
 
-        .payments-list {
-            list-style: none;
-        }
-
-        .payments-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
+        .invoice-details {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #000;
         }
 
-        .payments-list li:last-child {
-            border-bottom: none;
-            font-weight: 600;
-            background: #e6fffa;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
+        .customer-info {
+            text-align: right;
         }
 
-        .footer {
-            background: #2d3748;
-            color: white;
+        .invoice-number {
+            text-align: left;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+        }
+
+        .items-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 1px solid #000;
+            padding: 8px;
             text-align: center;
-            padding: 30px;
-            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .items-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            height: 30px;
+        }
+
+        .footer-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-top: 1px solid #000;
         }
 
         .print-btn {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            top: 20px;
+            left: 20px;
+            background: #007bff;
             color: white;
             border: none;
-            padding: 15px 25px;
-            border-radius: 50px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            font-family: 'Cairo', 'Arial', sans-serif;
-            font-weight: 600;
             z-index: 1000;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .print-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         @media print {
-            .print-btn {
-                display: none;
-            }
-
-            body {
-                background: white;
-                margin: 0;
-            }
-
-            .print-container {
-                max-width: none;
-                margin: 0;
-                box-shadow: none;
-                border-radius: 0;
-            }
-
-            .header::after {
-                display: none;
-            }
+            .print-btn { display: none; }
+            body { margin: 0; }
+            .invoice { margin: 0; border: none; }
         }
     </style>
 </head>
 
 <body>
     <button class="print-btn" onclick="printPage()">طباعة</button>
-    
+
+    <div class="invoice">
+        <div class="header">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+                <img src="{{ asset('images/logo.png') }}" alt="لوغو" style="width: 60px; height: 60px; border-radius: 50%;">
+                <div>
+                    <div class="company-name">Renas Print</div>
+                    <div class="company-info">
+                        دعاية . طباعة . اعلان . زينة سيارات<br>
+                        آياز قرموطي ٠٩٩٣١٤٧٢٤٤
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="invoice-details">
+            <div class="customer-info">
+                <div><strong>العميل:</strong> {{ $order->customer_name }}</div>
+                @if($order->customer_phone)
+                <div><strong>الهاتف:</strong> {{ $order->customer_phone }}</div>
+                @endif
+                <div><strong>التاريخ:</strong> {{ $order->order_date->format('d/m/Y') }}</div>
+            </div>
+            <div class="invoice-number">
+                <div><strong>رقم الفاتورة:</strong> {{ $order->order_number }}</div>
+                <div><strong>تاريخ التسليم:</strong> {{ $order->delivery_date->format('d/m/Y') }}</div>
+            </div>
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">م</th>
+                    <th style="width: 15%;">الكمية</th>
+                    <th style="width: 15%;">السعر</th>
+                    <th style="width: 32%;">البيان والمواصفات</th>
+                    <th style="width: 15%;">النوع الإجمالي</th>
+                    <th style="width: 15%;">القيمة الإجمالية</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>{{ number_format($order->cost, 0) }}</td>
+                    <td style="text-align: right; padding-right: 10px;">{{ $order->order_details }}</td>
+                    <td>{{ $order->order_type }}</td>
+                    <td>{{ number_format($order->cost, 0) }}</td>
+                </tr>
+                @for($i = 2; $i <= 15; $i++)
+                <tr>
+                    <td>{{ $i }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @endfor
+            </tbody>
+        </table>
+
+        <div class="footer-section">
+            <div><strong>خصم للعميل:</strong></div>
+            <div><strong>المجموع:</strong> {{ number_format($order->cost, 0) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</div>
+        </div>
+    </div>
+
     <script>
     function printPage() {
         window.print();
     }
-    
-    // Auto print when page loads (optional)
-    // window.addEventListener('load', function() {
-    //     setTimeout(printPage, 1000);
-    // });
     </script>
-
-    <div class="print-container">
-        <div class="header">
-            <div class="company-name">مطبعة ريناس</div>
-            <div class="company-subtitle">دعاية.طباعة.اعلان.زينة سيارات</div>
-            <div style="margin-top: 15px; font-size: 16px;">قامشلو</div>
-            <div style="font-size: 14px; margin-top: 10px;">
-                فرع١ طريق عامودا مقابل مطعم الصمود<br>
-                فرع٢ الصناعة الجديدة
-            </div>
-            <div style="font-size: 14px; margin-top: 10px;">
-                بإدارة: آياز قرموطي واخوانه
-            </div>
-        </div>
-
-        <div class="content">
-
-
-            <table class="info-table">
-                <tr>
-                    <td>الرقم</td>
-                    <td>#{{ $order->order_number }}</td>
-                </tr>
-                <tr>
-                    <td>التاريخ</td>
-                    <td>{{ $order->order_date->format('Y-m-d') }}</td>
-                </tr>
-                <tr>
-                    <td>اسم العميل</td>
-                    <td>{{ $order->customer_name }}</td>
-                </tr>
-                @if ($order->customer_phone)
-                    <tr>
-                        <td>الهاتف</td>
-                        <td>{{ $order->customer_phone }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td>النوع</td>
-                    <td>{{ $order->order_type }}</td>
-                </tr>
-                <tr>
-                    <td>الكلفة</td>
-                    <td><span class="cost-highlight">{{ number_format($order->cost, 0) }}
-                            {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span></td>
-                </tr>
-
-                <tr>
-                    <td>التسليم</td>
-                    <td>{{ $order->delivery_date->format('Y-m-d') }}</td>
-                </tr>
-
-            </table>
-
-            <div class="details-section">
-                <div class="section-header">تفاصيل الطلبية</div>
-                <div class="section-content">{{ $order->order_details }}</div>
-            </div>
-
-            @if ($order->receipts->count() > 0)
-                <div class="details-section">
-                    <div class="section-header">المدفوعات</div>
-                    <div class="section-content">
-                        <ul class="payments-list">
-                            @foreach ($order->receipts as $receipt)
-                                <li>
-                                    <span>{{ $receipt->receipt_date->format('Y-m-d') }}</span>
-                                    <span>{{ number_format($receipt->amount, 0) }}
-                                        {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
-                                </li>
-                            @endforeach
-                            <li>
-                                <span>المبلغ المتبقي</span>
-                                <span>{{ number_format($order->remaining_amount, 0) }}
-                                    {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endif
-        </div>
-
-        <div class="footer">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <div style="text-align: right;">
-                    <div>الإدارة: ٠٩٩٣١٤٧٢٤٤</div>
-                    <div>الاستعلامات: ٠٩٩٠٥٧٨٤٧١</div>
-                </div>
-                <div style="text-align: center;">
-                    <div>تم طباعة هذا المستند في</div>
-                    <div>{{ now()->format('Y-m-d H:i') }}</div>
-                </div>
-                <div style="text-align: left;">
-                    <div>ديار: ٠٩٩٤٧٢٥٠٩٠</div>
-                    <div>دلو فرع٢: ٠٩٣٢٣٥٠٦٠١</div>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
-                <div>Instagram: renas_print</div>
-            </div>
-        </div>
-    </div>
 </body>
-
 </html>
