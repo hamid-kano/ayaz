@@ -104,7 +104,7 @@
                     <a href="{{ asset($attachment->file_path) }}" target="_blank" class="btn-view">
                         <i data-lucide="eye"></i>
                     </a>
-                    <button type="button" class="btn-delete" onclick="showDeleteModal('', '{{ $attachment->file_name }}'); window.deleteAttachmentId = {{ $attachment->id }};">
+                    <button type="button" class="btn-delete" onclick="prepareAttachmentDelete({{ $attachment->id }}, '{{ $attachment->file_name }}')">
                         <i data-lucide="trash-2"></i>
                     </button>
                 </div>
@@ -146,31 +146,30 @@
 
 <script>
 function deleteAttachment(attachmentId) {
-        const deleteUrl = '{{ route('purchase.attachments.destroy', ':id') }}'.replace(':id', attachmentId);
-        fetch(deleteUrl, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json'
+    const deleteUrl = '{{ route('purchase.attachments.destroy', ':id') }}'.replace(':id', attachmentId);
+    fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelector(`[data-attachment-id="${attachmentId}"]`).remove();
+            const attachmentsGrid = document.querySelector('.attachments-grid');
+            if (attachmentsGrid && attachmentsGrid.children.length === 0) {
+                document.querySelector('.existing-attachments').style.display = 'none';
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.querySelector(`[data-attachment-id="${attachmentId}"]`).remove();
-                // إذا لم تعد هناك مرفقات، إخفاء القسم
-                const attachmentsGrid = document.querySelector('.attachments-grid');
-                if (attachmentsGrid && attachmentsGrid.children.length === 0) {
-                    document.querySelector('.existing-attachments').style.display = 'none';
-                }
-            } else {
-                alert('حدث خطأ في حذف المرفق');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+        } else {
             alert('حدث خطأ في حذف المرفق');
-        });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('حدث خطأ في حذف المرفق');
+    });
 }
 
 // معالجة رفع الملفات الجديدة
@@ -287,11 +286,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// إعداد حذف المرفق باستخدام المودال
+function prepareAttachmentDelete(attachmentId, fileName) {
+    window.pendingAttachmentId = attachmentId;
+    
+    // عرض المودال مع معالج مخصوص
+    const modal = document.querySelector('[x-data*="open: false"]');
+    if (modal) {
+        const message = modal.querySelector('p');
+        if (message) {
+            message.textContent = `هل أنت متأكد من أنك تريد حذف المرفق "${fileName}"؟ لا يمكن التراجع عن هذا الإجراء.`;
+        }
+    }
+    
+    window.dispatchEvent(new CustomEvent('delete-modal'));
+}
+
 // معالجة تأكيد الحذف من المودال
 window.addEventListener('confirm-delete', function() {
-    if (window.deleteAttachmentId) {
-        deleteAttachment(window.deleteAttachmentId);
-        window.deleteAttachmentId = null;
+    if (window.pendingAttachmentId) {
+        deleteAttachment(window.pendingAttachmentId);
+        window.pendingAttachmentId = null;
     }
 });
 </script>
