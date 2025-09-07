@@ -239,15 +239,31 @@
 </head>
 
 <body>
-    <button class="print-btn" onclick="window.print()">طباعة</button>
+    <button class="print-btn" onclick="printPage()">طباعة</button>
+    
+    <script>
+    function printPage() {
+        window.print();
+    }
+    
+    // Auto print when page loads (optional)
+    // window.addEventListener('load', function() {
+    //     setTimeout(printPage, 1000);
+    // });
+    </script>
 
     <div class="print-container">
         <div class="header">
-            <div class="logo">
-                <img src="{{ asset('images/logo.png') }}" alt="مطبعة ريناس">
-            </div>
             <div class="company-name">مطبعة ريناس</div>
-            <div class="company-subtitle">للطباعة والتصميم</div>
+            <div class="company-subtitle">دعاية.طباعة.اعلان.زينة سيارات</div>
+            <div style="margin-top: 15px; font-size: 16px;">قامشلو</div>
+            <div style="font-size: 14px; margin-top: 10px;">
+                فرع١ طريق عامودا مقابل مطعم الصمود<br>
+                فرع٢ الصناعة الجديدة
+            </div>
+            <div style="font-size: 14px; margin-top: 10px;">
+                بإدارة: آياز قرموطي واخوانه
+            </div>
         </div>
 
         <div class="content">
@@ -278,7 +294,7 @@
                 </tr>
                 <tr>
                     <td>الكلفة</td>
-                    <td><span class="cost-highlight">{{ number_format($order->cost, 2) }}
+                    <td><span class="cost-highlight">{{ number_format($order->cost, 0) }}
                             {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span></td>
                 </tr>
 
@@ -302,13 +318,13 @@
                             @foreach ($order->receipts as $receipt)
                                 <li>
                                     <span>{{ $receipt->receipt_date->format('Y-m-d') }}</span>
-                                    <span>{{ number_format($receipt->amount, 2) }}
+                                    <span>{{ number_format($receipt->amount, 0) }}
                                         {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
                                 </li>
                             @endforeach
                             <li>
                                 <span>المبلغ المتبقي</span>
-                                <span>{{ number_format($order->remaining_amount, 2) }}
+                                <span>{{ number_format($order->remaining_amount, 0) }}
                                     {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
                             </li>
                         </ul>
@@ -318,8 +334,23 @@
         </div>
 
         <div class="footer">
-            <p>تم طباعة هذا المستند في {{ now()->format('Y-m-d H:i') }}</p>
-            <p>مطبعة ريناس - جميع الحقوق محفوظة</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div style="text-align: right;">
+                    <div>الإدارة: ٠٩٩٣١٤٧٢٤٤</div>
+                    <div>الاستعلامات: ٠٩٩٠٥٧٨٤٧١</div>
+                </div>
+                <div style="text-align: center;">
+                    <div>تم طباعة هذا المستند في</div>
+                    <div>{{ now()->format('Y-m-d H:i') }}</div>
+                </div>
+                <div style="text-align: left;">
+                    <div>ديار: ٠٩٩٤٧٢٥٠٩٠</div>
+                    <div>دلو فرع٢: ٠٩٣٢٣٥٠٦٠١</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+                <div>Instagram: renas_print</div>
+            </div>
         </div>
     </div>
 </body>
