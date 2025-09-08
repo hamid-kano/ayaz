@@ -21,7 +21,7 @@
                         <button type="button" class="action-btn edit" onclick="editFormItem({{ $index }})" title="تعديل">
                             <i data-lucide="edit-2"></i>
                         </button>
-                        <button type="button" class="action-btn delete" onclick="removeFormItem({{ $index }})" title="حذف">
+                        <button type="button" class="action-btn delete" onclick="confirmDeleteItem({{ $index }})" title="حذف">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </div>
@@ -175,7 +175,7 @@ function updateItemsDisplay() {
                     <button type="button" class="action-btn edit" onclick="editFormItem(${index})" title="تعديل">
                         <i data-lucide="edit-2"></i>
                     </button>
-                    <button type="button" class="action-btn delete" onclick="removeFormItem(${index})" title="حذف">
+                    <button type="button" class="action-btn delete" onclick="confirmDeleteItem(${index})" title="حذف">
                         <i data-lucide="trash-2"></i>
                     </button>
                 </div>
@@ -183,6 +183,12 @@ function updateItemsDisplay() {
         `).join('');
     }
     if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function confirmDeleteItem(index) {
+    if (confirm('هل أنت متأكد من حذف هذه المادة؟')) {
+        removeFormItem(index);
+    }
 }
 
 function updateHiddenInputs() {
