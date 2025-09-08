@@ -145,7 +145,7 @@
                     <td>1</td>
                     <td>1</td>
                     <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
-                    <td style="text-align: right; padding-right: 10px;">{{ $order->order_details }}</td>
+                    <td style="text-align: center;">{{ $order->order_details }}</td>
                     <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
                 </tr>
                 @for($i = 2; $i <= 15; $i++)
