@@ -4463,14 +4463,40 @@ button:disabled {
 
 .empty-items {
     text-align: center;
-    padding: 40px;
+    padding: 50px 20px;
     color: #6b7280;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 2px dashed #e2e8f0;
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
 }
 
 .empty-items i {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
+    font-size: 36px;
+    color: #94a3b8;
+}
+
+.empty-items h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.empty-items p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
 }
 
 .add-item-form {

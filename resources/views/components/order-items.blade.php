@@ -29,8 +29,11 @@
             </div>
         @empty
             <div class="empty-items">
-                <i data-lucide="package"></i>
-                <p>لا توجد مواد مضافة</p>
+                <div class="empty-icon">
+                    <i data-lucide="package-x"></i>
+                </div>
+                <h4>لا توجد مواد مضافة</h4>
+                <p>قم بإضافة مواد لهذه الطلبية</p>
             </div>
         @endforelse
     </div>
@@ -157,7 +160,7 @@ function clearFormItem() {
 function updateItemsDisplay() {
     const container = document.getElementById('itemsList');
     if (formItems.length === 0) {
-        container.innerHTML = '<div class="empty-items"><i data-lucide="package"></i><p>لا توجد مواد مضافة</p></div>';
+        container.innerHTML = '<div class="empty-items"><div class="empty-icon"><i data-lucide="package-x"></i></div><h4>لا توجد مواد مضافة</h4><p>قم بإضافة مواد لهذه الطلبية</p></div>';
     } else {
         container.innerHTML = formItems.map((item, index) => `
             <div class="item-card" data-index="${index}">
