@@ -255,11 +255,20 @@
             <div><strong>خصم للعميل:</strong></div>
             <div><strong>المجموع:</strong> 
                 @if($order->items->count() > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->items->sum(function($item) { return $item->quantity * $item->price; })) }}
+                    @php
+                        $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
+                        $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
+                    @endphp
+                    @if($totalSyp > 0 && $totalUsd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
+                    @elseif($totalSyp > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س
+                    @else
+                        {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
+                    @endif
                 @else
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? '$' : 'ل.س' }}
                 @endif
-                {{ $order->currency == 'usd' ? '$' : 'ل.س' }}
             </div>
         </div>
     </div>
