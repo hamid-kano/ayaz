@@ -95,9 +95,6 @@ Route::middleware('auth')->group(function () {
         return response()->file($path);
     })->name('audio.serve');
     
-    // Order Items
-    Route::post('/order-items', [\App\Http\Controllers\OrderItemController::class, 'store'])->name('order-items.store');
-    Route::put('/order-items/{orderItem}', [\App\Http\Controllers\OrderItemController::class, 'update'])->name('order-items.update');
-    Route::delete('/order-items/{orderItem}', [\App\Http\Controllers\OrderItemController::class, 'destroy'])->name('order-items.destroy');
+
 
 });
