@@ -118,7 +118,7 @@
 
         <div class="invoice-details">
             <div class="customer-info">
-                <div><strong>العميل:</strong> {{ $order->customer_name }}</div>
+                <div><strong>الزبون:</strong> {{ $order->customer_name }}</div>
                 @if($order->customer_phone)
                 <div><strong>الهاتف:</strong> {{ $order->customer_phone }}</div>
                 @endif
