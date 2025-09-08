@@ -43,18 +43,18 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>اسم المادة</label>
-                    <input type="text" id="itemName" required>
+                    <input type="text" id="itemName" placeholder="مثال: ورق A4" required>
                 </div>
                 <div class="form-group">
                     <label>الكمية</label>
-                    <input type="number" id="itemQuantity" min="1" required>
+                    <input type="number" id="itemQuantity" placeholder="1" min="1" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label>السعر</label>
-                    <input type="number" id="itemPrice" min="0" step="1" required>
+                    <input type="number" id="itemPrice" placeholder="0" min="0" step="1" required>
                 </div>
                 <div class="form-group">
                     <label>العملة</label>

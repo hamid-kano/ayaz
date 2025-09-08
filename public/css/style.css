@@ -2321,13 +2321,13 @@ body {
 }
 
 .btn-secondary {
-    flex: 1;
-    padding: 15px;
+    flex: 0 0 auto;
+    padding: 8px 16px;
     background: #f8f9fa;
     color: #6c757d;
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    font-size: 16px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -2335,7 +2335,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .btn-secondary:hover {
@@ -2344,7 +2344,7 @@ body {
 }
 
 .submit-btn {
-    flex: 2;
+    flex: 1;
     padding: 15px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
