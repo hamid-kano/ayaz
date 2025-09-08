@@ -384,7 +384,7 @@ class OrderController extends Controller
 
     public function print(Order $order)
     {
-        $order->load(['executor', 'receipts']);
+        $order->load(['executor', 'receipts', 'items']);
         return view('orders.print', compact('order'));
     }
 }

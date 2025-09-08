@@ -83,6 +83,25 @@
             padding: 8px;
             text-align: center;
             height: 30px;
+            vertical-align: middle;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #000;
+        }
+
+        .item-total {
+            font-weight: 600;
+            color: #006400;
+        }
+
+        .separator-row {
+            border-top: 2px solid #006400 !important;
+        }
+
+        .empty-row {
+            color: #ccc;
         }
 
         .footer-section {
@@ -141,28 +160,59 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
-                    <td style="text-align: center;">{{ $order->order_details }}</td>
-                    <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
-                </tr>
-                @for($i = 2; $i <= 15; $i++)
-                <tr>
-                    <td>{{ $i }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                @endfor
+                @if($order->items->count() > 0)
+                    @foreach($order->items as $index => $item)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $item->quantity }}</td>
+                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($item->price) }}</td>
+                        <td style="text-align: center;" class="item-name">{{ $item->item_name }}</td>
+                        <td class="item-total">{{ \App\Helpers\TranslationHelper::formatAmount($item->quantity * $item->price) }}</td>
+                    </tr>
+                    @endforeach
+                    @php
+                        $remainingRows = 15 - $order->items->count();
+                    @endphp
+                    @for($i = 1; $i <= $remainingRows; $i++)
+                    <tr>
+                        <td>{{ $order->items->count() + $i }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @endfor
+                @else
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
+                        <td style="text-align: center;">{{ $order->order_details }}</td>
+                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
+                    </tr>
+                    @for($i = 2; $i <= 15; $i++)
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @endfor
+                @endif
             </tbody>
         </table>
 
         <div class="footer-section">
             <div><strong>خصم للعميل:</strong></div>
-            <div><strong>المجموع:</strong> {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</div>
+            <div><strong>المجموع:</strong> 
+                @if($order->items->count() > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->items->sum(function($item) { return $item->quantity * $item->price; })) }}
+                @else
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}
+                @endif
+                {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+            </div>
         </div>
     </div>
 
