@@ -103,6 +103,9 @@
         </div>
     </div>
     
+    <!-- Order Items Section -->
+    @include('components.order-items', ['items' => collect([]), 'editable' => true])
+    
     <!-- Attachments Section -->
     <div class="section-header">
         <i data-lucide="paperclip"></i>

@@ -102,6 +102,9 @@
         </div>
     </div>
     
+    <!-- Order Items Section -->
+    @include('components.order-items', ['items' => $order->items, 'editable' => true])
+    
     <!-- Action Buttons -->
     <div class="form-actions">
         <a href="{{ route('orders.show', $order) }}" class="btn-secondary">

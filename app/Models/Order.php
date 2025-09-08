@@ -52,6 +52,11 @@ class Order extends Model
         return $this->hasMany(AudioRecording::class);
     }
 
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function notifications()
     {
         return $this->hasMany(\App\Models\Notification::class, 'data->order_id', 'id');

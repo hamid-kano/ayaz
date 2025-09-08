@@ -60,6 +60,11 @@ class OrderController extends Controller
             'delivery_date' => 'required|date',
             'reviewer_name' => 'nullable|string|max:255',
             'executor_id' => 'nullable|exists:users,id',
+            'items' => 'nullable|array',
+            'items.*.item_name' => 'required|string|max:255',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
+            'items.*.currency' => 'required|in:syp,usd',
         ]);
 
         // إنشاء رقم طلبية تلقائي
@@ -69,6 +74,13 @@ class OrderController extends Controller
         $validated['order_date'] = now()->toDateString();
 
         $order = Order::create($validated);
+
+        // إضافة المواد
+        if (isset($validated['items'])) {
+            foreach ($validated['items'] as $item) {
+                $order->items()->create($item);
+            }
+        }
 
         // إرسال إشعار للمنفذ عند تعيين طلبية جديدة
         if ($order->executor_id) {
@@ -119,7 +131,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['executor', 'attachments', 'audioRecordings', 'receipts']);
+        $order->load(['executor', 'attachments', 'audioRecordings', 'receipts', 'items']);
         return view('orders.show', compact('order'));
     }
 
@@ -142,10 +154,23 @@ class OrderController extends Controller
             'delivery_date' => 'required|date',
             'reviewer_name' => 'nullable|string|max:255',
             'executor_id' => 'nullable|exists:users,id',
+            'items' => 'nullable|array',
+            'items.*.item_name' => 'required|string|max:255',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
+            'items.*.currency' => 'required|in:syp,usd',
         ]);
 
         $oldExecutorId = $order->executor_id;
         $order->update($validated);
+
+        // تحديث المواد
+        if (isset($validated['items'])) {
+            $order->items()->delete();
+            foreach ($validated['items'] as $item) {
+                $order->items()->create($item);
+            }
+        }
 
         // إرسال إشعار عند تغيير المنفذ
         if ($oldExecutorId != $validated['executor_id']) {
