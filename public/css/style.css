@@ -4418,6 +4418,69 @@ button:disabled {
     min-width: 35px;
 }
 
+/* Order Items Component */
+.order-items-section {
+    margin-bottom: 30px;
+}
+
+.items-list {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.item-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.item-details {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.empty-items {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+}
+
+.empty-items i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.add-item-form {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
 /* Notifications Dropdown */
 .notifications-dropdown {
     position: absolute;
