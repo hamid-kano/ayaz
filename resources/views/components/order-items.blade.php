@@ -10,10 +10,13 @@
         @forelse($items as $index => $item)
             <div class="item-card" data-index="{{ $index }}">
                 <div class="item-info">
-                    <div class="item-name">{{ is_object($item) ? $item->item_name : $item['item_name'] }}</div>
+                    <div class="item-header">
+                        <div class="item-name">{{ is_object($item) ? $item->item_name : $item['item_name'] }}</div>
+                        <div class="item-total">{{ \App\Helpers\TranslationHelper::formatAmount((is_object($item) ? $item->quantity * $item->price : $item['quantity'] * $item['price'])) }} {{ (is_object($item) ? $item->currency : $item['currency']) == 'usd' ? 'دولار' : 'ليرة' }}</div>
+                    </div>
                     <div class="item-details">
-                        <span>الكمية: {{ is_object($item) ? $item->quantity : $item['quantity'] }}</span>
-                        <span>السعر: {{ \App\Helpers\TranslationHelper::formatAmount(is_object($item) ? $item->price : $item['price']) }} {{ (is_object($item) ? $item->currency : $item['currency']) == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        <span class="item-qty">{{ is_object($item) ? $item->quantity : $item['quantity'] }} قطعة</span>
+                        <span class="item-price">{{ \App\Helpers\TranslationHelper::formatAmount(is_object($item) ? $item->price : $item['price']) }} {{ (is_object($item) ? $item->currency : $item['currency']) == 'usd' ? 'دولار' : 'ليرة' }} للقطعة</span>
                     </div>
                 </div>
                 @if($editable)
@@ -176,10 +179,13 @@ function updateItemsDisplay() {
         container.innerHTML = formItems.map((item, index) => `
             <div class="item-card" data-index="${index}">
                 <div class="item-info">
-                    <div class="item-name">${item.item_name}</div>
+                    <div class="item-header">
+                        <div class="item-name">${item.item_name}</div>
+                        <div class="item-total">${(item.quantity * item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
+                    </div>
                     <div class="item-details">
-                        <span>الكمية: ${item.quantity}</span>
-                        <span>السعر: ${item.price.toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</span>
+                        <span class="item-qty">${item.quantity} قطعة</span>
+                        <span class="item-price">${item.price.toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
                     </div>
                 </div>
                 <div class="item-actions">
