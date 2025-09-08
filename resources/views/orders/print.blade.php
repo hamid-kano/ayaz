@@ -92,22 +92,7 @@
             border-top: 1px solid #000;
         }
 
-        .print-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-            font-family: 'Cairo', Arial, sans-serif;
-        }
-
         @media print {
-            .print-btn { display: none; }
             @page { size: A4; margin: 10mm; }
             body { margin: 0; }
             .invoice { width: 190mm; margin: 0; border: 2px solid #000; }
@@ -116,7 +101,6 @@
 </head>
 
 <body>
-    <button class="print-btn" onclick="printPage()">طباعة</button>
 
     <div class="invoice">
         <div class="header">
@@ -152,8 +136,7 @@
                     <th style="width: 8%;">م</th>
                     <th style="width: 15%;">الكمية</th>
                     <th style="width: 15%;">السعر</th>
-                    <th style="width: 32%;">البيان والمواصفات</th>
-                    <th style="width: 15%;">النوع الإجمالي</th>
+                    <th style="width: 47%;">البيان والمواصفات</th>
                     <th style="width: 15%;">القيمة الإجمالية</th>
                 </tr>
             </thead>
@@ -163,13 +146,11 @@
                     <td>1</td>
                     <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
                     <td style="text-align: right; padding-right: 10px;">{{ $order->order_details }}</td>
-                    <td>{{ $order->order_type }}</td>
                     <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
                 </tr>
                 @for($i = 2; $i <= 15; $i++)
                 <tr>
                     <td>{{ $i }}</td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -186,9 +167,9 @@
     </div>
 
     <script>
-    function printPage() {
+    window.onload = function() {
         window.print();
-    }
+    };
     </script>
 </body>
 </html>
