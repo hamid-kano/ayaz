@@ -198,14 +198,10 @@
                         <td style="text-align: center;" class="item-name">{{ $item->item_name }}</td>
                         <td><strong>{{ $item->quantity }}</strong></td>
                         <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($item->price) }}
-                            @if($item->currency != $order->currency)
-                                <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small>
-                            @endif</strong>
+                                <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small></strong>
                         </td>
                         <td class="item-total"><strong>{{ \App\Helpers\TranslationHelper::formatAmount($item->quantity * $item->price) }}
-                            @if($item->currency != $order->currency)
-                                <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small>
-                            @endif</strong>
+                                <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small></strong>
                         </td>
                     </tr>
                     @endforeach
