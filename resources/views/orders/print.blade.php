@@ -108,20 +108,24 @@
             padding: 15px;
             background: #f8f9fa;
             border-bottom: 1px solid #000;
-            text-align: center;
+            text-align: right;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .order-details-header {
             font-weight: bold;
             color: #006400;
-            margin-bottom: 8px;
             font-size: 16px;
+            flex-shrink: 0;
         }
 
         .order-details-content {
             color: #333;
             line-height: 1.6;
             font-size: 14px;
+            flex: 1;
         }
 
         .footer-section {
@@ -183,7 +187,7 @@
                     <th style="width: 40%;">اسم المادة</th>
                     <th style="width: 17%;">الكمية</th>
                     <th style="width: 17%;">السعر</th>
-                    <th style="width: 18%;">القيمة الإجمالية</th>
+                    <th style="width: 18%;">الإجمالي</th>
                 </tr>
             </thead>
             <tbody>
@@ -192,16 +196,16 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td style="text-align: center;" class="item-name">{{ $item->item_name }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($item->price) }}
+                        <td><strong>{{ $item->quantity }}</strong></td>
+                        <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($item->price) }}
                             @if($item->currency != $order->currency)
                                 <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small>
-                            @endif
+                            @endif</strong>
                         </td>
-                        <td class="item-total">{{ \App\Helpers\TranslationHelper::formatAmount($item->quantity * $item->price) }}
+                        <td class="item-total"><strong>{{ \App\Helpers\TranslationHelper::formatAmount($item->quantity * $item->price) }}
                             @if($item->currency != $order->currency)
                                 <small>{{ $item->currency == 'usd' ? '$' : 'ل.س' }}</small>
-                            @endif
+                            @endif</strong>
                         </td>
                     </tr>
                     @endforeach
@@ -230,9 +234,9 @@
                     <tr>
                         <td>1</td>
                         <td style="text-align: center;">طلبية عامة</td>
-                        <td>1</td>
-                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
-                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
+                        <td><strong>1</strong></td>
+                        <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</strong></td>
+                        <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</strong></td>
                     </tr>
                     @for($i = 2; $i <= 15; $i++)
                     <tr>
