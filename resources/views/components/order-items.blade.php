@@ -9,7 +9,7 @@
     <div class="items-list" id="itemsList">
         @forelse($items as $index => $item)
             <div class="item-card" data-index="{{ $index }}">
-                <div class="item-info">
+                <div class="item-content">
                     <div class="item-header">
                         <div class="item-name">{{ is_object($item) ? $item->item_name : $item['item_name'] }}</div>
                         <div class="item-total">{{ \App\Helpers\TranslationHelper::formatAmount((is_object($item) ? $item->quantity * $item->price : $item['quantity'] * $item['price'])) }} {{ (is_object($item) ? $item->currency : $item['currency']) == 'usd' ? 'دولار' : 'ليرة' }}</div>
@@ -18,17 +18,17 @@
                         <span class="item-qty">{{ is_object($item) ? $item->quantity : $item['quantity'] }} قطعة</span>
                         <span class="item-price">{{ \App\Helpers\TranslationHelper::formatAmount(is_object($item) ? $item->price : $item['price']) }} {{ (is_object($item) ? $item->currency : $item['currency']) == 'usd' ? 'دولار' : 'ليرة' }} للقطعة</span>
                     </div>
+                    @if($editable)
+                        <div class="item-actions">
+                            <button type="button" class="action-btn edit" onclick="editFormItem({{ $index }})" title="تعديل">
+                                <i data-lucide="edit-2"></i>
+                            </button>
+                            <button type="button" class="action-btn delete" onclick="confirmDeleteItem({{ $index }})" title="حذف">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
+                    @endif
                 </div>
-                @if($editable)
-                    <div class="item-actions">
-                        <button type="button" class="action-btn edit" onclick="editFormItem({{ $index }})" title="تعديل">
-                            <i data-lucide="edit-2"></i>
-                        </button>
-                        <button type="button" class="action-btn delete" onclick="confirmDeleteItem({{ $index }})" title="حذف">
-                            <i data-lucide="trash-2"></i>
-                        </button>
-                    </div>
-                @endif
             </div>
         @empty
             <div class="empty-items">
@@ -178,7 +178,7 @@ function updateItemsDisplay() {
     } else {
         container.innerHTML = formItems.map((item, index) => `
             <div class="item-card" data-index="${index}">
-                <div class="item-info">
+                <div class="item-content">
                     <div class="item-header">
                         <div class="item-name">${item.item_name}</div>
                         <div class="item-total">${(item.quantity * item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
@@ -187,14 +187,14 @@ function updateItemsDisplay() {
                         <span class="item-qty">${item.quantity} قطعة</span>
                         <span class="item-price">${item.price.toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
                     </div>
-                </div>
-                <div class="item-actions">
-                    <button type="button" class="action-btn edit" onclick="editFormItem(${index})" title="تعديل">
-                        <i data-lucide="edit-2"></i>
-                    </button>
-                    <button type="button" class="action-btn delete" onclick="confirmDeleteItem(${index})" title="حذف">
-                        <i data-lucide="trash-2"></i>
-                    </button>
+                    <div class="item-actions">
+                        <button type="button" class="action-btn edit" onclick="editFormItem(${index})" title="تعديل">
+                            <i data-lucide="edit-2"></i>
+                        </button>
+                        <button type="button" class="action-btn delete" onclick="confirmDeleteItem(${index})" title="حذف">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `).join('');
