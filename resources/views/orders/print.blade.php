@@ -29,7 +29,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #006400;
             padding: 10px;
             text-align: center;
             border-bottom: 2px solid #000;
@@ -70,7 +70,7 @@
         }
 
         .items-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #006400;
             border: 1px solid #000;
             padding: 8px;
             text-align: center;
