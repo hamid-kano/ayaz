@@ -43,22 +43,22 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>اسم المادة</label>
-                    <input type="text" id="itemName" placeholder="مثال: ورق A4" required>
+                    <input type="text" id="itemName" name="itemName" placeholder="مثال: ورق A4">
                 </div>
                 <div class="form-group">
                     <label>الكمية</label>
-                    <input type="number" id="itemQuantity" placeholder="1" min="1" required>
+                    <input type="number" id="itemQuantity" name="itemQuantity" placeholder="1" min="1">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label>السعر</label>
-                    <input type="number" id="itemPrice" placeholder="0" min="0" step="1" required>
+                    <input type="number" id="itemPrice" name="itemPrice" placeholder="0" min="0" step="1">
                 </div>
                 <div class="form-group">
                     <label>العملة</label>
-                    <select id="itemCurrency" required>
+                    <select id="itemCurrency" name="itemCurrency">
                         <option value="syp">ليرة سورية</option>
                         <option value="usd">دولار أمريكي</option>
                     </select>
@@ -112,18 +112,29 @@ function editFormItem(index) {
 }
 
 function saveFormItem() {
-    const name = document.getElementById('itemName').value;
-    const quantity = document.getElementById('itemQuantity').value;
-    const price = document.getElementById('itemPrice').value;
-    const currency = document.getElementById('itemCurrency').value;
+    const nameInput = document.getElementById('itemName');
+    const quantityInput = document.getElementById('itemQuantity');
+    const priceInput = document.getElementById('itemPrice');
+    const currencyInput = document.getElementById('itemCurrency');
     
-    if (!name || !quantity || !price) return;
+    if (!nameInput.value.trim()) {
+        nameInput.focus();
+        return;
+    }
+    if (!quantityInput.value || quantityInput.value < 1) {
+        quantityInput.focus();
+        return;
+    }
+    if (!priceInput.value || priceInput.value < 0) {
+        priceInput.focus();
+        return;
+    }
     
     const item = {
-        item_name: name,
-        quantity: parseInt(quantity),
-        price: parseFloat(price),
-        currency: currency
+        item_name: nameInput.value.trim(),
+        quantity: parseInt(quantityInput.value),
+        price: parseFloat(priceInput.value),
+        currency: currencyInput.value
     };
     
     if (editingIndex >= 0) {
