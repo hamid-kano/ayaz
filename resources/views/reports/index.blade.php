@@ -34,7 +34,7 @@
             <i data-lucide="trending-up"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ number_format($stats['total_revenue']) }} ل.س</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue']) }} ل.س</h3>
             <p>إجمالي الإيرادات</p>
             <span class="stat-change positive">+12%</span>
         </div>
@@ -45,7 +45,7 @@
             <i data-lucide="trending-down"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ number_format($stats['total_expenses']) }} ل.س</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses']) }} ل.س</h3>
             <p>إجمالي المصروفات</p>
             <span class="stat-change negative">+5%</span>
         </div>
@@ -56,7 +56,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ number_format($stats['net_profit']) }} ل.س</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit']) }} ل.س</h3>
             <p>صافي الربح</p>
             <span class="stat-change positive">+18%</span>
         </div>
@@ -115,7 +115,7 @@
                     <tr>
                         <td>{{ $customer['name'] }}</td>
                         <td>{{ $customer['orders'] }}</td>
-                        <td>{{ number_format($customer['total']) }} ل.س</td>
+                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($customer['total']) }} ل.س</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -138,11 +138,11 @@
                 </div>
                 <div class="debt-amounts">
                     <div class="debt-amount-item">
-                        <span class="amount debt-on-us">{{ number_format($stats['debts_on_us_syp']) }}</span>
+                        <span class="amount debt-on-us">{{ \App\Helpers\TranslationHelper::formatAmount($stats['debts_on_us_syp']) }}</span>
                         <span class="currency">ليرة سورية</span>
                     </div>
                     <div class="debt-amount-item">
-                        <span class="amount debt-on-us">{{ number_format($stats['debts_on_us_usd']) }}</span>
+                        <span class="amount debt-on-us">{{ \App\Helpers\TranslationHelper::formatAmount($stats['debts_on_us_usd']) }}</span>
                         <span class="currency">دولار أمريكي</span>
                     </div>
                 </div>
@@ -157,11 +157,11 @@
                 </div>
                 <div class="debt-amounts">
                     <div class="debt-amount-item">
-                        <span class="amount debt-for-us">{{ number_format($stats['outstanding_debts_syp']) }}</span>
+                        <span class="amount debt-for-us">{{ \App\Helpers\TranslationHelper::formatAmount($stats['outstanding_debts_syp']) }}</span>
                         <span class="currency">ليرة سورية</span>
                     </div>
                     <div class="debt-amount-item">
-                        <span class="amount debt-for-us">{{ number_format($stats['outstanding_debts_usd']) }}</span>
+                        <span class="amount debt-for-us">{{ \App\Helpers\TranslationHelper::formatAmount($stats['outstanding_debts_usd']) }}</span>
                         <span class="currency">دولار أمريكي</span>
                     </div>
                 </div>

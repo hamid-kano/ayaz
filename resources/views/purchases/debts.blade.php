@@ -29,7 +29,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="summary-info">
-            <h3>${{ number_format($totalUsd, 2) }}</h3>
+            <h3>${{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }}</h3>
             <p>إجمالي المستحق بالدولار</p>
         </div>
     </div>
@@ -38,7 +38,7 @@
             <i data-lucide="banknote"></i>
         </div>
         <div class="summary-info">
-            <h3>{{ number_format($totalSyp, 0) }} ليرة</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ليرة</h3>
             <p>إجمالي المستحق بالليرة</p>
         </div>
     </div>
@@ -56,7 +56,7 @@
                 <div class="debt-details">{{ Str::limit($purchase->details, 80) }}</div>
                 <div class="debt-footer">
                     <div class="debt-amount">
-                        {{ number_format($purchase->amount, 2) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                        {{ \App\Helpers\TranslationHelper::formatAmount($purchase->amount) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
                     </div>
                     <div class="debt-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
                 </div>

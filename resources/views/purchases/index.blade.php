@@ -49,7 +49,7 @@
                 <div class="purchase-details">{{ Str::limit($purchase->details, 60) }}</div>
                 <div class="purchase-meta">
                     <div class="purchase-amount">
-                        {{ number_format($purchase->amount, 2) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                        {{ \App\Helpers\TranslationHelper::formatAmount($purchase->amount) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
                     </div>
                     <div class="purchase-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
                 </div>

@@ -85,7 +85,7 @@
                 <div class="order-footer">
                     <div class="order-meta">
                         <div class="order-cost">
-                            {{ number_format($order->cost, 2) }}
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}
                             {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
                         </div>
                         <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>

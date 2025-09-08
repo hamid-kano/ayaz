@@ -31,7 +31,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-info">
-            <h3>${{ number_format($receipts->where('currency', 'usd')->sum('amount'), 2) }}</h3>
+            <h3>${{ \App\Helpers\TranslationHelper::formatAmount($receipts->where('currency', 'usd')->sum('amount')) }}</h3>
             <p>إجمالي المقبوضات بالدولار</p>
         </div>
     </div>
@@ -40,7 +40,7 @@
             <i data-lucide="banknote"></i>
         </div>
         <div class="stat-info">
-            <h3>{{ number_format($receipts->where('currency', 'syp')->sum('amount'), 0) }} ليرة</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($receipts->where('currency', 'syp')->sum('amount')) }} ليرة</h3>
             <p>إجمالي المقبوضات بالليرة</p>
         </div>
     </div>
@@ -63,7 +63,7 @@
             </div>
             <div class="receipt-footer">
                 <div class="receipt-amount">
-                    {{ number_format($receipt->amount, 2) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                    {{ \App\Helpers\TranslationHelper::formatAmount($receipt->amount) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}
                 </div>
                 <div class="receipt-date">{{ $receipt->receipt_date->format('Y-m-d') }}</div>
             </div>

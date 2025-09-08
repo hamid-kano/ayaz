@@ -161,10 +161,10 @@
                 <tr>
                     <td>1</td>
                     <td>1</td>
-                    <td>{{ number_format($order->cost, 0) }}</td>
+                    <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
                     <td style="text-align: right; padding-right: 10px;">{{ $order->order_details }}</td>
                     <td>{{ $order->order_type }}</td>
-                    <td>{{ number_format($order->cost, 0) }}</td>
+                    <td>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</td>
                 </tr>
                 @for($i = 2; $i <= 15; $i++)
                 <tr>
@@ -181,7 +181,7 @@
 
         <div class="footer-section">
             <div><strong>خصم للعميل:</strong></div>
-            <div><strong>المجموع:</strong> {{ number_format($order->cost, 0) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</div>
+            <div><strong>المجموع:</strong> {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</div>
         </div>
     </div>
 

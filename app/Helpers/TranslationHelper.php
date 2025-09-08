@@ -105,4 +105,15 @@ class TranslationHelper
             'en' => __($key, [], 'en'),
         ];
     }
+
+    /**
+     * Format amount without decimal places
+     *
+     * @param float $amount
+     * @return string
+     */
+    public static function formatAmount($amount)
+    {
+        return number_format($amount, 0, '', ',');
+    }
 }

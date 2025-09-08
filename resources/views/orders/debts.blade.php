@@ -29,7 +29,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="summary-info">
-            <h3>${{ number_format($totalUsd, 2) }}</h3>
+            <h3>${{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }}</h3>
             <p>إجمالي المتبقي بالدولار</p>
         </div>
     </div>
@@ -38,7 +38,7 @@
             <i data-lucide="banknote"></i>
         </div>
         <div class="summary-info">
-            <h3>{{ number_format($totalSyp, 0) }} ليرة</h3>
+            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ليرة</h3>
             <p>إجمالي المتبقي بالليرة</p>
         </div>
     </div>
@@ -64,16 +64,16 @@
                 <div class="debt-details">
                     <div class="debt-row">
                         <span class="debt-label">إجمالي:</span>
-                        <span class="debt-total">{{ number_format($order->cost, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        <span class="debt-total">{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
                     </div>
                     <div class="debt-row">
                         <span class="debt-label">مدفوع:</span>
-                        <span class="debt-paid">{{ number_format($order->total_paid, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        <span class="debt-paid">{{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
                     </div>
                 </div>
                 <div class="debt-remaining">
                     <span class="remaining-label">متبقي:</span>
-                    <span class="remaining-amount">{{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                    <span class="remaining-amount">{{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
                 </div>
             </div>
         </div>

@@ -33,7 +33,7 @@
             </div>
             <div class="info-item">
                 <label>الكلفة</label>
-                <span class="cost-value">{{ number_format($order->cost, 2) }}
+                <span class="cost-value">{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}
                     {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
             </div>
             <div class="info-item">
