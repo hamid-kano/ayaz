@@ -232,8 +232,8 @@
                         <td>1</td>
                         <td style="text-align: center;">طلبية عامة</td>
                         <td><strong>1</strong></td>
-                        <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</strong></td>
-                        <td><strong>{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}</strong></td>
+                        <td><strong>-</strong></td>
+                        <td><strong>-</strong></td>
                     </tr>
                     @for($i = 2; $i <= 15; $i++)
                     <tr>
@@ -264,7 +264,15 @@
                         {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
                     @endif
                 @else
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? '$' : 'ل.س' }}
+                    @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                    @elseif($order->total_cost_syp > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
+                    @elseif($order->total_cost_usd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                    @else
+                        0 ل.س
+                    @endif
                 @endif
             </div>
         </div>

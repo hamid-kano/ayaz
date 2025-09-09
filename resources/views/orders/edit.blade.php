@@ -45,19 +45,7 @@
         <textarea name="order_details" rows="3" placeholder="وصف مفصل للطلبية..." required>{{ old('order_details', $order->order_details) }}</textarea>
     </div>
     
-    <div class="form-row">
-        <div class="form-group">
-            <label>الكلفة</label>
-            <input type="number" name="cost" value="{{ old('cost', $order->cost) }}" min="0" step="1" required>
-        </div>
-        <div class="form-group">
-            <label>العملة</label>
-            <select name="currency" required>
-                <option value="syp" {{ $order->currency == 'syp' ? 'selected' : '' }}>ليرة سورية</option>
-                <option value="usd" {{ $order->currency == 'usd' ? 'selected' : '' }}>دولار أمريكي</option>
-            </select>
-        </div>
-    </div>
+
     
     <div class="form-row">
         <div class="form-group">

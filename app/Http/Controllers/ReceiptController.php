@@ -80,14 +80,8 @@ class ReceiptController extends Controller
 
     public function edit(Receipt $receipt)
     {
-        $orders = Order::whereIn('status', ['new', 'in-progress'])
-            ->with('receipts')
-            ->get()
-            ->filter(function($order) use ($receipt) {
-                return $order->id === $receipt->order_id || $order->remaining_amount > 0;
-            });
-            
-        return view('receipts.edit', compact('receipt', 'orders'));
+        $receipt->load('order.items');
+        return view('receipts.edit', compact('receipt'));
     }
 
     public function update(Request $request, Receipt $receipt)
