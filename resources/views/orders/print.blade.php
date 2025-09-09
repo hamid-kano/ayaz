@@ -139,6 +139,7 @@
             @page { size: A4; margin: 10mm; }
             body { margin: 0; }
             .invoice { width: 190mm; margin: 0; border: 2px solid #000; }
+            #pdfBtn { display: none !important; }
         }
     </style>
 </head>
@@ -269,10 +270,46 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+    function generatePDF() {
+        const invoice = document.querySelector('.invoice');
+        const button = document.querySelector('#pdfBtn');
+        
+        button.style.display = 'none';
+        
+        html2canvas(invoice, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true
+        }).then(canvas => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            pdf.save('فاتورة-{{ $order->order_number }}.pdf');
+            
+            button.style.display = 'block';
+        });
+    }
+    
     window.onload = function() {
         window.print();
     };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const pdfBtn = document.createElement('button');
+        pdfBtn.id = 'pdfBtn';
+        pdfBtn.innerHTML = 'تصدير PDF';
+        pdfBtn.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#dc3545;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
+        pdfBtn.onclick = generatePDF;
+        document.body.appendChild(pdfBtn);
+    });
     </script>
 </body>
 </html>
