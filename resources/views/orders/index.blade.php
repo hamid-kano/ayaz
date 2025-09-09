@@ -85,21 +85,14 @@
                 <div class="order-footer">
                     <div class="order-meta">
                         <div class="order-cost">
-                            @if($order->currency === 'mixed')
-                                @php
-                                    $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
-                                    $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
-                                @endphp
-                                @if($totalSyp > 0)
-                                    {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س
-                                @endif
-                                @if($totalSyp > 0 && $totalUsd > 0) + @endif
-                                @if($totalUsd > 0)
-                                    {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
-                                @endif
+                            @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                            @elseif($order->total_cost_syp > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
+                            @elseif($order->total_cost_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
                             @else
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost) }}
-                                {{ $order->currency == 'usd' ? 'دولار' : 'ل.س' }}
+                                0 ل.س
                             @endif
                         </div>
                         <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>

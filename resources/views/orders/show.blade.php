@@ -40,21 +40,14 @@
             <div class="info-item">
                 <label>الكلفة</label>
                 <span class="cost-value">
-                    @if($order->currency === 'mixed')
-                        @php
-                            $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
-                            $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
-                        @endphp
-                        @if($totalSyp > 0)
-                            {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ليرة
-                        @endif
-                        @if($totalSyp > 0 && $totalUsd > 0) + @endif
-                        @if($totalUsd > 0)
-                            {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} دولار
-                        @endif
+                    @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} دولار
+                    @elseif($order->total_cost_syp > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة
+                    @elseif($order->total_cost_usd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} دولار
                     @else
-                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost) }}
-                        {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                        0 ليرة
                     @endif
                 </span>
             </div>

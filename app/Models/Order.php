@@ -59,56 +59,47 @@ class Order extends Model
         return $this->hasMany(\App\Models\Notification::class, 'data->order_id', 'id');
     }
 
-    public function getTotalPaidAttribute()
+    public function getTotalPaidSypAttribute()
     {
-        if ($this->currency === 'mixed') {
-            return $this->receipts()->sum('amount');
-        }
-        return $this->receipts()->where('currency', $this->currency)->sum('amount');
+        return $this->receipts()->where('currency', 'syp')->sum('amount');
     }
+    
+    public function getTotalPaidUsdAttribute()
+    {
+        return $this->receipts()->where('currency', 'usd')->sum('amount');
+    }
+    
 
-    public function getRemainingAmountAttribute()
+
+    public function getRemainingAmountSypAttribute()
     {
-        return $this->total_cost - $this->total_paid;
+        return $this->total_cost_syp - $this->total_paid_syp;
     }
     
-    public function getTotalCostAttribute()
+    public function getRemainingAmountUsdAttribute()
     {
-        if ($this->items->isEmpty()) {
-            return $this->cost ?? 0;
-        }
-        
-        $totalSyp = $this->items->where('currency', 'syp')->sum(function($item) {
-            return $item->quantity * $item->price;
-        });
-        
-        $totalUsd = $this->items->where('currency', 'usd')->sum(function($item) {
-            return $item->quantity * $item->price;
-        });
-        
-        // إرجاع المبلغ الأكبر أو الوحيد
-        if ($totalSyp > 0 && $totalUsd > 0) {
-            return max($totalSyp, $totalUsd);
-        }
-        
-        return $totalSyp + $totalUsd;
+        return $this->total_cost_usd - $this->total_paid_usd;
     }
     
-    public function getCurrencyAttribute()
+
+    
+    public function getTotalCostSypAttribute()
     {
-        if ($this->items->isEmpty()) {
-            return $this->attributes['currency'] ?? 'syp';
-        }
-        
-        $hasSyp = $this->items->where('currency', 'syp')->count() > 0;
-        $hasUsd = $this->items->where('currency', 'usd')->count() > 0;
-        
-        if ($hasSyp && $hasUsd) {
-            return 'mixed';
-        }
-        
-        return $hasUsd ? 'usd' : 'syp';
+        return $this->items->where('currency', 'syp')->sum(function($item) {
+            return $item->quantity * $item->price;
+        });
     }
+    
+    public function getTotalCostUsdAttribute()
+    {
+        return $this->items->where('currency', 'usd')->sum(function($item) {
+            return $item->quantity * $item->price;
+        });
+    }
+    
+
+    
+
 
     public function getStatusColorAttribute()
     {
