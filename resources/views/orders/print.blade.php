@@ -139,6 +139,7 @@
             @page { size: A4; margin: 10mm; }
             body { margin: 0; }
             .invoice { width: 190mm; margin: 0; border: 2px solid #000; }
+            #pdfBtn { display: none !important; }
         }
     </style>
 </head>
@@ -269,41 +270,49 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-    function printPage() {
-        // محاولة الطباعة العادية
-        if (window.print) {
-            window.print();
-        }
-        // إشارة للتطبيق الأصلي (Android/iOS)
-        if (window.Android && window.Android.print) {
-            window.Android.print();
-        }
-        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.print) {
-            window.webkit.messageHandlers.print.postMessage('print');
-        }
+    function generatePDF() {
+        const invoice = document.querySelector('.invoice');
+        const button = document.querySelector('#pdfBtn');
+        
+        // إخفاء الزر مؤقتاً
+        button.style.display = 'none';
+        
+        html2canvas(invoice, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true
+        }).then(canvas => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            pdf.save('فاتورة-{{ $order->order_number }}.pdf');
+            
+            // إظهار الزر مرة أخرى
+            button.style.display = 'block';
+        });
     }
     
-    // تشغيل الطباعة عند تحميل الصفحة
+    // تشغيل تصدير PDF عند تحميل الصفحة
     window.onload = function() {
-        setTimeout(printPage, 500);
+        setTimeout(generatePDF, 1000);
     };
     
-    // إضافة زر طباعة للطوارئ
+    // إضافة زر تصدير PDF
     document.addEventListener('DOMContentLoaded', function() {
-        const printBtn = document.createElement('button');
-        printBtn.innerHTML = 'طباعة';
-        printBtn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
-        printBtn.onclick = printPage;
-        document.body.appendChild(printBtn);
-        
-        // إخفاء الزر عند الطباعة
-        window.addEventListener('beforeprint', function() {
-            printBtn.style.display = 'none';
-        });
-        window.addEventListener('afterprint', function() {
-            printBtn.style.display = 'block';
-        });
+        const pdfBtn = document.createElement('button');
+        pdfBtn.id = 'pdfBtn';
+        pdfBtn.innerHTML = 'تصدير PDF';
+        pdfBtn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
+        pdfBtn.onclick = generatePDF;
+        document.body.appendChild(pdfBtn);
     });
     </script>
 </body>
