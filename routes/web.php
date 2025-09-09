@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 // Authentication Routes
 Auth::routes();
 
+// Public print route (no authentication required)
+Route::get('/print/{order}', [OrderController::class, 'publicPrint'])->name('orders.public-print');
+
 // Redirect root to login if not authenticated
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');

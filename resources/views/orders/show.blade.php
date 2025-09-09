@@ -8,9 +8,15 @@
             <i data-lucide="arrow-right"></i>
         </a>
         <h2>تفاصيل الطلبية</h2>
-        <a href="{{ route('orders.edit', $order) }}" class="add-btn">
-            <i data-lucide="edit-2"></i>
-        </a>
+        <div class="header-actions">
+            <a href="{{ route('orders.public-print', $order) }}" class="btn-print" target="_blank">
+                <i data-lucide="printer"></i>
+                طباعة
+            </a>
+            <a href="{{ route('orders.edit', $order) }}" class="add-btn">
+                <i data-lucide="edit-2"></i>
+            </a>
+        </div>
     </div>
 
     <div class="view-container">
@@ -229,4 +235,44 @@
 
         @include('components.audio-recorder')
     </div>
+
+@push('styles')
+<style>
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-print {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-print:hover {
+    background: #218838;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-print i {
+    width: 16px;
+    height: 16px;
+}
+</style>
+@endpush
+
 @endsection
