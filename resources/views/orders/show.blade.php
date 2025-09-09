@@ -39,8 +39,24 @@
             </div>
             <div class="info-item">
                 <label>الكلفة</label>
-                <span class="cost-value">{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }}
-                    {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                <span class="cost-value">
+                    @if($order->currency === 'mixed')
+                        @php
+                            $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
+                            $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
+                        @endphp
+                        @if($totalSyp > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ليرة
+                        @endif
+                        @if($totalSyp > 0 && $totalUsd > 0) + @endif
+                        @if($totalUsd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} دولار
+                        @endif
+                    @else
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost) }}
+                        {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}
+                    @endif
+                </span>
             </div>
             <div class="info-item">
                 <label>حالة الطلبية</label>

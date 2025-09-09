@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('customer_phone')->nullable();
             $table->text('order_type');
             $table->text('order_details');
-            $table->decimal('cost', 10, 2);
-            $table->enum('currency', ['syp', 'usd']);
             $table->enum('status', ['new', 'in-progress', 'delivered', 'cancelled'])->default('new');
             $table->date('delivery_date');
             $table->string('reviewer_name')->nullable();

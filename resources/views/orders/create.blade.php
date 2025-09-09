@@ -48,25 +48,7 @@
         @enderror
     </div>
     
-    <div class="form-row">
-        <div class="form-group">
-            <label>الكلفة</label>
-            <input type="number" name="cost" value="{{ old('cost') }}" min="0" step="1" placeholder="0" required>
-            @error('cost')
-                <span class="error-message">{{ $message }}</span>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label>العملة</label>
-            <select name="currency" required>
-                <option value="syp" {{ old('currency') == 'syp' ? 'selected' : '' }}>ليرة سورية</option>
-                <option value="usd" {{ old('currency') == 'usd' ? 'selected' : '' }}>دولار أمريكي</option>
-            </select>
-            @error('currency')
-                <span class="error-message">{{ $message }}</span>
-            @enderror
-        </div>
-    </div>
+
     
     <div class="form-group">
         <label>تاريخ التسليم</label>
