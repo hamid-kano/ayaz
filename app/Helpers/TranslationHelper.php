@@ -143,4 +143,59 @@ class TranslationHelper
     {
         return floatval(str_replace(',', '', $amount));
     }
+
+    /**
+     * Convert number to written amount in Arabic
+     *
+     * @param float $amount
+     * @return string
+     */
+    public static function numberToWords($amount)
+    {
+        $ones = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'];
+        $tens = ['', '', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+        $teens = ['عشرة', 'أحد عشر', 'اثنا عشر', 'ثلاثة عشر', 'أربعة عشر', 'خمسة عشر', 'ستة عشر', 'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'];
+        $hundreds = ['', 'مائة', 'مائتان', 'ثلاثمائة', 'أربعمائة', 'خمسمائة', 'ستمائة', 'سبعمائة', 'ثمانمائة', 'تسعمائة'];
+        $thousands = ['', 'ألف', 'مليون', 'مليار'];
+
+        if ($amount == 0) return 'صفر';
+        
+        $integerPart = floor($amount);
+        $decimalPart = round(($amount - $integerPart) * 100);
+        
+        $result = self::convertInteger($integerPart, $ones, $tens, $teens, $hundreds, $thousands);
+        
+        if ($decimalPart > 0) {
+            $result .= ' و ' . self::convertInteger($decimalPart, $ones, $tens, $teens, $hundreds, $thousands) . ' قرش';
+        }
+        
+        return $result . ' فقط لا غير';
+    }
+
+    private static function convertInteger($number, $ones, $tens, $teens, $hundreds, $thousands)
+    {
+        if ($number == 0) return '';
+        if ($number < 10) return $ones[$number];
+        if ($number < 20) return $teens[$number - 10];
+        if ($number < 100) return $tens[floor($number / 10)] . ($number % 10 ? ' ' . $ones[$number % 10] : '');
+        if ($number < 1000) return $hundreds[floor($number / 100)] . ($number % 100 ? ' ' . self::convertInteger($number % 100, $ones, $tens, $teens, $hundreds, $thousands) : '');
+        
+        $result = '';
+        $scale = 0;
+        
+        while ($number > 0) {
+            $chunk = $number % 1000;
+            if ($chunk != 0) {
+                $chunkText = self::convertInteger($chunk, $ones, $tens, $teens, $hundreds, $thousands);
+                if ($scale > 0) {
+                    $chunkText .= ' ' . $thousands[$scale];
+                }
+                $result = $chunkText . ($result ? ' ' . $result : '');
+            }
+            $number = floor($number / 1000);
+            $scale++;
+        }
+        
+        return $result;
+    }
 }
