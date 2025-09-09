@@ -270,9 +270,41 @@
     </div>
 
     <script>
+    function printPage() {
+        // محاولة الطباعة العادية
+        if (window.print) {
+            window.print();
+        }
+        // إشارة للتطبيق الأصلي (Android/iOS)
+        if (window.Android && window.Android.print) {
+            window.Android.print();
+        }
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.print) {
+            window.webkit.messageHandlers.print.postMessage('print');
+        }
+    }
+    
+    // تشغيل الطباعة عند تحميل الصفحة
     window.onload = function() {
-        window.print();
+        setTimeout(printPage, 500);
     };
+    
+    // إضافة زر طباعة للطوارئ
+    document.addEventListener('DOMContentLoaded', function() {
+        const printBtn = document.createElement('button');
+        printBtn.innerHTML = 'طباعة';
+        printBtn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);';
+        printBtn.onclick = printPage;
+        document.body.appendChild(printBtn);
+        
+        // إخفاء الزر عند الطباعة
+        window.addEventListener('beforeprint', function() {
+            printBtn.style.display = 'none';
+        });
+        window.addEventListener('afterprint', function() {
+            printBtn.style.display = 'block';
+        });
+    });
     </script>
 </body>
 </html>
