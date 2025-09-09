@@ -95,7 +95,7 @@
                     <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
                         <i data-lucide="eye"></i>
                     </a>
-                    <a href="{{ route('orders.print', $order) }}" class="action-btn print" title="طباعة">
+                    <a href="{{ route('orders.public-print', $order) }}" class="action-btn print" title="طباعة" target="_blank">
                         <i data-lucide="printer"></i>
                     </a>
                     @if (auth()->user()->isAdmin())
