@@ -249,7 +249,7 @@
         </table>
 
         <div class="footer-section">
-            <div><strong>خصم للعميل:</strong></div>
+            <div></div>
             <div><strong>المجموع:</strong> 
                 @if($order->items->count() > 0)
                     @php
@@ -266,6 +266,26 @@
                 @else
                     {{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? '$' : 'ل.س' }}
                 @endif
+            </div>
+        </div>
+        
+        <div class="page-footer">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding: 15px; background: #006400; color: white; font-size: 12px;">
+                <div style="text-align: right;">
+                    <div>الإدارة: ٠٩٩٣١٤٧٢٤٤</div>
+                    <div>الاستعلامات: ٠٩٩٠٥٧٨٤٧١</div>
+                </div>
+                <div style="text-align: center;">
+                    <div>تم طباعة هذا المستند في</div>
+                    <div>{{ now()->format('Y-m-d H:i') }}</div>
+                </div>
+                <div style="text-align: left;">
+                    <div>ديار: ٠٩٩٤٧٢٥٠٩٠</div>
+                    <div>دلو فرع٢: ٠٩٣٢٣٥٠٦٠١</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(0,100,0,0.8); color: white;">
+                <div style="font-weight: bold;">Instagram: renas_print</div>
             </div>
         </div>
     </div>
