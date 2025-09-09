@@ -284,7 +284,7 @@
                     <div>دلو فرع٢: ٠٩٣٢٣٥٠٦٠١</div>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(0,100,0,0.8); color: white;">
+            <div style="text-align: center; padding: 8px; background: rgba(0,100,0,0.8); color: white;">
                 <div style="font-weight: bold;">Instagram: renas_print</div>
             </div>
         </div>
