@@ -181,11 +181,11 @@ function updateItemsDisplay() {
                 <div class="item-content">
                     <div class="item-header">
                         <div class="item-name">${item.item_name}</div>
-                        <div class="item-total">${(item.quantity * item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
+                        <div class="item-total">${Math.floor(item.quantity * item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
                     </div>
                     <div class="item-details">
                         <span class="item-qty">${item.quantity} قطعة</span>
-                        <span class="item-price">${item.price.toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
+                        <span class="item-price">${Math.floor(item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
                     </div>
                     <div class="item-actions">
                         <button type="button" class="action-btn edit" onclick="editFormItem(${index})" title="تعديل">
