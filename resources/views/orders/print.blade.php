@@ -277,6 +277,31 @@
             </div>
         </div>
         
+        <div style="padding: 10px; border-top: 1px solid #000; text-align: center; font-size: 12px; background: #f8f9fa;">
+            <strong>المبلغ كتابة:</strong>
+            @if($order->items->count() > 0)
+                @php
+                    $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
+                    $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
+                @endphp
+                @if($totalSyp > 0)
+                    {{ \App\Helpers\TranslationHelper::numberToWords($totalSyp) }}
+                @endif
+                @if($totalUsd > 0)
+                    @if($totalSyp > 0) + @endif
+                    {{ \App\Helpers\TranslationHelper::numberToWords($totalUsd) }} دولار
+                @endif
+            @else
+                @if($order->total_cost_syp > 0)
+                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_syp) }}
+                @elseif($order->total_cost_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_usd) }} دولار
+                @else
+                    صفر فقط لا غير
+                @endif
+            @endif
+        </div>
+        
         <div class="page-footer">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding: 15px; background: #006400; color: white; font-size: 12px;">
                 <div style="text-align: right;">
