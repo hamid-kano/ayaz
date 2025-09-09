@@ -285,17 +285,17 @@
                     $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
                 @endphp
                 @if($totalSyp > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($totalSyp) }}
+                    {{ \App\Helpers\TranslationHelper::numberToWords($totalSyp) }} ل.س فقط لا غير
                 @endif
                 @if($totalUsd > 0)
                     @if($totalSyp > 0) + @endif
-                    {{ \App\Helpers\TranslationHelper::numberToWords($totalUsd) }} دولار
+                    {{ \App\Helpers\TranslationHelper::numberToWords($totalUsd) }} دولار فقط لا غير
                 @endif
             @else
                 @if($order->total_cost_syp > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_syp) }}
+                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_syp) }} ليرة فقط لا غير
                 @elseif($order->total_cost_usd > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_usd) }} دولار
+                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_usd) }} دولار فقط لا غير
                 @else
                     صفر فقط لا غير
                 @endif

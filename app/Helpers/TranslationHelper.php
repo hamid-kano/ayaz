@@ -169,7 +169,7 @@ class TranslationHelper
             $result .= ' و ' . self::convertInteger($decimalPart, $ones, $tens, $teens, $hundreds, $thousands) . ' قرش';
         }
         
-        return $result . ' فقط لا غير';
+        return $result;
     }
 
     private static function convertInteger($number, $ones, $tens, $teens, $hundreds, $thousands)
