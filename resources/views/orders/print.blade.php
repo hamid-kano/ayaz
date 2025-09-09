@@ -293,7 +293,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const printBtn = document.createElement('button');
         printBtn.innerHTML = 'طباعة';
-        printBtn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);';
+        printBtn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
         printBtn.onclick = printPage;
         document.body.appendChild(printBtn);
         
