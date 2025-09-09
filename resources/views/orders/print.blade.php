@@ -281,7 +281,7 @@
                 </div>
                 <div style="text-align: left;">
                     <div>ديار: ٠٩٩٤٧٢٥٠٩٠</div>
-                    <div>دلو فرع٢: ٠٩٣٢٣٥٠٦٠١</div>
+                    <div>دلو الفرع 2: ٠٩٣٢٣٥٠٦٠١</div>
                 </div>
             </div>
             <div style="text-align: center; padding: 8px; background: rgba(0,100,0,0.8); color: white;">
