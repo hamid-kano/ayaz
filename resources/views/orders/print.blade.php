@@ -306,7 +306,7 @@
         const pdfBtn = document.createElement('button');
         pdfBtn.id = 'pdfBtn';
         pdfBtn.innerHTML = 'تصدير PDF';
-        pdfBtn.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#dc3545;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
+        pdfBtn.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:15px 30px;background:#006400;color:white;border:none;border-radius:25px;cursor:pointer;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);font-family:"Cairo",Arial,sans-serif;';
         pdfBtn.onclick = generatePDF;
         document.body.appendChild(pdfBtn);
     });
