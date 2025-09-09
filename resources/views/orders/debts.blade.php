@@ -64,16 +64,42 @@
                 <div class="debt-details">
                     <div class="debt-row">
                         <span class="debt-label">إجمالي:</span>
-                        <span class="debt-total">{{ \App\Helpers\TranslationHelper::formatAmount($order->cost) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        <span class="debt-total">
+                            @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                            @elseif($order->total_cost_syp > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
+                            @else
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                            @endif
+                        </span>
                     </div>
                     <div class="debt-row">
                         <span class="debt-label">مدفوع:</span>
-                        <span class="debt-paid">{{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                        <span class="debt-paid">
+                            @if($order->total_paid_syp > 0 && $order->total_paid_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid_usd) }} $
+                            @elseif($order->total_paid_syp > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid_syp) }} ل.س
+                            @elseif($order->total_paid_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_paid_usd) }} $
+                            @else
+                                0
+                            @endif
+                        </span>
                     </div>
                 </div>
                 <div class="debt-remaining">
                     <span class="remaining-label">متبقي:</span>
-                    <span class="remaining-amount">{{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }}</span>
+                    <span class="remaining-amount">
+                        @if($order->remaining_amount_syp > 0 && $order->remaining_amount_usd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
+                        @elseif($order->remaining_amount_syp > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س
+                        @else
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
+                        @endif
+                    </span>
                 </div>
             </div>
         </div>

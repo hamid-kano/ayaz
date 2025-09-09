@@ -253,7 +253,7 @@ class OrderController extends Controller
 
     public function debts(Request $request)
     {
-        $query = Order::with('receipts');
+        $query = Order::with(['receipts', 'items']);
 
         if ($request->has('search')) {
             $search = $request->search;
@@ -266,11 +266,11 @@ class OrderController extends Controller
 
         $orders = $query->get()
             ->filter(function($order) {
-                return $order->remaining_amount > 0;
+                return $order->remaining_amount_syp > 0 || $order->remaining_amount_usd > 0;
             });
 
-        $totalUsd = $orders->where('currency', 'usd')->sum('remaining_amount');
-        $totalSyp = $orders->where('currency', 'syp')->sum('remaining_amount');
+        $totalUsd = $orders->sum('remaining_amount_usd');
+        $totalSyp = $orders->sum('remaining_amount_syp');
 
         return view('orders.debts', compact('orders', 'totalUsd', 'totalSyp'));
     }

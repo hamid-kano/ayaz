@@ -29,10 +29,10 @@ class ReceiptController extends Controller
     public function create(Request $request)
     {
         $orders = Order::whereIn('status', ['new', 'in-progress'])
-            ->with('receipts')
+            ->with(['receipts', 'items'])
             ->get()
             ->filter(function($order) {
-                return $order->remaining_amount > 0;
+                return $order->remaining_amount_syp > 0 || $order->remaining_amount_usd > 0;
             });
         
         $selectedOrderId = $request->get('order_id');
@@ -54,16 +54,17 @@ class ReceiptController extends Controller
             'order_id.required' => 'يجب اختيار رقم الطلبية'
         ]);
 
-        $order = Order::findOrFail($validated['order_id']);
+        $order = Order::with('items')->findOrFail($validated['order_id']);
         
-        // Check currency matches order currency
-        if ($validated['currency'] !== $order->currency) {
-            return back()->withErrors(['currency' => 'يجب أن تكون العملة مطابقة لعملة الطلبية']);
+        // Check if amount doesn't exceed remaining for the specific currency
+        $remainingAmount = $validated['currency'] === 'syp' ? $order->remaining_amount_syp : $order->remaining_amount_usd;
+        
+        if ($validated['amount'] > $remainingAmount) {
+            return back()->withErrors(['amount' => 'المبلغ يتجاوز المبلغ المتبقي بهذه العملة']);
         }
         
-        // Check if amount doesn't exceed remaining
-        if ($validated['amount'] > $order->remaining_amount) {
-            return back()->withErrors(['amount' => 'المبلغ يتجاوز المبلغ المتبقي']);
+        if ($remainingAmount <= 0) {
+            return back()->withErrors(['currency' => 'لا يوجد مبلغ متبقي بهذه العملة']);
         }
 
         Receipt::create($validated);
@@ -100,11 +101,14 @@ class ReceiptController extends Controller
         ]);
 
         $order = $receipt->order;
+        $order->load('items');
         $oldAmount = $receipt->amount;
         $newAmount = $validated['amount'];
+        $currency = $receipt->currency;
         
         // حساب المبلغ المتبقي مع استثناء المقبوض الحالي
-        $availableAmount = $order->remaining_amount + $oldAmount;
+        $remainingAmount = $currency === 'syp' ? $order->remaining_amount_syp : $order->remaining_amount_usd;
+        $availableAmount = $remainingAmount + $oldAmount;
         
         if ($newAmount > $availableAmount) {
             return back()->withErrors(['amount' => 'المبلغ يتجاوز المبلغ المتبقي']);

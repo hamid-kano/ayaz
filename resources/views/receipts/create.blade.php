@@ -22,12 +22,20 @@
                 <option value="">اختر رقم الطلبية</option>
                 @foreach($orders as $order)
                     <option value="{{ $order->id }}" 
-                            data-currency="{{ $order->currency }}"
-                            data-remaining="{{ $order->remaining_amount }}"
+                            data-remaining-syp="{{ $order->remaining_amount_syp }}"
+                            data-remaining-usd="{{ $order->remaining_amount_usd }}"
                             data-search="{{ $order->order_number }} {{ $order->customer_name }}"
                             {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
                         #{{ $order->order_number }} - {{ $order->customer_name }} 
-                        (متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }})
+                        (متبقي: 
+                        @if($order->remaining_amount_syp > 0 && $order->remaining_amount_usd > 0)
+                            {{ number_format($order->remaining_amount_syp, 2) }} ل.س + {{ number_format($order->remaining_amount_usd, 2) }} $
+                        @elseif($order->remaining_amount_syp > 0)
+                            {{ number_format($order->remaining_amount_syp, 2) }} ل.س
+                        @else
+                            {{ number_format($order->remaining_amount_usd, 2) }} $
+                        @endif
+                        )
                     </option>
                 @endforeach
             </select>
@@ -133,20 +141,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedOption = this.options[this.selectedIndex];
         
         if (selectedOption.value) {
-            const currency = selectedOption.dataset.currency;
-            const remaining = selectedOption.dataset.remaining;
-            
-            // Update currency select and disable it
-            currencySelect.value = currency;
-            currencySelect.disabled = true;
+            const remainingSyp = parseFloat(selectedOption.dataset.remainingSyp);
+            const remainingUsd = parseFloat(selectedOption.dataset.remainingUsd);
             
             // Show order info
             selectedOrderInfo.style.display = 'block';
-            remainingAmount.textContent = parseFloat(remaining).toFixed(2) + ' ' + (currency === 'usd' ? 'دولار' : 'ليرة');
             
-            // Set max amount
-            amountInput.max = remaining;
-            amountInput.value = remaining;
+            // Display remaining amounts
+            let remainingText = '';
+            if (remainingSyp > 0 && remainingUsd > 0) {
+                remainingText = remainingSyp.toFixed(2) + ' ل.س + ' + remainingUsd.toFixed(2) + ' دولار';
+            } else if (remainingSyp > 0) {
+                remainingText = remainingSyp.toFixed(2) + ' ل.س';
+                currencySelect.value = 'syp';
+            } else if (remainingUsd > 0) {
+                remainingText = remainingUsd.toFixed(2) + ' دولار';
+                currencySelect.value = 'usd';
+            }
+            
+            remainingAmount.textContent = remainingText;
+            
+            // Enable currency select if both currencies have remaining amounts
+            currencySelect.disabled = !(remainingSyp > 0 && remainingUsd > 0);
+            
+            // Update amount input based on selected currency
+            updateAmountInput();
         } else {
             selectedOrderInfo.style.display = 'none';
             currencySelect.disabled = false;
@@ -155,11 +174,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Add currency change handler
+    currencySelect.addEventListener('change', updateAmountInput);
+    
+    function updateAmountInput() {
+        const selectedOption = orderSelect.options[orderSelect.selectedIndex];
+        if (selectedOption.value) {
+            const currency = currencySelect.value;
+            const remaining = currency === 'syp' ? 
+                parseFloat(selectedOption.dataset.remainingSyp) : 
+                parseFloat(selectedOption.dataset.remainingUsd);
+            
+            amountInput.max = remaining;
+            amountInput.value = remaining > 0 ? remaining : '';
+        }
+    }
+    
     // Validate amount doesn't exceed remaining
     amountInput.addEventListener('input', function() {
         const selectedOption = orderSelect.options[orderSelect.selectedIndex];
         if (selectedOption.value) {
-            const remaining = parseFloat(selectedOption.dataset.remaining);
+            const currency = currencySelect.value;
+            const remaining = currency === 'syp' ? 
+                parseFloat(selectedOption.dataset.remainingSyp) : 
+                parseFloat(selectedOption.dataset.remainingUsd);
             const amount = parseFloat(this.value);
             
             if (amount > remaining) {
