@@ -58,7 +58,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" id="amountInput" value="{{ old('amount') }}" min="0" step="1" placeholder="أدخل المبلغ المقبوض" required>
+            <input type="number" name="amount" id="amountInput" value="{{ old('amount') }}" min="0" step="0.01" placeholder="أدخل المبلغ المقبوض" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror
@@ -149,13 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Display remaining amounts
             let remainingText = '';
+            function formatAmount(amount) {
+                if (Math.floor(amount) == amount) {
+                    return Math.floor(amount).toLocaleString();
+                }
+                return parseFloat(amount).toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+            
             if (remainingSyp > 0 && remainingUsd > 0) {
-                remainingText = Math.floor(remainingSyp).toLocaleString() + ' ل.س + ' + Math.floor(remainingUsd).toLocaleString() + ' دولار';
+                remainingText = formatAmount(remainingSyp) + ' ل.س + ' + formatAmount(remainingUsd) + ' دولار';
             } else if (remainingSyp > 0) {
-                remainingText = Math.floor(remainingSyp).toLocaleString() + ' ل.س';
+                remainingText = formatAmount(remainingSyp) + ' ل.س';
                 currencySelect.value = 'syp';
             } else if (remainingUsd > 0) {
-                remainingText = Math.floor(remainingUsd).toLocaleString() + ' دولار';
+                remainingText = formatAmount(remainingUsd) + ' دولار';
                 currencySelect.value = 'usd';
             }
             
@@ -186,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 parseFloat(selectedOption.dataset.remainingUsd);
             
             amountInput.max = remaining;
-            amountInput.value = remaining > 0 ? remaining : '';
+            amountInput.value = remaining > 0 ? remaining.toFixed(2) : '';
         }
     }
     

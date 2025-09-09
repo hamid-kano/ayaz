@@ -1,0 +1,57 @@
+/* تنسيق المبالغ المالية */
+.amount-display {
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.amount-input {
+    text-align: left;
+    direction: ltr;
+}
+
+.amount-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* تنسيق الأرقام في الجداول */
+.table-amount {
+    text-align: left;
+    font-weight: 500;
+    font-family: monospace;
+}
+
+/* تنسيق المبالغ في البطاقات */
+.card-amount {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.card-amount.negative {
+    color: #dc3545;
+}
+
+/* تنسيق المبالغ في الملخصات */
+.summary-amount {
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* تنسيق حقول الإدخال للمبالغ */
+input[type="number"][step="0.01"] {
+    text-align: left;
+    direction: ltr;
+    font-family: monospace;
+}
+
+/* تنسيق عرض الكسور */
+.decimal-amount {
+    font-family: monospace;
+}
+
+.integer-amount {
+    font-family: inherit;
+}

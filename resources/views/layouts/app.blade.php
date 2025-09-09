@@ -17,7 +17,9 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/users.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/amounts.css') }}">
     <script src="{{ asset('js/lucide.js') }}"></script>
+    <script src="{{ asset('js/amounts.js') }}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     

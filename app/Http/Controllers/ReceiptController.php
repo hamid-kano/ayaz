@@ -43,7 +43,7 @@ class ReceiptController extends Controller
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'amount' => 'required|integer|min:1',
+            'amount' => 'required|numeric|min:0.01',
             'currency' => 'required|in:syp,usd',
             'receipt_date' => 'required|date',
             'notes' => 'nullable|string',
@@ -86,7 +86,7 @@ class ReceiptController extends Controller
     public function update(Request $request, Receipt $receipt)
     {
         $validated = $request->validate([
-            'amount' => 'required|integer|min:1',
+            'amount' => 'required|numeric|min:0.01',
             'receipt_date' => 'required|date',
             'notes' => 'nullable|string',
         ], [

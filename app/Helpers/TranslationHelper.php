@@ -107,13 +107,40 @@ class TranslationHelper
     }
 
     /**
-     * Format amount without decimal places
+     * Format amount with conditional decimal places
      *
      * @param float $amount
      * @return string
      */
     public static function formatAmount($amount)
     {
-        return number_format($amount, 0, '', ',');
+        // إذا كان الرقم صحيح (بدون كسور) أظهره بدون فاصلة
+        if (floor($amount) == $amount) {
+            return number_format($amount, 0, '', ',');
+        }
+        // إذا كان يحتوي على كسور أظهر رقمين بعد الفاصلة
+        return number_format($amount, 2, '.', ',');
+    }
+
+    /**
+     * Format amount for input fields (always 2 decimal places)
+     *
+     * @param float $amount
+     * @return string
+     */
+    public static function formatAmountForInput($amount)
+    {
+        return number_format($amount, 2, '.', '');
+    }
+
+    /**
+     * Parse amount from input (remove formatting)
+     *
+     * @param string $amount
+     * @return float
+     */
+    public static function parseAmount($amount)
+    {
+        return floatval(str_replace(',', '', $amount));
     }
 }

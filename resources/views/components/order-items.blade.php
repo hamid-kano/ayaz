@@ -57,7 +57,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>السعر</label>
-                    <input type="number" id="itemPrice" name="itemPrice" placeholder="0" min="0" step="1">
+                    <input type="number" id="itemPrice" name="itemPrice" placeholder="0" min="0" step="0.01">
                 </div>
                 <div class="form-group">
                     <label>العملة</label>
@@ -91,6 +91,14 @@
 <script>
 let formItems = @json($items->toArray() ?? []);
 let editingIndex = -1;
+
+// دالة تنسيق المبالغ
+function formatAmount(amount) {
+    if (Math.floor(amount) == amount) {
+        return Math.floor(amount).toLocaleString();
+    }
+    return parseFloat(amount).toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 
 function showAddFormItem() {
     document.getElementById('itemForm').style.display = 'block';
@@ -181,11 +189,11 @@ function updateItemsDisplay() {
                 <div class="item-content">
                     <div class="item-header">
                         <div class="item-name">${item.item_name}</div>
-                        <div class="item-total">${Math.floor(item.quantity * item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
+                        <div class="item-total">${formatAmount(item.quantity * item.price)} ${item.currency == 'usd' ? 'دولار' : 'ليرة'}</div>
                     </div>
                     <div class="item-details">
                         <span class="item-qty">${item.quantity} قطعة</span>
-                        <span class="item-price">${Math.floor(item.price).toLocaleString()} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
+                        <span class="item-price">${formatAmount(item.price)} ${item.currency == 'usd' ? 'دولار' : 'ليرة'} للقطعة</span>
                     </div>
                     <div class="item-actions">
                         <button type="button" class="action-btn edit" onclick="editFormItem(${index})" title="تعديل">

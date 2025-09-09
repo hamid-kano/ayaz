@@ -22,7 +22,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" value="{{ old('amount', $receipt->amount) }}" min="0" step="1" placeholder="أدخل المبلغ المقبوض" required>
+            <input type="number" name="amount" value="{{ old('amount', \App\Helpers\TranslationHelper::formatAmountForInput($receipt->amount)) }}" min="0" step="0.01" placeholder="أدخل المبلغ المقبوض" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror
