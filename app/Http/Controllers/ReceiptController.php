@@ -21,9 +21,8 @@ class ReceiptController extends Controller
         }
 
         $receipts = $query->latest()->get();
-        $totalAmount = $receipts->sum('amount');
         
-        return view('receipts.index', compact('receipts', 'totalAmount'));
+        return view('receipts.index', compact('receipts'));
     }
 
     public function create(Request $request)
