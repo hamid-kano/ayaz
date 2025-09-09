@@ -16,18 +16,22 @@
     @csrf
     <div class="form-group">
         <label>رقم الطلبية</label>
-        <select name="order_id" required id="orderSelect">
-            <option value="">اختر رقم الطلبية</option>
-            @foreach($orders as $order)
-                <option value="{{ $order->id }}" 
-                        data-currency="{{ $order->currency }}"
-                        data-remaining="{{ $order->remaining_amount }}"
-                        {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
-                    #{{ $order->order_number }} - {{ $order->customer_name }} 
-                    (متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }})
-                </option>
-            @endforeach
-        </select>
+        <div class="search-select-container">
+            <input type="text" id="orderSearch" placeholder="ابحث برقم الطلبية أو اسم الزبون..." class="search-input">
+            <select name="order_id" required id="orderSelect">
+                <option value="">اختر رقم الطلبية</option>
+                @foreach($orders as $order)
+                    <option value="{{ $order->id }}" 
+                            data-currency="{{ $order->currency }}"
+                            data-remaining="{{ $order->remaining_amount }}"
+                            data-search="{{ $order->order_number }} {{ $order->customer_name }}"
+                            {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
+                        #{{ $order->order_number }} - {{ $order->customer_name }} 
+                        (متبقي: {{ number_format($order->remaining_amount, 2) }} {{ $order->currency == 'usd' ? 'دولار' : 'ليرة' }})
+                    </option>
+                @endforeach
+            </select>
+        </div>
         @error('order_id')
             <span class="error-message">{{ $message }}</span>
         @enderror
@@ -97,10 +101,28 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const orderSelect = document.getElementById('orderSelect');
+    const orderSearch = document.getElementById('orderSearch');
     const currencySelect = document.getElementById('currencySelect');
     const amountInput = document.getElementById('amountInput');
     const selectedOrderInfo = document.getElementById('selectedOrderInfo');
     const remainingAmount = document.getElementById('remainingAmount');
+    
+    // البحث في الطلبات
+    orderSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const options = orderSelect.options;
+        
+        for (let i = 1; i < options.length; i++) {
+            const option = options[i];
+            const searchData = option.dataset.search.toLowerCase();
+            
+            if (searchData.includes(searchTerm)) {
+                option.style.display = '';
+            } else {
+                option.style.display = 'none';
+            }
+        }
+    });
     
     // تفعيل الاختيار التلقائي عند تحميل الصفحة
     if (orderSelect.value) {
@@ -149,6 +171,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<style>
+.search-select-container {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+#orderSelect {
+    max-height: 200px;
+    overflow-y: auto;
+}
+</style>
 @endpush
 
 @endsection
