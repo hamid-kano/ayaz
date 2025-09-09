@@ -29,11 +29,11 @@
                         #{{ $order->order_number }} - {{ $order->customer_name }} 
                         (متبقي: 
                         @if($order->remaining_amount_syp > 0 && $order->remaining_amount_usd > 0)
-                            {{ number_format($order->remaining_amount_syp, 2) }} ل.س + {{ number_format($order->remaining_amount_usd, 2) }} $
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
                         @elseif($order->remaining_amount_syp > 0)
-                            {{ number_format($order->remaining_amount_syp, 2) }} ل.س
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س
                         @else
-                            {{ number_format($order->remaining_amount_usd, 2) }} $
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
                         @endif
                         )
                     </option>
@@ -150,12 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Display remaining amounts
             let remainingText = '';
             if (remainingSyp > 0 && remainingUsd > 0) {
-                remainingText = remainingSyp.toFixed(2) + ' ل.س + ' + remainingUsd.toFixed(2) + ' دولار';
+                remainingText = Math.floor(remainingSyp).toLocaleString() + ' ل.س + ' + Math.floor(remainingUsd).toLocaleString() + ' دولار';
             } else if (remainingSyp > 0) {
-                remainingText = remainingSyp.toFixed(2) + ' ل.س';
+                remainingText = Math.floor(remainingSyp).toLocaleString() + ' ل.س';
                 currencySelect.value = 'syp';
             } else if (remainingUsd > 0) {
-                remainingText = remainingUsd.toFixed(2) + ' دولار';
+                remainingText = Math.floor(remainingUsd).toLocaleString() + ' دولار';
                 currencySelect.value = 'usd';
             }
             
