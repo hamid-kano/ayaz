@@ -40,8 +40,9 @@
             <div class="info-item">
                 <label>الكلفة</label>
                 <span class="cost-value">
-                    @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} دولار
+                    @if ($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة +
+                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} دولار
                     @elseif($order->total_cost_syp > 0)
                         {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة
                     @elseif($order->total_cost_usd > 0)
@@ -115,7 +116,7 @@
                             title="عرض">
                             <i data-lucide="eye"></i>
                         </a>
-                        @if(auth()->user()->isAdmin())
+                        @if (auth()->user()->isAdmin())
                             <form method="POST" action="{{ route('attachments.destroy', $attachment) }}"
                                 style="display: inline;">
                                 @csrf
@@ -189,12 +190,22 @@
 
         <div class="audio-list">
             @forelse($order->audioRecordings as $audio)
-                <div class="audio-item">
-                    {{-- <span>{{ $audio->file_name }}</span> --}}
-                    <audio controls>
+                <div class="audio-item" x-data="{ playing: false }">
+                    <div class="audio-controls">
+                        <button type="button" x-show="!playing"
+                            @click="$refs.audio{{ $loop->index }}.play(); playing = true" class="btn-play">
+                            <i data-lucide="play"></i>
+                        </button>
+                        <button type="button" x-show="playing"
+                            @click="$refs.audio{{ $loop->index }}.pause(); playing = false" class="btn-pause">
+                            <i data-lucide="pause"></i>
+                        </button>
+                    </div>
+                    <audio x-ref="audio{{ $loop->index }}" controls @ended="playing = false">
                         <source src="{{ URL($audio->file_path) }}" type="audio/wav">
                     </audio>
-                    @if(auth()->user()->isAdmin())
+
+                    @if (auth()->user()->isAdmin())
                         <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -249,43 +260,80 @@
         @include('components.audio-recorder')
     </div>
 
-@push('styles')
-<style>
-.header-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
+    @push('styles')
+        <style>
+            .header-actions {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
 
-.btn-print {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-}
+            .btn-print {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 16px;
+                background: #28a745;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            }
 
-.btn-print:hover {
-    background: #218838;
-    color: white;
-    text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-}
+            .btn-print:hover {
+                background: #218838;
+                color: white;
+                text-decoration: none;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            }
 
-.btn-print i {
-    width: 16px;
-    height: 16px;
-}
-</style>
-@endpush
+            .btn-print i {
+                width: 16px;
+                height: 16px;
+            }
+
+            .audio-controls {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .btn-play,
+            .btn-pause {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-play {
+                background: #28a745;
+                color: white;
+            }
+
+            .btn-play:hover {
+                background: #218838;
+            }
+
+            .btn-pause {
+                background: #dc3545;
+                color: white;
+            }
+
+            .btn-pause:hover {
+                background: #c82333;
+            }
+        </style>
+    @endpush
 
 @endsection
