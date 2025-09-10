@@ -190,7 +190,7 @@
         <div class="audio-list">
             @forelse($order->audioRecordings as $audio)
                 <div class="audio-item">
-                    <span>{{ $audio->file_name }}</span>
+                    {{-- <span>{{ $audio->file_name }}</span> --}}
                     <audio controls>
                         <source src="{{ URL($audio->file_path) }}" type="audio/wav">
                     </audio>
