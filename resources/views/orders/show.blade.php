@@ -115,16 +115,18 @@
                             title="عرض">
                             <i data-lucide="eye"></i>
                         </a>
-                        <form method="POST" action="{{ route('attachments.destroy', $attachment) }}"
-                            style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
-                                onclick="showDeleteModal('{{ route('attachments.destroy', $attachment) }}', 'المرفق', this.closest('form'))"
-                                title="حذف">
-                                <i data-lucide="trash-2"></i>
-                            </button>
-                        </form>
+                        @if(auth()->user()->isAdmin())
+                            <form method="POST" action="{{ route('attachments.destroy', $attachment) }}"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="showDeleteModal('{{ route('attachments.destroy', $attachment) }}', 'المرفق', this.closest('form'))"
+                                    title="حذف">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             @empty
@@ -192,12 +194,14 @@
                     <audio controls>
                         <source src="{{ URL($audio->file_path) }}" type="audio/wav">
                     </audio>
-                    <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="showDeleteModal('{{ route('audio.destroy', $audio) }}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
-                    </form>
+                    @if(auth()->user()->isAdmin())
+                        <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button"
+                                onclick="showDeleteModal('{{ route('audio.destroy', $audio) }}', 'التسجيل الصوتي', this.closest('form'))">حذف</button>
+                        </form>
+                    @endif
                 </div>
             @empty
                 <div class="empty-audio">
