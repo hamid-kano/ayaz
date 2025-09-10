@@ -177,8 +177,23 @@ class TranslationHelper
         if ($number == 0) return '';
         if ($number < 10) return $ones[$number];
         if ($number < 20) return $teens[$number - 10];
-        if ($number < 100) return $tens[floor($number / 10)] . ($number % 10 ? ' ' . $ones[$number % 10] : '');
-        if ($number < 1000) return $hundreds[floor($number / 100)] . ($number % 100 ? ' ' . self::convertInteger($number % 100, $ones, $tens, $teens, $hundreds, $thousands) : '');
+        if ($number < 100) {
+            $tensDigit = floor($number / 10);
+            $onesDigit = $number % 10;
+            if ($onesDigit == 0) {
+                return $tens[$tensDigit];
+            }
+            return $ones[$onesDigit] . ' و' . $tens[$tensDigit];
+        }
+        if ($number < 1000) {
+            $hundredsDigit = floor($number / 100);
+            $remainder = $number % 100;
+            $result = $hundreds[$hundredsDigit];
+            if ($remainder > 0) {
+                $result .= ' ' . self::convertInteger($remainder, $ones, $tens, $teens, $hundreds, $thousands);
+            }
+            return $result;
+        }
         
         $result = '';
         $scale = 0;
