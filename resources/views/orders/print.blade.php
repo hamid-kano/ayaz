@@ -176,7 +176,7 @@
         
         @if($order->order_details)
         <div class="order-details-section">
-            <div class="order-details-header">تفاصيل الطلبية:</div>
+            <div class="order-details-header">ملاحظات:</div>
             <div class="order-details-content">{{ $order->order_details }}</div>
         </div>
         @endif

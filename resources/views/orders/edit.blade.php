@@ -41,8 +41,8 @@
     </div>
     
     <div class="form-group">
-        <label>التفاصيل</label>
-        <textarea name="order_details" rows="3" placeholder="وصف مفصل للطلبية..." required>{{ old('order_details', $order->order_details) }}</textarea>
+        <label>ملاحظات</label>
+        <textarea name="order_details" rows="3" placeholder="ملاحظات عن الطلبية..." required>{{ old('order_details', $order->order_details) }}</textarea>
     </div>
     
 

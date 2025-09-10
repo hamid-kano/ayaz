@@ -86,7 +86,7 @@
                 <span>{{ $order->executor->name ?? 'غير محدد' }}</span>
             </div>
             <div class="info-item full-width">
-                <label>تفاصيل الطلبية</label>
+                <label>ملاحظات</label>
                 <span class="details-text">{{ $order->order_details }}</span>
             </div>
         </div>
