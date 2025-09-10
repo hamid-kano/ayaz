@@ -148,9 +148,10 @@ class TranslationHelper
      * Convert number to written amount in Arabic
      *
      * @param float $amount
+     * @param string $currency 'SYP' for Syrian Pound, 'USD' for US Dollar
      * @return string
      */
-    public static function numberToWords($amount)
+    public static function numberToWords($amount, $currency = 'SYP')
     {
         $ones = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'];
         $tens = ['', '', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
@@ -166,7 +167,8 @@ class TranslationHelper
         $result = self::convertInteger($integerPart, $ones, $tens, $teens, $hundreds, $thousands);
         
         if ($decimalPart > 0) {
-            $result .= ' و ' . self::convertInteger($decimalPart, $ones, $tens, $teens, $hundreds, $thousands) . ' قرش';
+            $decimalUnit = $currency === 'USD' ? 'سنت' : 'قرش';
+            $result .= ' و ' . self::convertInteger($decimalPart, $ones, $tens, $teens, $hundreds, $thousands) . ' ' . $decimalUnit;
         }
         
         return $result;
