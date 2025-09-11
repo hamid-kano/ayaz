@@ -107,7 +107,7 @@ class TranslationHelper
     }
 
     /**
-     * Format amount with conditional decimal places
+     * Format amount with conditional decimal places (up to 6)
      *
      * @param float $amount
      * @return string
@@ -118,19 +118,19 @@ class TranslationHelper
         if (floor($amount) == $amount) {
             return number_format($amount, 0, '', ',');
         }
-        // إذا كان يحتوي على كسور أظهر رقمين بعد الفاصلة
-        return number_format($amount, 2, '.', ',');
+        // إذا كان يحتوي على كسور أظهر حتى 6 أرقام بعد الفاصلة مع إزالة الأصفار الزائدة
+        return rtrim(rtrim(number_format($amount, 6, '.', ','), '0'), '.');
     }
 
     /**
-     * Format amount for input fields (always 2 decimal places)
+     * Format amount for input fields (up to 6 decimal places)
      *
      * @param float $amount
      * @return string
      */
     public static function formatAmountForInput($amount)
     {
-        return number_format($amount, 2, '.', '');
+        return rtrim(rtrim(number_format($amount, 6, '.', ''), '0'), '.');
     }
 
     /**

@@ -58,7 +58,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" id="amountInput" value="{{ old('amount') }}" min="0" step="0.01" placeholder="أدخل المبلغ المقبوض" required>
+            <input type="number" name="amount" id="amountInput" value="{{ old('amount') }}" min="0" step="0.000001" placeholder="أدخل المبلغ المقبوض" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (Math.floor(amount) == amount) {
                     return Math.floor(amount).toLocaleString();
                 }
-                return parseFloat(amount).toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return parseFloat(amount).toFixed(6).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             }
             
             if (remainingSyp > 0 && remainingUsd > 0) {

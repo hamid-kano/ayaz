@@ -21,7 +21,7 @@ class Purchase extends Model
 
     protected $casts = [
         'purchase_date' => 'date',
-        'amount' => 'decimal:2',
+        'amount' => 'decimal:6',
     ];
 
     public function attachments()

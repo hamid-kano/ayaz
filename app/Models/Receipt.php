@@ -19,7 +19,7 @@ class Receipt extends Model
 
     protected $casts = [
         'receipt_date' => 'date',
-        'amount' => 'decimal:2',
+        'amount' => 'decimal:6',
     ];
 
     public function order()

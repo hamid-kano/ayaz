@@ -61,7 +61,7 @@ class OrderController extends Controller
             'items' => 'nullable|array',
             'items.*.item_name' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
+            'items.*.price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'items.*.currency' => 'required|in:syp,usd',
         ]);
 
@@ -153,7 +153,7 @@ class OrderController extends Controller
             'items' => 'nullable|array',
             'items.*.item_name' => 'required|string|max:255',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
+            'items.*.price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'items.*.currency' => 'required|in:syp,usd',
         ]);
 

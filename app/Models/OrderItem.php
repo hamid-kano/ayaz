@@ -18,7 +18,7 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'decimal:6',
     ];
 
     public function order()

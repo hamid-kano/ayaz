@@ -8,19 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        // تحديث جدول order_items لدعم الكسور في الأسعار
+        // تحديث جدول order_items لدعم 6 أرقام بعد الفاصلة
         Schema::table('order_items', function (Blueprint $table) {
-            $table->decimal('price', 10, 2)->change();
+            $table->decimal('price', 15, 6)->change();
         });
         
-        // تحديث جدول receipts لدعم الكسور في المبالغ
+        // تحديث جدول receipts لدعم 6 أرقام بعد الفاصلة
         Schema::table('receipts', function (Blueprint $table) {
-            $table->decimal('amount', 10, 2)->change();
+            $table->decimal('amount', 15, 6)->change();
         });
         
-        // تحديث جدول purchases لدعم الكسور في المبالغ
+        // تحديث جدول purchases لدعم 6 أرقام بعد الفاصلة
         Schema::table('purchases', function (Blueprint $table) {
-            $table->decimal('amount', 10, 2)->change();
+            $table->decimal('amount', 15, 6)->change();
         });
     }
 

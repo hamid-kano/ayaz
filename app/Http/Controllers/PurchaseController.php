@@ -36,7 +36,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'currency' => 'required|in:syp,usd',
             'purchase_date' => 'required|date',
             'status' => 'required|in:cash,debt',
@@ -87,7 +87,7 @@ class PurchaseController extends Controller
     public function update(Request $request, Purchase $purchase)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'currency' => 'required|in:syp,usd',
             'purchase_date' => 'required|date',
             'status' => 'required|in:cash,debt',

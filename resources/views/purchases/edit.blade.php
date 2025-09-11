@@ -37,7 +37,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>المبلغ</label>
-            <input type="number" name="amount" value="{{ old('amount', \App\Helpers\TranslationHelper::formatAmountForInput($purchase->amount)) }}" min="0" step="0.01" required>
+            <input type="number" name="amount" value="{{ old('amount', \App\Helpers\TranslationHelper::formatAmountForInput($purchase->amount)) }}" min="0" step="0.000001" required>
             @error('amount')
                 <span class="error-message">{{ $message }}</span>
             @enderror

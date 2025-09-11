@@ -57,7 +57,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>السعر</label>
-                    <input type="number" id="itemPrice" name="itemPrice" placeholder="0" min="0" step="0.01">
+                    <input type="number" id="itemPrice" name="itemPrice" placeholder="0" min="0" step="0.000001">
                 </div>
                 <div class="form-group">
                     <label>العملة</label>
@@ -92,12 +92,12 @@
 let formItems = @json($items->toArray() ?? []);
 let editingIndex = -1;
 
-// دالة تنسيق المبالغ
+// دالة تنسيق المبالغ (حتى 6 أرقام بعد الفاصلة)
 function formatAmount(amount) {
     if (Math.floor(amount) == amount) {
         return Math.floor(amount).toLocaleString();
     }
-    return parseFloat(amount).toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parseFloat(amount).toFixed(6).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function showAddFormItem() {
