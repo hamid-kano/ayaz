@@ -115,7 +115,17 @@
                     <tr>
                         <td>{{ $customer['name'] }}</td>
                         <td>{{ $customer['orders'] }}</td>
-                        <td>{{ \App\Helpers\TranslationHelper::formatAmount($customer['total']) }} ل.س</td>
+                        <td>
+                            @if($customer['total_syp'] > 0 && $customer['total_usd'] > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($customer['total_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($customer['total_usd']) }} $
+                            @elseif($customer['total_syp'] > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($customer['total_syp']) }} ل.س
+                            @elseif($customer['total_usd'] > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($customer['total_usd']) }} $
+                            @else
+                                0
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

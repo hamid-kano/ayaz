@@ -109,18 +109,24 @@ class ReportController extends Controller
             ->get()
             ->groupBy('customer_name')
             ->map(function ($orders, $customerName) {
-                $totalAmount = $orders->sum(function($order) {
-                    return $order->items->sum(function($item) {
+                $totalSyp = $orders->sum(function($order) {
+                    return $order->items->where('currency', 'syp')->sum(function($item) {
+                        return $item->quantity * $item->price;
+                    });
+                });
+                $totalUsd = $orders->sum(function($order) {
+                    return $order->items->where('currency', 'usd')->sum(function($item) {
                         return $item->quantity * $item->price;
                     });
                 });
                 return [
                     'name' => $customerName,
                     'orders' => $orders->count(),
-                    'total' => $totalAmount
+                    'total_syp' => $totalSyp,
+                    'total_usd' => $totalUsd
                 ];
             })
-            ->sortByDesc('total')
+            ->sortByDesc('orders')
             ->take(5)
             ->values()
             ->toArray();
