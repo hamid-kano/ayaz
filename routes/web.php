@@ -57,6 +57,9 @@ Route::middleware('auth')->group(function () {
     // Settings
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
+    
+    // Logs (Admin only)
+    Route::get('/logs', [\App\Http\Controllers\LogController::class, 'index'])->name('logs.index');
 
     // Profile routes
     Route::get('/user-profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
