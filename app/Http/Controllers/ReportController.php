@@ -25,13 +25,20 @@ class ReportController extends Controller
             ->where('order_date', '>=', $startDate)->count();
         
         // حساب الإيرادات (مجموع المدفوعات)
-        $totalRevenue = Receipt::where('receipt_date', '>=', $startDate)->sum('amount');
+        $totalRevenueSyp = Receipt::where('receipt_date', '>=', $startDate)
+            ->where('currency', 'syp')->sum('amount');
+        $totalRevenueUsd = Receipt::where('receipt_date', '>=', $startDate)
+            ->where('currency', 'usd')->sum('amount');
         
         // حساب المصروفات
-        $totalExpenses = Purchase::where('purchase_date', '>=', $startDate)->sum('amount');
+        $totalExpensesSyp = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'syp')->sum('amount');
+        $totalExpensesUsd = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'usd')->sum('amount');
         
         // صافي الربح
-        $netProfit = $totalRevenue - $totalExpenses;
+        $netProfitSyp = $totalRevenueSyp - $totalExpensesSyp;
+        $netProfitUsd = $totalRevenueUsd - $totalExpensesUsd;
         
         // الديون المستحقة (الطلبات غير المدفوعة بالكامل)
         $orders = Order::with(['items', 'receipts'])->where('order_date', '>=', $startDate)->get();
@@ -70,9 +77,12 @@ class ReportController extends Controller
             'total_orders' => $totalOrders,
             'completed_orders' => $completedOrders,
             'pending_orders' => $pendingOrders,
-            'total_revenue' => $totalRevenue,
-            'total_expenses' => $totalExpenses,
-            'net_profit' => $netProfit,
+            'total_revenue_syp' => $totalRevenueSyp,
+            'total_revenue_usd' => $totalRevenueUsd,
+            'total_expenses_syp' => $totalExpensesSyp,
+            'total_expenses_usd' => $totalExpensesUsd,
+            'net_profit_syp' => $netProfitSyp,
+            'net_profit_usd' => $netProfitUsd,
             'outstanding_debts_syp' => $outstandingDebtsSyp,
             'outstanding_debts_usd' => $outstandingDebtsUsd,
             'debts_on_us_syp' => $debtsOnUsSyp,
@@ -86,20 +96,34 @@ class ReportController extends Controller
             $date = Carbon::now()->subMonths($i);
             $monthName = $date->locale('ar')->translatedFormat('F');
             
-            $monthlyRevenue = Receipt::whereYear('receipt_date', $date->year)
+            $monthlyRevenueSyp = Receipt::whereYear('receipt_date', $date->year)
                 ->whereMonth('receipt_date', $date->month)
                 ->where('receipt_date', '>=', $startDate)
+                ->where('currency', 'syp')
+                ->sum('amount');
+            $monthlyRevenueUsd = Receipt::whereYear('receipt_date', $date->year)
+                ->whereMonth('receipt_date', $date->month)
+                ->where('receipt_date', '>=', $startDate)
+                ->where('currency', 'usd')
                 ->sum('amount');
                 
-            $monthlyExpenses = Purchase::whereYear('purchase_date', $date->year)
+            $monthlyExpensesSyp = Purchase::whereYear('purchase_date', $date->year)
                 ->whereMonth('purchase_date', $date->month)
                 ->where('purchase_date', '>=', $startDate)
+                ->where('currency', 'syp')
+                ->sum('amount');
+            $monthlyExpensesUsd = Purchase::whereYear('purchase_date', $date->year)
+                ->whereMonth('purchase_date', $date->month)
+                ->where('purchase_date', '>=', $startDate)
+                ->where('currency', 'usd')
                 ->sum('amount');
                 
             $monthlyData[] = [
                 'month' => $monthName,
-                'revenue' => $monthlyRevenue,
-                'expenses' => $monthlyExpenses
+                'revenue_syp' => $monthlyRevenueSyp,
+                'revenue_usd' => $monthlyRevenueUsd,
+                'expenses_syp' => $monthlyExpensesSyp,
+                'expenses_usd' => $monthlyExpensesUsd
             ];
         }
 

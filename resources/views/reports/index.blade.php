@@ -34,7 +34,17 @@
             <i data-lucide="trending-up"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue']) }} ل.س</h3>
+            <h3>
+                @if($stats['total_revenue_syp'] > 0 && $stats['total_revenue_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_usd']) }} $
+                @elseif($stats['total_revenue_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_syp']) }} ل.س
+                @elseif($stats['total_revenue_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
             <p>إجمالي الإيرادات</p>
             <span class="stat-change positive">+12%</span>
         </div>
@@ -45,7 +55,17 @@
             <i data-lucide="trending-down"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses']) }} ل.س</h3>
+            <h3>
+                @if($stats['total_expenses_syp'] > 0 && $stats['total_expenses_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_usd']) }} $
+                @elseif($stats['total_expenses_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_syp']) }} ل.س
+                @elseif($stats['total_expenses_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
             <p>إجمالي المصروفات</p>
             <span class="stat-change negative">+5%</span>
         </div>
@@ -56,7 +76,17 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-content">
-            <h3>{{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit']) }} ل.س</h3>
+            <h3>
+                @if($stats['net_profit_syp'] != 0 && $stats['net_profit_usd'] != 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_usd']) }} $
+                @elseif($stats['net_profit_syp'] != 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_syp']) }} ل.س
+                @elseif($stats['net_profit_usd'] != 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
             <p>صافي الربح</p>
             <span class="stat-change positive">+18%</span>
         </div>
@@ -654,16 +684,28 @@ new Chart(monthlyCtx, {
     data: {
         labels: {!! json_encode(array_column($monthlyData, 'month')) !!},
         datasets: [{
-            label: 'الإيرادات',
-            data: {!! json_encode(array_column($monthlyData, 'revenue')) !!},
+            label: 'الإيرادات (ل.س)',
+            data: {!! json_encode(array_column($monthlyData, 'revenue_syp')) !!},
             borderColor: '#3b82f6',
             backgroundColor: 'rgba(59, 130, 246, 0.1)',
             tension: 0.4
         }, {
-            label: 'المصروفات',
-            data: {!! json_encode(array_column($monthlyData, 'expenses')) !!},
+            label: 'الإيرادات ($)',
+            data: {!! json_encode(array_column($monthlyData, 'revenue_usd')) !!},
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'المصروفات (ل.س)',
+            data: {!! json_encode(array_column($monthlyData, 'expenses_syp')) !!},
             borderColor: '#ef4444',
             backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'المصروفات ($)',
+            data: {!! json_encode(array_column($monthlyData, 'expenses_usd')) !!},
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
             tension: 0.4
         }]
     },
