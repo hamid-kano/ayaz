@@ -30,7 +30,7 @@
                 <span>{{ $order->order_date->format('Y-m-d') }}</span>
             </div>
             <div class="info-item">
-                <label>اسم العميل</label>
+                <label>اسم الزبون</label>
                 <span>{{ $order->customer_name }}</span>
             </div>
             <div class="info-item">

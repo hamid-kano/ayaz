@@ -36,7 +36,7 @@ class NotificationSeeder extends Seeder
                 'user_id' => $user->id,
                 'type' => 'debt_reminder',
                 'title' => 'تذكير دين',
-                'message' => 'دين مستحق من عميل محمد علي - 250 ريال',
+                'message' => 'دين مستحق من زبون محمد علي - 250 ريال',
                 'data' => ['debt_amount' => 250],
                 'created_at' => now()->subHours(2)
             ]);
@@ -56,7 +56,7 @@ class NotificationSeeder extends Seeder
                 'user_id' => $user->id,
                 'type' => 'payment_received',
                 'title' => 'دفعة جديدة',
-                'message' => 'تم استلام دفعة 500 ريال من عميل سارة أحمد',
+                'message' => 'تم استلام دفعة 500 ريال من زبون سارة أحمد',
                 'data' => ['amount' => 500],
                 'read_at' => now()->subHours(2),
                 'created_at' => now()->subDay()

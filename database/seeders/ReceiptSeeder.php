@@ -19,7 +19,7 @@ class ReceiptSeeder extends Seeder
                 'amount' => 200.00,
                 'currency' => 'usd',
                 'receipt_date' => Carbon::now()->subDays(3),
-                'notes' => 'دفعة أولى من العميل',
+                'notes' => 'دفعة أولى من الزبون',
             ],
             [
                 'order_id' => $orders->where('order_number', 'ORD-002')->first()->id,

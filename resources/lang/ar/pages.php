@@ -135,7 +135,7 @@ return [
     'website' => 'الموقع الإلكتروني',
     
     // Business Terms
-    'customer' => 'العميل',
+    'customer' => 'الزبون',
     'customers' => 'العملاء',
     'supplier' => 'المورد',
     'suppliers' => 'الموردين',

@@ -25,7 +25,7 @@
     </div>
     
     <div class="form-group">
-        <label>اسم العميل</label>
+        <label>اسم الزبون</label>
         <input type="text" name="customer_name" value="{{ old('customer_name', $order->customer_name) }}" required>
         @error('customer_name')
             <span class="error-message">{{ $message }}</span>

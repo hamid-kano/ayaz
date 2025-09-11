@@ -135,7 +135,7 @@
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th>اسم العميل</th>
+                        <th>اسم الزبون</th>
                         <th>عدد الطلبات</th>
                         <th>إجمالي المبلغ</th>
                     </tr>
