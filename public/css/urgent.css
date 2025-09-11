@@ -1,38 +1,66 @@
 /* تنسيق الطلبيات المستعجلة */
 .urgent-badge {
-    background: #ff4757;
+    background: #ff6b35;
     color: white;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-right: 5px;
-    font-weight: 600;
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-right: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3); }
+    50% { box-shadow: 0 2px 8px rgba(255, 107, 53, 0.6); }
+    100% { box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3); }
 }
 
 .urgent-status.urgent {
-    color: #ff4757;
-    font-weight: 600;
+    color: #ff6b35;
+    font-weight: 700;
+    position: relative;
+}
+
+.urgent-status.urgent::before {
+    content: "🔥";
+    margin-left: 5px;
 }
 
 .urgent-status.normal {
-    color: #2ed573;
+    color: #27ae60;
     font-weight: 500;
 }
 
 .order-card[data-urgent="true"] {
-    border-right: 4px solid #ff4757;
+    border: 2px solid #ff6b35;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
+    position: relative;
+    overflow: hidden;
 }
 
-.order-card[data-urgent="true"] .order-header {
-    background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
-    color: white;
+.order-card[data-urgent="true"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 30px 30px 0;
+    border-color: transparent #ff6b35 transparent transparent;
 }
 
-.order-card[data-urgent="true"] .order-number {
+.order-card[data-urgent="true"]::after {
+    content: "!";
+    position: absolute;
+    top: 5px;
+    right: 8px;
     color: white;
-}
-
-.order-card[data-urgent="true"] .order-status {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 1;
 }
