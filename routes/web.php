@@ -9,6 +9,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestNotificationController;
 use Illuminate\Support\Facades\Auth;
 
 // Authentication Routes
@@ -101,6 +102,8 @@ Route::middleware('auth')->group(function () {
         return response()->file($path);
     })->name('audio.serve');
     
-
+    // Test Notification
+    Route::get('/test-notification', [TestNotificationController::class, 'index'])->name('test-notification');
+    Route::post('/test-notification/send', [TestNotificationController::class, 'send'])->name('test-notification.send');
 
 });
