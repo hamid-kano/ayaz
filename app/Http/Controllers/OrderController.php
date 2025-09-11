@@ -84,11 +84,12 @@ class OrderController extends Controller
         // إرسال إشعار للمنفذ عند تعيين طلبية جديدة
         if ($order->executor_id) {
             // إضافة إشعار محلي
+            $urgentText = $order->is_urgent ? ' (مستعجلة)' : '';
             \App\Models\Notification::create([
                 'user_id' => $order->executor_id,
                 'type' => 'new_order',
-                'title' => 'طلبية جديدة',
-                'message' => "تم تعيين طلبية جديدة لك: {$order->order_number}",
+                'title' => 'طلبية جديدة' . $urgentText,
+                'message' => "تم تعيين طلبية جديدة لك: {$order->order_number}" . $urgentText,
                 'data' => ['order_id' => $order->id]
             ]);
             
@@ -97,8 +98,8 @@ class OrderController extends Controller
                 $oneSignal = new OneSignalService();
                 $oneSignal->sendToUser(
                     $order->executor->player_id,
-                    'طلبية جديدة',
-                    "تم تعيين طلبية جديدة لك: {$order->order_number}",
+                    'طلبية جديدة' . $urgentText,
+                    "تم تعيين طلبية جديدة لك: {$order->order_number}" . $urgentText,
                     ['order_id' => $order->id, 'type' => 'new_order']
                 );
             }
@@ -177,11 +178,12 @@ class OrderController extends Controller
             // إشعار للمنفذ الجديد
             if ($validated['executor_id']) {
                 // إضافة إشعار محلي
+                $urgentText = $order->is_urgent ? ' (مستعجلة)' : '';
                 \App\Models\Notification::create([
                     'user_id' => $validated['executor_id'],
                     'type' => 'assigned_order',
-                    'title' => 'طلبية جديدة',
-                    'message' => "تم تعيين طلبية لك: {$order->order_number}",
+                    'title' => 'طلبية جديدة' . $urgentText,
+                    'message' => "تم تعيين طلبية لك: {$order->order_number}" . $urgentText,
                     'data' => ['order_id' => $order->id]
                 ]);
                 
@@ -189,8 +191,8 @@ class OrderController extends Controller
                 if ($newExecutor && $newExecutor->player_id) {
                     $oneSignal->sendToUser(
                         $newExecutor->player_id,
-                        'طلبية جديدة',
-                        "تم تعيين طلبية لك: {$order->order_number}",
+                        'طلبية جديدة' . $urgentText,
+                        "تم تعيين طلبية لك: {$order->order_number}" . $urgentText,
                         ['order_id' => $order->id, 'type' => 'assigned_order']
                     );
                 }
