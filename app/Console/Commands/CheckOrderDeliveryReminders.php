@@ -24,7 +24,7 @@ class CheckOrderDeliveryReminders extends Command
             return;
         }
 
-        $hoursBefore = Setting::get('notification_hours_before', 24);
+        $hoursBefore = (int) Setting::get('notification_hours_before', 24);
         $reminderTime = Carbon::now()->addHours($hoursBefore);
 
         $orders = Order::where('status', '!=', 'delivered')
