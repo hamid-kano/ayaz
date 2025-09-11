@@ -21,7 +21,6 @@ class SettingsController extends Controller
     {
         $request->validate([
             'notification_hours_before' => 'required|integer|min:1|max:168',
-            'notification_enabled' => 'boolean',
         ]);
 
         Setting::set('notification_hours_before', $request->notification_hours_before);
