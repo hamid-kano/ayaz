@@ -63,6 +63,17 @@
         </div>
     </div>
     
+    <div class="form-group">
+        <label>نوع الطلبية</label>
+        <select name="is_urgent">
+            <option value="0" {{ !$order->is_urgent ? 'selected' : '' }}>عادية</option>
+            <option value="1" {{ $order->is_urgent ? 'selected' : '' }}>مستعجلة</option>
+        </select>
+        @error('is_urgent')
+            <span class="error-message">{{ $message }}</span>
+        @enderror
+    </div>
+    
     <!-- Users Section -->
     <div class="section-header">
         <i data-lucide="users"></i>

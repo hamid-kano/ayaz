@@ -1,0 +1,38 @@
+/* تنسيق الطلبيات المستعجلة */
+.urgent-badge {
+    background: #ff4757;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-right: 5px;
+    font-weight: 600;
+}
+
+.urgent-status.urgent {
+    color: #ff4757;
+    font-weight: 600;
+}
+
+.urgent-status.normal {
+    color: #2ed573;
+    font-weight: 500;
+}
+
+.order-card[data-urgent="true"] {
+    border-right: 4px solid #ff4757;
+}
+
+.order-card[data-urgent="true"] .order-header {
+    background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+    color: white;
+}
+
+.order-card[data-urgent="true"] .order-number {
+    color: white;
+}
+
+.order-card[data-urgent="true"] .order-status {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}

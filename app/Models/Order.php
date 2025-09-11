@@ -17,6 +17,7 @@ class Order extends Model
         'order_type',
         'order_details',
         'status',
+        'is_urgent',
         'delivery_date',
         'reviewer_name',
         'executor_id',
@@ -25,6 +26,7 @@ class Order extends Model
     protected $casts = [
         'order_date' => 'date',
         'delivery_date' => 'date',
+        'is_urgent' => 'boolean',
     ];
 
 

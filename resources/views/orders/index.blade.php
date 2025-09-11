@@ -51,9 +51,14 @@
     <div class="orders-grid">
         @forelse($orders as $order)
             <div class="order-card" data-order="{{ $order->order_number }}" data-customer="{{ $order->customer_name }}"
-                data-type="{{ $order->order_type }}">
+                data-type="{{ $order->order_type }}" data-urgent="{{ $order->is_urgent ? 'true' : 'false' }}">
                 <div class="order-header">
-                    <div class="order-number">#{{ $order->order_number }}</div>
+                    <div class="order-number">
+                        #{{ $order->order_number }}
+                        @if($order->is_urgent)
+                            <span class="urgent-badge">مستعجلة</span>
+                        @endif
+                    </div>
                     <div class="order-status {{ $order->status }}">
                         @switch($order->status)
                             @case('new')

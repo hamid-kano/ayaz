@@ -75,6 +75,12 @@
                 </span>
             </div>
             <div class="info-item">
+                <label>نوع الطلبية</label>
+                <span class="urgent-status {{ $order->is_urgent ? 'urgent' : 'normal' }}">
+                    {{ $order->is_urgent ? 'مستعجلة' : 'عادية' }}
+                </span>
+            </div>
+            <div class="info-item">
                 <label>تاريخ التسليم</label>
                 <span>{{ $order->delivery_date->format('Y-m-d') }}</span>
             </div>

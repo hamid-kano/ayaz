@@ -50,12 +50,24 @@
     
 
     
-    <div class="form-group">
-        <label>تاريخ التسليم</label>
-        <input type="date" name="delivery_date" value="{{ old('delivery_date') }}" required>
-        @error('delivery_date')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
+    <div class="form-row">
+        <div class="form-group">
+            <label>تاريخ التسليم</label>
+            <input type="date" name="delivery_date" value="{{ old('delivery_date') }}" required>
+            @error('delivery_date')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label>نوع الطلبية</label>
+            <select name="is_urgent">
+                <option value="0" {{ old('is_urgent') == '0' ? 'selected' : '' }}>عادية</option>
+                <option value="1" {{ old('is_urgent') == '1' ? 'selected' : '' }}>مستعجلة</option>
+            </select>
+            @error('is_urgent')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
     </div>
     
     <!-- Users Section -->
