@@ -17,11 +17,13 @@
     <form method="POST" action="{{ route('settings.update') }}" class="form-card">
         @csrf
         @method('PUT')
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                <input type="checkbox" name="notification_enabled" {{ $settings['notification_enabled'] ? 'checked' : '' }}>
-                <span class="checkmark"></span>
-                تفعيل الإشعارات
+        <div class="form-group">
+            <label class="toggle-label">
+                <span class="toggle-text">تفعيل الإشعارات</span>
+                                <div class="toggle-switch">
+                    <input type="checkbox" name="notification_enabled" {{ $settings['notification_enabled'] ? 'checked' : '' }}>
+                    <span class="toggle-slider"></span>
+                </div>
             </label>
         </div>
 
