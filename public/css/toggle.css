@@ -1,11 +1,12 @@
 /* Toggle Switch عصري */
 .toggle-label {
-    display: flex;
-    justify-content: space-between;
+    display: flex !important;
     align-items: center;
     cursor: pointer;
     user-select: none;
     padding: 16px 0;
+    gap: 10px
+;
 }
 
 .toggle-text {
