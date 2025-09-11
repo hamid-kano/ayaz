@@ -41,24 +41,48 @@ class CheckOrderDeliveryReminders extends Command
         $count = 0;
 
         foreach ($orders as $order) {
+            $urgentText = $order->is_urgent ? ' (مستعجلة)' : '';
+            
+            // إشعار للمنفذ
             if ($order->executor_id) {
                 Notification::create([
                     'user_id' => $order->executor_id,
                     'type' => 'delivery_reminder',
-                    'title' => 'تذكير بموعد التسليم',
-                    'message' => "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة",
+                    'title' => 'تذكير بموعد التسليم' . $urgentText,
+                    'message' => "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
                     'data' => ['order_id' => $order->id]
                 ]);
 
                 if ($order->executor->player_id) {
                     $oneSignal->sendToUser(
                         $order->executor->player_id,
-                        'تذكير بموعد التسليم',
-                        "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة",
+                        'تذكير بموعد التسليم' . $urgentText,
+                        "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
                         ['order_id' => $order->id, 'type' => 'delivery_reminder']
                     );
                 }
                 $count++;
+            }
+            
+            // إشعار للأدمن
+            $admins = \App\Models\User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'type' => 'delivery_reminder_admin',
+                    'title' => 'تذكير بموعد تسليم' . $urgentText,
+                    'message' => "موعد تسليم الطلبية {$order->order_number} للعميل {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
+                    'data' => ['order_id' => $order->id]
+                ]);
+                
+                if ($admin->player_id) {
+                    $oneSignal->sendToUser(
+                        $admin->player_id,
+                        'تذكير بموعد تسليم' . $urgentText,
+                        "موعد تسليم الطلبية {$order->order_number} للعميل {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
+                        ['order_id' => $order->id, 'type' => 'delivery_reminder_admin']
+                    );
+                }
             }
         }
 
