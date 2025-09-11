@@ -34,17 +34,27 @@ class ReportController extends Controller
         $netProfit = $totalRevenue - $totalExpenses;
         
         // الديون المستحقة (الطلبات غير المدفوعة بالكامل)
-        $outstandingDebtsSyp = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
-            ->where('currency', 'syp')
-            ->where('order_date', '>=', $startDate)
-            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
-            ->value('debt') ?? 0;
+        $orders = Order::with(['items', 'receipts'])->where('order_date', '>=', $startDate)->get();
+        $outstandingDebtsSyp = 0;
+        $outstandingDebtsUsd = 0;
+        
+        foreach ($orders as $order) {
+            $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
+            $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
             
-        $outstandingDebtsUsd = Order::selectRaw('SUM(cost - COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)) as debt')
-            ->where('currency', 'usd')
-            ->where('order_date', '>=', $startDate)
-            ->whereRaw('cost > COALESCE((SELECT SUM(amount) FROM receipts WHERE receipts.order_id = orders.id AND receipts.currency = orders.currency), 0)')
-            ->value('debt') ?? 0;
+            $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
+            $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
+            
+            $remainingSyp = $totalSyp - $paidSyp;
+            $remainingUsd = $totalUsd - $paidUsd;
+            
+            if ($remainingSyp > 0) $outstandingDebtsSyp += $remainingSyp;
+            if ($remainingUsd > 0) $outstandingDebtsUsd += $remainingUsd;
+        }
         
         // الديون علينا (المشتريات غير المدفوعة)
         $debtsOnUsSyp = Purchase::where('status', 'debt')
@@ -94,21 +104,25 @@ class ReportController extends Controller
         }
 
         // أفضل العملاء
-        $topCustomers = Order::select('customer_name')
-            ->selectRaw('COUNT(*) as orders_count')
-            ->selectRaw('SUM(cost) as total_amount')
+        $topCustomers = Order::with('items')
             ->where('order_date', '>=', $startDate)
-            ->groupBy('customer_name')
-            ->orderByDesc('total_amount')
-            ->limit(5)
             ->get()
-            ->map(function ($customer) {
+            ->groupBy('customer_name')
+            ->map(function ($orders, $customerName) {
+                $totalAmount = $orders->sum(function($order) {
+                    return $order->items->sum(function($item) {
+                        return $item->quantity * $item->price;
+                    });
+                });
                 return [
-                    'name' => $customer->customer_name,
-                    'orders' => $customer->orders_count,
-                    'total' => $customer->total_amount
+                    'name' => $customerName,
+                    'orders' => $orders->count(),
+                    'total' => $totalAmount
                 ];
             })
+            ->sortByDesc('total')
+            ->take(5)
+            ->values()
             ->toArray();
 
         return view('reports.index', compact('stats', 'monthlyData', 'topCustomers'));
