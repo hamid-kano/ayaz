@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Services\OneSignalService;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CheckOrderDeliveryReminders extends Command
 {
@@ -54,12 +55,27 @@ class CheckOrderDeliveryReminders extends Command
                 ]);
 
                 if ($order->executor->player_id) {
-                    $oneSignal->sendToUser(
-                        $order->executor->player_id,
-                        'تذكير بموعد التسليم' . $urgentText,
-                        "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
-                        ['order_id' => $order->id, 'type' => 'delivery_reminder']
-                    );
+                    try {
+                        $response = $oneSignal->sendToUser(
+                            $order->executor->player_id,
+                            'تذكير بموعد التسليم' . $urgentText,
+                            "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
+                            ['order_id' => $order->id, 'type' => 'delivery_reminder']
+                        );
+                        Log::info('OneSignal notification sent to executor', [
+                            'order_id' => $order->id,
+                            'executor_id' => $order->executor_id,
+                            'player_id' => $order->executor->player_id,
+                            'response' => $response
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('OneSignal notification failed for executor', [
+                            'order_id' => $order->id,
+                            'executor_id' => $order->executor_id,
+                            'player_id' => $order->executor->player_id,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
                 }
                 $count++;
             }
@@ -76,12 +92,27 @@ class CheckOrderDeliveryReminders extends Command
                 ]);
                 
                 if ($admin->player_id) {
-                    $oneSignal->sendToUser(
-                        $admin->player_id,
-                        'تذكير بموعد تسليم' . $urgentText,
-                        "موعد تسليم الطلبية {$order->order_number} للعميل {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
-                        ['order_id' => $order->id, 'type' => 'delivery_reminder_admin']
-                    );
+                    try {
+                        $response = $oneSignal->sendToUser(
+                            $admin->player_id,
+                            'تذكير بموعد تسليم' . $urgentText,
+                            "موعد تسليم الطلبية {$order->order_number} للعميل {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
+                            ['order_id' => $order->id, 'type' => 'delivery_reminder_admin']
+                        );
+                        Log::info('OneSignal notification sent to admin', [
+                            'order_id' => $order->id,
+                            'admin_id' => $admin->id,
+                            'player_id' => $admin->player_id,
+                            'response' => $response
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error('OneSignal notification failed for admin', [
+                            'order_id' => $order->id,
+                            'admin_id' => $admin->id,
+                            'player_id' => $admin->player_id,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
                 }
             }
         }
