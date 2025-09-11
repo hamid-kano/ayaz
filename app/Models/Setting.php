@@ -11,11 +11,28 @@ class Setting extends Model
     public static function get($key, $default = null)
     {
         $setting = self::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+        if (!$setting) {
+            return $default;
+        }
+        
+        // تحويل القيم النصية إلى boolean
+        if ($setting->value === 'true' || $setting->value === '1') {
+            return true;
+        }
+        if ($setting->value === 'false' || $setting->value === '0') {
+            return false;
+        }
+        
+        return $setting->value;
     }
 
     public static function set($key, $value)
     {
+        // تحويل boolean إلى string
+        if (is_bool($value)) {
+            $value = $value ? 'true' : 'false';
+        }
+        
         return self::updateOrCreate(
             ['key' => $key],
             ['value' => $value]
