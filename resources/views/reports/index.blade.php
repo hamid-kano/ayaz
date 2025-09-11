@@ -303,79 +303,117 @@
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
     margin-bottom: 32px;
 }
 
 .stat-card {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--card-color), var(--card-color-light));
+}
+
+.stat-card.revenue {
+    --card-color: #3b82f6;
+    --card-color-light: #60a5fa;
+}
+
+.stat-card.expenses {
+    --card-color: #ef4444;
+    --card-color-light: #f87171;
+}
+
+.stat-card.profit {
+    --card-color: #22c55e;
+    --card-color-light: #4ade80;
+}
+
+.stat-card.orders {
+    --card-color: #f59e0b;
+    --card-color-light: #fbbf24;
 }
 
 .stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 28px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--card-color), var(--card-color-light));
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.stat-card.revenue .stat-icon {
-    background: #dbeafe;
-    color: #3b82f6;
-}
-
-.stat-card.expenses .stat-icon {
-    background: #fecaca;
-    color: #ef4444;
-}
-
-.stat-card.profit .stat-icon {
-    background: #dcfce7;
-    color: #22c55e;
-}
-
-.stat-card.orders .stat-icon {
-    background: #fef3c7;
-    color: #f59e0b;
+.stat-content {
+    width: 100%;
 }
 
 .stat-content h3 {
-    margin: 0 0 4px 0;
-    font-size: 24px;
+    margin: 0 0 8px 0;
+    font-size: 22px;
     font-weight: 700;
-    color: #111827;
+    color: #1f2937;
+    line-height: 1.2;
 }
 
 .stat-content p {
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
     color: #6b7280;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .stat-change {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .stat-change.positive {
-    background: #dcfce7;
-    color: #22c55e;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #166534;
 }
 
 .stat-change.negative {
-    background: #fecaca;
-    color: #ef4444;
+    background: linear-gradient(135deg, #fecaca, #fca5a5);
+    color: #991b1b;
+}
+
+.stat-change::before {
+    content: '↗';
+    font-size: 12px;
+}
+
+.stat-change.negative::before {
+    content: '↘';
 }
 
 .charts-section {
