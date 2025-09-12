@@ -2456,6 +2456,27 @@ body {
     color: #6c757d;
     white-space: nowrap;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.tab-btn .count {
+    background: rgba(108, 117, 125, 0.2);
+    color: #6c757d;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active .count {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
 }
 
 .tab-btn.active {

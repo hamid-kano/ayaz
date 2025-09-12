@@ -36,15 +36,21 @@
 
     <!-- Filter Tabs -->
     <div class="filter-tabs">
-        <button class="tab-btn {{ request('status') == '' ? 'active' : '' }}" onclick="filterOrders('')">الكل</button>
-        <button class="tab-btn {{ request('status') == 'new' ? 'active' : '' }}"
-            onclick="filterOrders('new')">جديدة</button>
-        <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}"
-            onclick="filterOrders('in-progress')">قيد التنفيذ</button>
-        <button class="tab-btn {{ request('status') == 'delivered' ? 'active' : '' }}"
-            onclick="filterOrders('delivered')">تم التسليم</button>
-        <button class="tab-btn {{ request('status') == 'cancelled' ? 'active' : '' }}"
-            onclick="filterOrders('cancelled')">ملغاة</button>
+        <button class="tab-btn {{ request('status') == '' ? 'active' : '' }}" onclick="filterOrders('')">
+            الكل <span class="count">{{ $statusCounts['all'] }}</span>
+        </button>
+        <button class="tab-btn {{ request('status') == 'new' ? 'active' : '' }}" onclick="filterOrders('new')">
+            جديدة <span class="count">{{ $statusCounts['new'] }}</span>
+        </button>
+        <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}" onclick="filterOrders('in-progress')">
+            قيد التنفيذ <span class="count">{{ $statusCounts['in-progress'] }}</span>
+        </button>
+        <button class="tab-btn {{ request('status') == 'delivered' ? 'active' : '' }}" onclick="filterOrders('delivered')">
+            تم التسليم <span class="count">{{ $statusCounts['delivered'] }}</span>
+        </button>
+        <button class="tab-btn {{ request('status') == 'cancelled' ? 'active' : '' }}" onclick="filterOrders('cancelled')">
+            ملغاة <span class="count">{{ $statusCounts['cancelled'] }}</span>
+        </button>
     </div>
 
     <!-- Orders Grid -->

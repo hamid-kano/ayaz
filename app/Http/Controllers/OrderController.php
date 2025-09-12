@@ -22,6 +22,16 @@ class OrderController extends Controller
             $query->where('executor_id', auth()->id());
         }
 
+        // حساب عدد الطلبيات لكل حالة
+        $baseQuery = clone $query;
+        $statusCounts = [
+            'all' => $baseQuery->count(),
+            'new' => (clone $baseQuery)->where('status', 'new')->count(),
+            'in-progress' => (clone $baseQuery)->where('status', 'in-progress')->count(),
+            'delivered' => (clone $baseQuery)->where('status', 'delivered')->count(),
+            'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
+        ];
+
         // فلتر حسب الحالة
         if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
@@ -39,7 +49,7 @@ class OrderController extends Controller
 
         $orders = $query->latest()->get();
 
-        return view('orders.index', compact('orders'));
+        return view('orders.index', compact('orders', 'statusCounts'));
     }
 
     public function create()
