@@ -56,25 +56,25 @@ class NotificationHelper
         );
     }
 
-    public static function deliveryReminder($userId, $orderNumber, $deliveryDate)
+    public static function deliveryReminder($userId, $customerName, $deliveryDate)
     {
         return self::createForUser(
             $userId,
             'delivery_reminder',
             'موعد تسليم',
-            "موعد تسليم طلبية #{$orderNumber} في {$deliveryDate}",
-            ['order_number' => $orderNumber, 'delivery_date' => $deliveryDate]
+            "موعد تسليم طلبية {$customerName} في {$deliveryDate}",
+            ['customer_name' => $customerName, 'delivery_date' => $deliveryDate]
         );
     }
 
-    public static function orderCompleted($userId, $orderNumber)
+    public static function orderCompleted($userId, $customerName)
     {
         return self::createForUser(
             $userId,
             'order_completed',
             'تم التسليم',
-            "تم تسليم طلبية #{$orderNumber} بنجاح",
-            ['order_number' => $orderNumber]
+            "تم تسليم طلبية {$customerName} بنجاح",
+            ['customer_name' => $customerName]
         );
     }
 

@@ -50,7 +50,7 @@ class CheckOrderDeliveryReminders extends Command
                     'user_id' => $order->executor_id,
                     'type' => 'delivery_reminder',
                     'title' => 'تذكير بموعد التسليم' . $urgentText,
-                    'message' => "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
+                    'message' => "موعد تسليم طلبية {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
                     'data' => ['order_id' => $order->id]
                 ]);
 
@@ -59,7 +59,7 @@ class CheckOrderDeliveryReminders extends Command
                         $response = $oneSignal->sendToUser(
                             $order->executor->player_id,
                             'تذكير بموعد التسليم' . $urgentText,
-                            "موعد تسليم الطلبية {$order->order_number} خلال {$hoursBefore} ساعة" . $urgentText,
+                            "موعد تسليم طلبية {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
                             ['order_id' => $order->id, 'type' => 'delivery_reminder']
                         );
                         Log::info('OneSignal notification sent to executor', [
@@ -87,7 +87,7 @@ class CheckOrderDeliveryReminders extends Command
                     'user_id' => $admin->id,
                     'type' => 'delivery_reminder_admin',
                     'title' => 'تذكير بموعد تسليم' . $urgentText,
-                    'message' => "موعد تسليم الطلبية {$order->order_number} للزبون {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
+                    'message' => "موعد تسليم طلبية {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
                     'data' => ['order_id' => $order->id]
                 ]);
                 
@@ -96,7 +96,7 @@ class CheckOrderDeliveryReminders extends Command
                         $response = $oneSignal->sendToUser(
                             $admin->player_id,
                             'تذكير بموعد تسليم' . $urgentText,
-                            "موعد تسليم الطلبية {$order->order_number} للزبون {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
+                            "موعد تسليم طلبية {$order->customer_name} خلال {$hoursBefore} ساعة" . $urgentText,
                             ['order_id' => $order->id, 'type' => 'delivery_reminder_admin']
                         );
                         Log::info('OneSignal notification sent to admin', [
