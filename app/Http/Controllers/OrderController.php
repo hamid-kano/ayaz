@@ -89,7 +89,7 @@ class OrderController extends Controller
                 'user_id' => $order->executor_id,
                 'type' => 'new_order',
                 'title' => 'طلبية جديدة' . $urgentText,
-                'message' => "تم تعيين طلبية جديدة لك: {$order->order_number}" . $urgentText,
+                'message' => "تم تعيين طلبية جديدة لك من: {$order->customer_name}" . $urgentText,
                 'data' => ['order_id' => $order->id]
             ]);
             
@@ -99,7 +99,7 @@ class OrderController extends Controller
                 $oneSignal->sendToUser(
                     $order->executor->player_id,
                     'طلبية جديدة' . $urgentText,
-                    "تم تعيين طلبية جديدة لك: {$order->order_number}" . $urgentText,
+                    "تم تعيين طلبية جديدة لك من: {$order->customer_name}" . $urgentText,
                     ['order_id' => $order->id, 'type' => 'new_order']
                 );
             }
@@ -183,7 +183,7 @@ class OrderController extends Controller
                     'user_id' => $validated['executor_id'],
                     'type' => 'assigned_order',
                     'title' => 'طلبية جديدة' . $urgentText,
-                    'message' => "تم تعيين طلبية لك: {$order->order_number}" . $urgentText,
+                    'message' => "تم تعيين طلبية لك من: {$order->customer_name}" . $urgentText,
                     'data' => ['order_id' => $order->id]
                 ]);
                 
@@ -192,7 +192,7 @@ class OrderController extends Controller
                     $oneSignal->sendToUser(
                         $newExecutor->player_id,
                         'طلبية جديدة' . $urgentText,
-                        "تم تعيين طلبية لك: {$order->order_number}" . $urgentText,
+                        "تم تعيين طلبية لك من: {$order->customer_name}" . $urgentText,
                         ['order_id' => $order->id, 'type' => 'assigned_order']
                     );
                 }
@@ -205,7 +205,7 @@ class OrderController extends Controller
                     'user_id' => $oldExecutorId,
                     'type' => 'unassigned_order',
                     'title' => 'تغيير في الطلبية',
-                    'message' => "تم إلغاء تعيين الطلبية: {$order->order_number}",
+                    'message' => "تم إلغاء تعيين طلبية: {$order->customer_name}",
                     'data' => ['order_id' => $order->id]
                 ]);
                 
@@ -214,7 +214,7 @@ class OrderController extends Controller
                     $oneSignal->sendToUser(
                         $oldExecutor->player_id,
                         'تغيير في الطلبية',
-                        "تم إلغاء تعيين الطلبية: {$order->order_number}",
+                        "تم إلغاء تعيين طلبية: {$order->customer_name}",
                         ['order_id' => $order->id, 'type' => 'unassigned_order']
                     );
                 }
