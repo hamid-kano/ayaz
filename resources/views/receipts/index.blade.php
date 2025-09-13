@@ -89,7 +89,7 @@
                 </div>
                 <h3>لا توجد مقبوضات</h3>
                 <p>ابدأ بإضافة سند قبض جديد لتتبع المدفوعات</p>
-                <a href="{{ route('receipts.create') }}" class="btn-primary">
+                <a href="{{ route('receipts.create', request()->has('order_id') ? ['order_id' => request('order_id')] : []) }}" class="btn-primary">
                     <i data-lucide="plus"></i>
                     إضافة سند قبض
                 </a>

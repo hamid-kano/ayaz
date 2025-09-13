@@ -4556,6 +4556,7 @@ button:disabled {
     width: 80px;
     height: 80px;
     background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
