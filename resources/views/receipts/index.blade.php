@@ -82,14 +82,18 @@
             </div>
         </div>
     @empty
-        <div class="empty-state">
-            <i data-lucide="banknote"></i>
-            <h3>لا توجد مقبوضات</h3>
-            <p>ابدأ بإضافة سند قبض جديد</p>
-            <a href="{{ route('receipts.create') }}" class="btn-primary">
-                <i data-lucide="plus"></i>
-                إضافة سند قبض
-            </a>
+        <div class="empty-state-container">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i data-lucide="banknote"></i>
+                </div>
+                <h3>لا توجد مقبوضات</h3>
+                <p>ابدأ بإضافة سند قبض جديد لتتبع المدفوعات</p>
+                <a href="{{ route('receipts.create') }}" class="btn-primary">
+                    <i data-lucide="plus"></i>
+                    إضافة سند قبض
+                </a>
+            </div>
         </div>
     @endforelse
 </div>

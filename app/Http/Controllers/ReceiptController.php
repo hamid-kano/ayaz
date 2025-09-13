@@ -12,6 +12,10 @@ class ReceiptController extends Controller
     {
         $query = Receipt::with('order');
 
+        if ($request->has('order_id')) {
+            $query->where('order_id', $request->order_id);
+        }
+
         if ($request->has('search')) {
             $search = $request->search;
             $query->whereHas('order', function ($q) use ($search) {
