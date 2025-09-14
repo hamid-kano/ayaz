@@ -27,8 +27,7 @@ class ReceiptController extends Controller
 
     public function create(Request $request)
     {
-        $orders = Order::whereIn('status', ['new', 'in-progress'])
-            ->with(['receipts', 'items'])
+        $orders = Order::with(['receipts', 'items'])
             ->get()
             ->filter(function($order) {
                 return $order->remaining_amount_syp > 0 || $order->remaining_amount_usd > 0;
