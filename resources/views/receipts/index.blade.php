@@ -46,8 +46,9 @@
     </div>
 </div>
 
+@if($receipts->count() > 0)
 <div class="receipts-grid">
-    @forelse($receipts as $receipt)
+    @foreach($receipts as $receipt)
         <div class="receipt-card">
             <div class="receipt-header">
                 <div class="receipt-order">#{{ $receipt->order->order_number }}</div>
@@ -81,18 +82,23 @@
                 </form>
             </div>
         </div>
-    @empty
-        <div class="empty-state">
-            <i data-lucide="banknote"></i>
-            <h3>لا توجد مقبوضات</h3>
-            <p>ابدأ بإضافة سند قبض جديد</p>
-            <a href="{{ route('receipts.create') }}" class="btn-primary">
-                <i data-lucide="plus"></i>
-                إضافة سند قبض
-            </a>
-        </div>
-    @endforelse
+    @endforeach
 </div>
+@else
+<div class="empty-state-container">
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i data-lucide="banknote"></i>
+        </div>
+        <h3>لا توجد مقبوضات</h3>
+        <p>ابدأ بإضافة سند قبض جديد لتتبع المدفوعات</p>
+        <a href="{{ route('receipts.create', request()->has('order_id') ? ['order_id' => request('order_id')] : []) }}" class="btn-primary">
+            <i data-lucide="plus"></i>
+            إضافة سند قبض
+        </a>
+    </div>
+</div>
+@endif
 
 @include('components.delete-modal')
 @include('components.delete-modal-script')
