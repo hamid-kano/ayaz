@@ -154,8 +154,7 @@
             @endforelse
         </div>
 
-        @include('components.delete-modal')
-        @include('components.delete-modal-script')
+
 
         @push('scripts')
             <script>
