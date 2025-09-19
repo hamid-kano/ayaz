@@ -30,7 +30,7 @@
                 <div class="folder-header">
                     <div class="folder-info">
                         <i data-lucide="folder"></i>
-                        <h3>{{ \Carbon\Carbon::createFromFormat('Y-m', $folder)->locale('ar')->translatedFormat('F Y') }}</h3>
+                        <h3>{{ \App\Helpers\MonthHelper::formatMonthYear($folder) }}</h3>
                         <span class="folder-count">{{ $orders->count() }} طلبية</span>
                     </div>
                     <button class="folder-toggle" onclick="toggleFolder('{{ $folder }}')">
