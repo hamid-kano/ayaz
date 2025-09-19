@@ -57,6 +57,14 @@
                 <p>المبالغ المستحقة علينا</p>
             </a>
 
+            <a href="{{ route('orders.archives') }}" class="menu-item archives">
+                <div class="menu-icon">
+                    <i data-lucide="archive"></i>
+                </div>
+                <h3>أرشيف الطلبيات</h3>
+                <p>الطلبيات المؤرشفة</p>
+            </a>
+
             <a href="{{ route('users.index') }}" class="menu-item users-management">
                 <div class="menu-icon">
                     <i data-lucide="users"></i>

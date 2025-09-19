@@ -55,6 +55,7 @@
                 <option value="in-progress" {{ $order->status == 'in-progress' ? 'selected' : '' }}>قيد التنفيذ</option>
                 <option value="ready" {{ $order->status == 'ready' ? 'selected' : '' }}>جاهزة</option>
                 <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>تم التسليم</option>
+                <option value="archived" {{ $order->status == 'archived' ? 'selected' : '' }}>مؤرشفة</option>
                 <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
             </select>
         </div>

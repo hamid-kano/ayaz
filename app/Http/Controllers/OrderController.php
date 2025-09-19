@@ -30,6 +30,7 @@ class OrderController extends Controller
             'in-progress' => (clone $baseQuery)->where('status', 'in-progress')->count(),
             'ready' => (clone $baseQuery)->where('status', 'ready')->count(),
             'delivered' => (clone $baseQuery)->where('status', 'delivered')->count(),
+            'archived' => (clone $baseQuery)->where('status', 'archived')->count(),
             'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
         ];
 
@@ -159,7 +160,7 @@ class OrderController extends Controller
             'customer_phone' => 'nullable|string|max:20',
             'order_type' => 'required|string|max:255',
             'order_details' => 'required|string',
-            'status' => 'required|in:new,in-progress,ready,delivered,cancelled',
+            'status' => 'required|in:new,in-progress,ready,delivered,archived,cancelled',
             'delivery_date' => 'required|date',
             'is_urgent' => 'boolean',
             'reviewer_name' => 'nullable|string|max:255',
@@ -406,5 +407,38 @@ class OrderController extends Controller
     {
         $order->load(['executor', 'receipts', 'items']);
         return view('orders.print', compact('order'));
+    }
+
+    public function archive(Order $order)
+    {
+        if (!$order->canBeArchived()) {
+            return back()->with('error', 'يمكن أرشفة الطلبيات المسلمة فقط');
+        }
+
+        $order->update(['status' => 'archived']);
+        
+        return back()->with('success', 'تم أرشفة الطلبية بنجاح');
+    }
+
+    public function archives(Request $request)
+    {
+        $query = Order::with(['executor'])->where('status', 'archived');
+
+        if (!auth()->user()->isAdmin()) {
+            $query->where('executor_id', auth()->id());
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('order_type', 'like', "%{$search}%");
+            });
+        }
+
+        $archives = $query->latest()->get()->groupBy('archive_folder');
+        
+        return view('orders.archives', compact('archives'));
     }
 }

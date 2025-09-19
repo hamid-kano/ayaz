@@ -110,8 +110,19 @@ class Order extends Model
             'in-progress' => 'yellow',
             'ready' => 'orange',
             'delivered' => 'green',
+            'archived' => 'purple',
             'cancelled' => 'red',
             default => 'gray'
         };
+    }
+
+    public function canBeArchived()
+    {
+        return $this->status === 'delivered';
+    }
+
+    public function getArchiveFolderAttribute()
+    {
+        return $this->order_date->format('Y-m');
     }
 }

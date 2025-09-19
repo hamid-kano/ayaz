@@ -51,6 +51,9 @@
         <button class="tab-btn {{ request('status') == 'delivered' ? 'active' : '' }}" onclick="filterOrders('delivered')">
             تم التسليم <span class="count">{{ $statusCounts['delivered'] }}</span>
         </button>
+        <button class="tab-btn {{ request('status') == 'archived' ? 'active' : '' }}" onclick="filterOrders('archived')">
+            مؤرشفة <span class="count">{{ $statusCounts['archived'] }}</span>
+        </button>
         <button class="tab-btn {{ request('status') == 'cancelled' ? 'active' : '' }}" onclick="filterOrders('cancelled')">
             ملغاة <span class="count">{{ $statusCounts['cancelled'] }}</span>
         </button>
@@ -84,6 +87,10 @@
 
                             @case('delivered')
                                 تم التسليم
+                            @break
+
+                            @case('archived')
+                                مؤرشفة
                             @break
 
                             @case('cancelled')
@@ -131,6 +138,15 @@
                         <a href="{{ route('orders.edit', $order) }}" class="action-btn edit" title="تعديل">
                             <i data-lucide="edit-2"></i>
                         </a>
+                        @if ($order->canBeArchived())
+                            <form method="POST" action="{{ route('orders.archive', $order) }}" style="display: inline;">
+                                @csrf
+                                <button type="button" class="action-btn archive" title="أرشفة"
+                                    onclick="showArchiveModal('{{ route('orders.archive', $order) }}', 'الطلبية #{{ $order->order_number }}', this.closest('form'))">
+                                    <i data-lucide="archive"></i>
+                                </button>
+                            </form>
+                        @endif
                         @if ($order->remaining_amount_syp <= 0 && $order->remaining_amount_usd <= 0)
                             <form method="POST" action="{{ route('orders.destroy', $order) }}" style="display: inline;">
                                 @csrf
@@ -173,6 +189,31 @@
                         url.searchParams.delete('status');
                     }
                     window.location = url;
+                }
+
+                function showArchiveModal(archiveUrl, itemName, formElement) {
+                    const modal = document.querySelector('[x-data*="open: false"]');
+                    if (modal) {
+                        const message = modal.querySelector('p');
+                        if (message) {
+                            message.textContent = `هل أنت متأكد من أنك تريد أرشفة ${itemName}؟ سيتم نقلها إلى الأرشيف.`;
+                        }
+                        const title = modal.querySelector('h3');
+                        if (title) {
+                            title.textContent = 'تأكيد الأرشفة';
+                        }
+                    }
+                    
+                    window.dispatchEvent(new CustomEvent('delete-modal'));
+                    
+                    const handleConfirm = (e) => {
+                        if (formElement) {
+                            formElement.submit();
+                        }
+                        window.removeEventListener('confirm-delete', handleConfirm);
+                    };
+                    
+                    window.addEventListener('confirm-delete', handleConfirm);
                 }
             </script>
         @endpush

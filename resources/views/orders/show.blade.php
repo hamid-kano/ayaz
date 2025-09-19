@@ -72,6 +72,10 @@
                             تم التسليم
                         @break
 
+                        @case('archived')
+                            مؤرشفة
+                        @break
+
                         @case('cancelled')
                             ملغاة
                         @break
