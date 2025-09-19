@@ -36,6 +36,45 @@ class ReportController extends Controller
         $totalExpensesUsd = Purchase::where('purchase_date', '>=', $startDate)
             ->where('currency', 'usd')->sum('amount');
         
+        // حساب المشتريات نقداً وبالدين
+        $cashPurchasesSyp = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'syp')->where('status', 'cash')->sum('amount');
+        $cashPurchasesUsd = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'usd')->where('status', 'cash')->sum('amount');
+        $debtPurchasesSyp = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'syp')->where('status', 'debt')->sum('amount');
+        $debtPurchasesUsd = Purchase::where('purchase_date', '>=', $startDate)
+            ->where('currency', 'usd')->where('status', 'debt')->sum('amount');
+        
+        // حساب المبيعات نقداً وبالدين
+        $totalSalesSyp = 0;
+        $totalSalesUsd = 0;
+        $cashSalesSyp = 0;
+        $cashSalesUsd = 0;
+        $debtSalesSyp = 0;
+        $debtSalesUsd = 0;
+        
+        foreach ($orders as $order) {
+            $orderTotalSyp = $order->items->where('currency', 'syp')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
+            $orderTotalUsd = $order->items->where('currency', 'usd')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
+            
+            $totalSalesSyp += $orderTotalSyp;
+            $totalSalesUsd += $orderTotalUsd;
+            
+            $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
+            $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
+            
+            $cashSalesSyp += $paidSyp;
+            $cashSalesUsd += $paidUsd;
+            
+            $debtSalesSyp += ($orderTotalSyp - $paidSyp);
+            $debtSalesUsd += ($orderTotalUsd - $paidUsd);
+        }
+        
         // صافي الربح
         $netProfitSyp = $totalRevenueSyp - $totalExpensesSyp;
         $netProfitUsd = $totalRevenueUsd - $totalExpensesUsd;
@@ -86,7 +125,17 @@ class ReportController extends Controller
             'outstanding_debts_syp' => $outstandingDebtsSyp,
             'outstanding_debts_usd' => $outstandingDebtsUsd,
             'debts_on_us_syp' => $debtsOnUsSyp,
-            'debts_on_us_usd' => $debtsOnUsUsd
+            'debts_on_us_usd' => $debtsOnUsUsd,
+            'cash_purchases_syp' => $cashPurchasesSyp,
+            'cash_purchases_usd' => $cashPurchasesUsd,
+            'debt_purchases_syp' => $debtPurchasesSyp,
+            'debt_purchases_usd' => $debtPurchasesUsd,
+            'total_sales_syp' => $totalSalesSyp,
+            'total_sales_usd' => $totalSalesUsd,
+            'cash_sales_syp' => $cashSalesSyp,
+            'cash_sales_usd' => $cashSalesUsd,
+            'debt_sales_syp' => $debtSalesSyp,
+            'debt_sales_usd' => $debtSalesUsd
         ];
 
         // البيانات الشهرية للرسم البياني

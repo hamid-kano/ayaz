@@ -102,6 +102,86 @@
             <span class="stat-change positive">+8%</span>
         </div>
     </div>
+
+    <div class="stat-card cash-purchases">
+        <div class="stat-icon">
+            <i data-lucide="banknote"></i>
+        </div>
+        <div class="stat-content">
+            <h3>
+                @if($stats['cash_purchases_syp'] > 0 && $stats['cash_purchases_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_usd']) }} $
+                @elseif($stats['cash_purchases_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_syp']) }} ل.س
+                @elseif($stats['cash_purchases_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
+            <p>مشتريات نقداً</p>
+        </div>
+    </div>
+
+    <div class="stat-card debt-purchases">
+        <div class="stat-icon">
+            <i data-lucide="credit-card"></i>
+        </div>
+        <div class="stat-content">
+            <h3>
+                @if($stats['debt_purchases_syp'] > 0 && $stats['debt_purchases_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_usd']) }} $
+                @elseif($stats['debt_purchases_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_syp']) }} ل.س
+                @elseif($stats['debt_purchases_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
+            <p>مشتريات بالدين</p>
+        </div>
+    </div>
+
+    <div class="stat-card cash-sales">
+        <div class="stat-icon">
+            <i data-lucide="dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+            <h3>
+                @if($stats['cash_sales_syp'] > 0 && $stats['cash_sales_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_usd']) }} $
+                @elseif($stats['cash_sales_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_syp']) }} ل.س
+                @elseif($stats['cash_sales_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
+            <p>مبيعات نقداً</p>
+        </div>
+    </div>
+
+    <div class="stat-card debt-sales">
+        <div class="stat-icon">
+            <i data-lucide="trending-up"></i>
+        </div>
+        <div class="stat-content">
+            <h3>
+                @if($stats['debt_sales_syp'] > 0 && $stats['debt_sales_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_usd']) }} $
+                @elseif($stats['debt_sales_syp'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_syp']) }} ل.س
+                @elseif($stats['debt_sales_usd'] > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_usd']) }} $
+                @else
+                    0 ل.س
+                @endif
+            </h3>
+            <p>مبيعات بالدين</p>
+        </div>
+    </div>
 </div>
 
 <!-- Charts Section -->
@@ -351,6 +431,26 @@
 .stat-card.orders .stat-icon {
     background: #fef3c7;
     color: #f59e0b;
+}
+
+.stat-card.cash-purchases .stat-icon {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.stat-card.debt-purchases .stat-icon {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.stat-card.cash-sales .stat-icon {
+    background: #e0f2fe;
+    color: #0891b2;
+}
+
+.stat-card.debt-sales .stat-icon {
+    background: #fdf4ff;
+    color: #a855f7;
 }
 
 .stat-content h3 {
