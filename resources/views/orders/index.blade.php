@@ -45,6 +45,9 @@
         <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}" onclick="filterOrders('in-progress')">
             قيد التنفيذ <span class="count">{{ $statusCounts['in-progress'] }}</span>
         </button>
+        <button class="tab-btn {{ request('status') == 'ready' ? 'active' : '' }}" onclick="filterOrders('ready')">
+            جاهزة <span class="count">{{ $statusCounts['ready'] }}</span>
+        </button>
         <button class="tab-btn {{ request('status') == 'delivered' ? 'active' : '' }}" onclick="filterOrders('delivered')">
             تم التسليم <span class="count">{{ $statusCounts['delivered'] }}</span>
         </button>
@@ -73,6 +76,10 @@
 
                             @case('in-progress')
                                 قيد التنفيذ
+                            @break
+
+                            @case('ready')
+                                جاهزة
                             @break
 
                             @case('delivered')

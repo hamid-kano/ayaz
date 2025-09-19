@@ -21,7 +21,7 @@ class ReportController extends Controller
         $totalOrders = Order::where('order_date', '>=', $startDate)->count();
         $completedOrders = Order::where('status', 'delivered')
             ->where('order_date', '>=', $startDate)->count();
-        $pendingOrders = Order::whereIn('status', ['new', 'in-progress'])
+        $pendingOrders = Order::whereIn('status', ['new', 'in-progress', 'ready'])
             ->where('order_date', '>=', $startDate)->count();
         
         // حساب الإيرادات (مجموع المدفوعات)

@@ -53,6 +53,7 @@
             <select name="status" required>
                 <option value="new" {{ $order->status == 'new' ? 'selected' : '' }}>جديدة</option>
                 <option value="in-progress" {{ $order->status == 'in-progress' ? 'selected' : '' }}>قيد التنفيذ</option>
+                <option value="ready" {{ $order->status == 'ready' ? 'selected' : '' }}>جاهزة</option>
                 <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>تم التسليم</option>
                 <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
             </select>

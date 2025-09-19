@@ -15,6 +15,7 @@ class DashboardController extends Controller
             'total_orders' => Order::count(),
             'new_orders' => Order::where('status', 'new')->count(),
             'in_progress_orders' => Order::where('status', 'in-progress')->count(),
+            'ready_orders' => Order::where('status', 'ready')->count(),
             'delivered_orders' => Order::where('status', 'delivered')->count(),
             'total_receipts_usd' => Receipt::where('currency', 'usd')->sum('amount'),
             'total_receipts_syp' => Receipt::where('currency', 'syp')->sum('amount'),

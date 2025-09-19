@@ -64,6 +64,10 @@
                             قيد التنفيذ
                         @break
 
+                        @case('ready')
+                            جاهزة
+                        @break
+
                         @case('delivered')
                             تم التسليم
                         @break

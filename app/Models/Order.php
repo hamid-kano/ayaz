@@ -108,6 +108,7 @@ class Order extends Model
         return match($this->status) {
             'new' => 'blue',
             'in-progress' => 'yellow',
+            'ready' => 'orange',
             'delivered' => 'green',
             'cancelled' => 'red',
             default => 'gray'

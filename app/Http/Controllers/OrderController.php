@@ -28,6 +28,7 @@ class OrderController extends Controller
             'all' => $baseQuery->count(),
             'new' => (clone $baseQuery)->where('status', 'new')->count(),
             'in-progress' => (clone $baseQuery)->where('status', 'in-progress')->count(),
+            'ready' => (clone $baseQuery)->where('status', 'ready')->count(),
             'delivered' => (clone $baseQuery)->where('status', 'delivered')->count(),
             'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
         ];
@@ -158,7 +159,7 @@ class OrderController extends Controller
             'customer_phone' => 'nullable|string|max:20',
             'order_type' => 'required|string|max:255',
             'order_details' => 'required|string',
-            'status' => 'required|in:new,in-progress,delivered,cancelled',
+            'status' => 'required|in:new,in-progress,ready,delivered,cancelled',
             'delivery_date' => 'required|date',
             'is_urgent' => 'boolean',
             'reviewer_name' => 'nullable|string|max:255',
