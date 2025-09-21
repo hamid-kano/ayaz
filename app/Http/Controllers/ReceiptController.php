@@ -31,6 +31,10 @@ class ReceiptController extends Controller
 
     public function create(Request $request)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بإنشاء مقبوضات');
+        }
+        
         $orders = Order::with(['receipts', 'items'])
             ->get()
             ->filter(function($order) {
@@ -44,6 +48,10 @@ class ReceiptController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بإنشاء مقبوضات');
+        }
+        
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
             'amount' => 'required|numeric|min:0.000001|regex:/^\d+(\.\d{1,6})?$/',
@@ -82,12 +90,20 @@ class ReceiptController extends Controller
 
     public function edit(Receipt $receipt)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل المقبوضات');
+        }
+        
         $receipt->load('order.items');
         return view('receipts.edit', compact('receipt'));
     }
 
     public function update(Request $request, Receipt $receipt)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل المقبوضات');
+        }
+        
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0.000001|regex:/^\d+(\.\d{1,6})?$/',
             'receipt_date' => 'required|date',
@@ -117,6 +133,10 @@ class ReceiptController extends Controller
 
     public function destroy(Receipt $receipt)
     {
+        if (!auth()->user()->canDeleteOrders()) {
+            abort(403, 'غير مصرح لك بحذف المقبوضات');
+        }
+        
         $receipt->delete();
         return redirect()->route('receipts.index')->with('success', 'تم حذف سند القبض بنجاح');
     }

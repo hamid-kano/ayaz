@@ -13,9 +13,11 @@
                 <i data-lucide="printer"></i>
                 طباعة
             </a>
-            <a href="{{ route('orders.edit', $order) }}" class="add-btn">
-                <i data-lucide="edit-2"></i>
-            </a>
+            @if (auth()->user()->canEditOrders())
+                <a href="{{ route('orders.edit', $order) }}" class="add-btn">
+                    <i data-lucide="edit-2"></i>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -130,7 +132,7 @@
                             title="عرض">
                             <i data-lucide="eye"></i>
                         </a>
-                        @if (auth()->user()->isAdmin())
+                        @if (auth()->user()->canEditOrders())
                             <form method="POST" action="{{ route('attachments.destroy', $attachment) }}"
                                 style="display: inline;">
                                 @csrf
@@ -219,7 +221,7 @@
                         <source src="{{ URL($audio->file_path) }}" type="audio/wav">
                     </audio>
 
-                    @if (auth()->user()->isAdmin())
+                    @if (auth()->user()->canEditOrders())
                         <form method="POST" action="{{ route('audio.destroy', $audio) }}" style="display: inline;">
                             @csrf
                             @method('DELETE')

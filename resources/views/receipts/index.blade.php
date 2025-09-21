@@ -8,9 +8,13 @@
         <i data-lucide="arrow-right"></i>
     </a>
     <h2>المقبوضات</h2>
-    <a href="{{ route('receipts.create') }}" class="add-btn">
-        <i data-lucide="plus"></i>
-    </a>
+    @if (auth()->user()->canEditOrders())
+        <a href="{{ route('receipts.create') }}" class="add-btn">
+            <i data-lucide="plus"></i>
+        </a>
+    @else
+        <div></div>
+    @endif
 </div>
 
 <!-- Search Section -->
@@ -69,17 +73,21 @@
                 <div class="receipt-date">{{ $receipt->receipt_date->format('Y-m-d') }}</div>
             </div>
             <div class="receipt-actions">
-                <a href="{{ route('receipts.edit', $receipt) }}" class="action-btn edit" title="تعديل">
-                    <i data-lucide="edit-2"></i>
-                </a>
-                <form method="POST" action="{{ route('receipts.destroy', $receipt) }}" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="action-btn delete" title="حذف" 
-                        onclick="showDeleteModal('{{ route('receipts.destroy', $receipt) }}', 'سند القبض #{{ $receipt->id }}', this.closest('form'))">
-                        <i data-lucide="trash-2"></i>
-                    </button>
-                </form>
+                @if (auth()->user()->canEditOrders())
+                    <a href="{{ route('receipts.edit', $receipt) }}" class="action-btn edit" title="تعديل">
+                        <i data-lucide="edit-2"></i>
+                    </a>
+                @endif
+                @if (auth()->user()->canDeleteOrders())
+                    <form method="POST" action="{{ route('receipts.destroy', $receipt) }}" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="action-btn delete" title="حذف" 
+                            onclick="showDeleteModal('{{ route('receipts.destroy', $receipt) }}', 'سند القبض #{{ $receipt->id }}', this.closest('form'))">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     @endforeach

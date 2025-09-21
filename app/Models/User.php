@@ -56,7 +56,32 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isAuditor(): bool
+    {
+        return $this->role === 'auditor';
+    }
+
     public function canManageUsers(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    public function canViewOrders(): bool
+    {
+        return $this->isAdmin() || $this->isAuditor();
+    }
+
+    public function canEditOrders(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    public function canDeleteOrders(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    public function canViewReports(): bool
     {
         return $this->isAdmin();
     }

@@ -80,9 +80,9 @@ class CheckOrderDeliveryReminders extends Command
                 $count++;
             }
             
-            // إشعار للأدمن
-            $admins = \App\Models\User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
+            // إشعار للأدمن والمدققين
+            $adminsAndAuditors = \App\Models\User::whereIn('role', ['admin', 'auditor'])->get();
+            foreach ($adminsAndAuditors as $admin) {
                 Notification::create([
                     'user_id' => $admin->id,
                     'type' => 'delivery_reminder_admin',

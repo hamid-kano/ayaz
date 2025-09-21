@@ -15,10 +15,14 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->canViewOrders()) {
+            abort(403, 'غير مصرح لك بعرض الطلبيات');
+        }
+
         $query = Order::with(['executor']);
 
         // إذا كان المستخدم عادي، إظهار طلبياته فقط
-        if (!auth()->user()->isAdmin()) {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isAuditor()) {
             $query->where('executor_id', auth()->id());
         }
 
@@ -56,12 +60,20 @@ class OrderController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بإنشاء طلبيات');
+        }
+        
         $users = User::all();
         return view('orders.create', compact('users'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بإنشاء طلبيات');
+        }
+        
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'nullable|string|max:20',
@@ -149,12 +161,20 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل الطلبيات');
+        }
+        
         $users = User::all();
         return view('orders.edit', compact('order', 'users'));
     }
 
     public function update(Request $request, Order $order)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل الطلبيات');
+        }
+        
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'nullable|string|max:20',
@@ -238,6 +258,10 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
+        if (!auth()->user()->canDeleteOrders()) {
+            abort(403, 'غير مصرح لك بحذف الطلبيات');
+        }
+        
         // تحقق من عدم وجود مقبوضات
         // if ($order->receipts()->count() > 0) {
         //     return redirect()->route('orders.index')
@@ -296,6 +320,10 @@ class OrderController extends Controller
 
     public function uploadAttachment(Request $request, Order $order)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل الطلبيات');
+        }
+        
         $request->validate([
             'attachments.*' => 'required|file|max:10240'
         ]);
@@ -341,6 +369,10 @@ class OrderController extends Controller
 
     public function deleteAttachment(Attachment $attachment)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بحذف المرفقات');
+        }
+        
         if (file_exists(public_path($attachment->file_path))) {
             unlink(public_path($attachment->file_path));
         }
@@ -351,6 +383,10 @@ class OrderController extends Controller
 
     public function uploadAudio(Request $request, Order $order)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بتعديل الطلبيات');
+        }
+        
         $request->validate([
             'audio' => 'required|file|mimes:wav,mp3,m4a,webm|max:5120'
         ]);
@@ -389,6 +425,10 @@ class OrderController extends Controller
 
     public function deleteAudio(AudioRecording $audio)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بحذف التسجيلات');
+        }
+        
         if (file_exists(public_path($audio->file_path))) {
             unlink(public_path($audio->file_path));
         }
@@ -411,6 +451,10 @@ class OrderController extends Controller
 
     public function archive(Order $order)
     {
+        if (!auth()->user()->canEditOrders()) {
+            abort(403, 'غير مصرح لك بأرشفة الطلبيات');
+        }
+        
         if (!$order->canBeArchived()) {
             return back()->with('error', 'يمكن أرشفة الطلبيات المسلمة فقط');
         }

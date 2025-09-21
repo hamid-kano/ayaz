@@ -42,7 +42,8 @@
         <button class="tab-btn {{ request('status') == 'new' ? 'active' : '' }}" onclick="filterOrders('new')">
             جديدة <span class="count">{{ $statusCounts['new'] }}</span>
         </button>
-        <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}" onclick="filterOrders('in-progress')">
+        <button class="tab-btn {{ request('status') == 'in-progress' ? 'active' : '' }}"
+            onclick="filterOrders('in-progress')">
             قيد التنفيذ <span class="count">{{ $statusCounts['in-progress'] }}</span>
         </button>
         <button class="tab-btn {{ request('status') == 'ready' ? 'active' : '' }}" onclick="filterOrders('ready')">
@@ -67,7 +68,7 @@
                 <div class="order-header">
                     <div class="order-number">
                         #{{ $order->order_number }}
-                        @if($order->is_urgent)
+                        @if ($order->is_urgent)
                             <span class="urgent-badge">مستعجلة</span>
                         @endif
                     </div>
@@ -110,8 +111,9 @@
                 <div class="order-footer">
                     <div class="order-meta">
                         <div class="order-cost">
-                            @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                            @if ($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س +
+                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
                             @elseif($order->total_cost_syp > 0)
                                 {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
                             @elseif($order->total_cost_usd > 0)
@@ -127,7 +129,8 @@
                     <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
                         <i data-lucide="eye"></i>
                     </a>
-                    <a href="{{ route('orders.public-print', $order) }}" class="action-btn print" title="طباعة" target="_blank">
+                    <a href="{{ route('orders.public-print', $order) }}" class="action-btn print" title="طباعة"
+                        target="_blank">
                         <i data-lucide="printer"></i>
                     </a>
                     @if (auth()->user()->isAdmin())
@@ -170,6 +173,8 @@
                             <i data-lucide="plus"></i>
                             إضافة طلبية
                         </a>
+                    @elseif (auth()->user()->isAuditor())
+                        <p>لا توجد طلبيات للعرض</p>
                     @else
                         <p>لم يتم تعيين أي طلبيات لك بعد</p>
                     @endif
@@ -203,16 +208,16 @@
                             title.textContent = 'تأكيد الأرشفة';
                         }
                     }
-                    
+
                     window.dispatchEvent(new CustomEvent('delete-modal'));
-                    
+
                     const handleConfirm = (e) => {
                         if (formElement) {
                             formElement.submit();
                         }
                         window.removeEventListener('confirm-delete', handleConfirm);
                     };
-                    
+
                     window.addEventListener('confirm-delete', handleConfirm);
                 }
             </script>

@@ -114,7 +114,9 @@
                         <i data-lucide="bar-chart-3"></i>
                         <span class="nav-label">التقارير</span>
                     </a>
+                @endif
                     
+                @if(auth()->user()->isAdmin())
                     <a href="{{ route('settings.index') }}" class="modern-nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                         <i data-lucide="settings"></i>
                         <span class="nav-label">الإعدادات</span>

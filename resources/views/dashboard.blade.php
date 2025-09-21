@@ -21,7 +21,7 @@
                 <i data-lucide="file-text"></i>
             </div>
             <h3>الطلبات</h3>
-            <p>{{ auth()->user()->isAdmin() ? 'عرض جميع الطلبات' : 'طلباتي' }}</p>
+            <p>{{ auth()->user()->isAdmin() || auth()->user()->isAuditor() ? 'عرض جميع الطلبات' : 'طلباتي' }}</p>
         </a>
 
         @if(auth()->user()->isAdmin())
@@ -40,6 +40,9 @@
                 <h3>مقبوضات</h3>
                 <p>المبالغ المحصلة</p>
             </a>
+        @endif
+
+        @if(auth()->user()->isAdmin())
 
             <a href="{{ route('purchases.index') }}" class="menu-item purchases">
                 <div class="menu-icon">
