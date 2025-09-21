@@ -68,7 +68,8 @@ class User extends Authenticatable
 
     public function canViewOrders(): bool
     {
-        return $this->isAdmin() || $this->isAuditor();
+        return true;
+        // return $this->isAdmin() || $this->isAuditor();
     }
 
     public function canEditOrders(): bool
