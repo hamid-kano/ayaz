@@ -46,6 +46,7 @@
             <label for="role">الصلاحية</label>
             <select id="role" name="role" required>
                 <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>مستخدم</option>
+                <option value="auditor" {{ old('role') === 'auditor' ? 'selected' : '' }}>مدقق</option>
                 <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>مدير</option>
             </select>
             @error('role')
