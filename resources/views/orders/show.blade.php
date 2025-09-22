@@ -91,8 +91,8 @@
                 </span>
             </div>
             <div class="info-item">
-                <label>تاريخ التسليم</label>
-                <span>{{ \App\Helpers\TranslationHelper::formatDate($order->delivery_date) }}</span>
+                <label>تاريخ ووقت التسليم</label>
+                <span>{{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'Y-m-d H:i') }}</span>
             </div>
             <div class="info-item">
                 <label>مدقق الطلب</label>

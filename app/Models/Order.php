@@ -25,7 +25,7 @@ class Order extends Model
 
     protected $casts = [
         'order_date' => 'date',
-        'delivery_date' => 'date',
+        'delivery_date' => 'datetime',
         'is_urgent' => 'boolean',
     ];
 

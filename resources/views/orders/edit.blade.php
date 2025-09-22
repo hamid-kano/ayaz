@@ -60,8 +60,8 @@
             </select>
         </div>
         <div class="form-group">
-            <label>تاريخ التسليم</label>
-            <input type="date" name="delivery_date" value="{{ $order->delivery_date->format('Y-m-d') }}" required>
+            <label>تاريخ ووقت التسليم</label>
+            <input type="datetime-local" name="delivery_date" value="{{ $order->delivery_date->format('Y-m-d\TH:i') }}" required>
         </div>
     </div>
     

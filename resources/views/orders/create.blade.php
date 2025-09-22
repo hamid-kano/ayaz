@@ -52,8 +52,8 @@
     
     <div class="form-row">
         <div class="form-group">
-            <label>تاريخ التسليم</label>
-            <input type="date" name="delivery_date" value="{{ old('delivery_date') }}" required>
+            <label>تاريخ ووقت التسليم</label>
+            <input type="datetime-local" name="delivery_date" value="{{ old('delivery_date') }}" required>
             @error('delivery_date')
                 <span class="error-message">{{ $message }}</span>
             @enderror

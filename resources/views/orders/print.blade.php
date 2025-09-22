@@ -170,7 +170,7 @@
             </div>
             <div class="invoice-number">
                 <div><strong>رقم الفاتورة:</strong> {{ $order->order_number }}</div>
-                <div><strong>تاريخ التسليم:</strong> {{ $order->delivery_date->format('d/m/Y') }}</div>
+                <div><strong>تاريخ ووقت التسليم:</strong> {{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m/Y H:i') }}</div>
             </div>
         </div>
         

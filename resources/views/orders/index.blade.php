@@ -123,6 +123,7 @@
                             @endif
                         </div>
                         <div class="order-date">{{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
+                        <div class="delivery-time">{{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m H:i') }}</div>
                     </div>
                 </div>
                 <div class="order-actions">
