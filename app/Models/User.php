@@ -74,7 +74,8 @@ class User extends Authenticatable
 
     public function canEditOrders(): bool
     {
-        return $this->isAdmin();
+        return true;
+        // return $this->isAdmin();
     }
 
     public function canDeleteOrders(): bool
