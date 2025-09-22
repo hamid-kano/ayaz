@@ -94,7 +94,7 @@ class OrderController extends Controller
         $lastOrder = Order::orderBy('id', 'desc')->first();
         $nextNumber = $lastOrder ? ($lastOrder->id + 10001) : 10001;
         $validated['order_number'] = 'ORD-' . $nextNumber;
-        $validated['order_date'] = now()->toDateString();
+        $validated['order_date'] = \Carbon\Carbon::now('Asia/Damascus')->toDateString();
 
         $order = Order::create($validated);
 

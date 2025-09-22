@@ -78,7 +78,7 @@
     
     <div class="form-group">
         <label>التاريخ</label>
-        <input type="date" name="receipt_date" value="{{ old('receipt_date', now()->format('Y-m-d')) }}" required>
+        <input type="date" name="receipt_date" value="{{ old('receipt_date', \App\Helpers\TranslationHelper::today()) }}" required>
         @error('receipt_date')
             <span class="error-message">{{ $message }}</span>
         @enderror

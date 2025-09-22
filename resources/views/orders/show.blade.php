@@ -29,7 +29,7 @@
             </div>
             <div class="info-item">
                 <label>تاريخ الطلب</label>
-                <span>{{ $order->order_date->format('Y-m-d') }}</span>
+                <span>{{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</span>
             </div>
             <div class="info-item">
                 <label>اسم الزبون</label>
@@ -92,7 +92,7 @@
             </div>
             <div class="info-item">
                 <label>تاريخ التسليم</label>
-                <span>{{ $order->delivery_date->format('Y-m-d') }}</span>
+                <span>{{ \App\Helpers\TranslationHelper::formatDate($order->delivery_date) }}</span>
             </div>
             <div class="info-item">
                 <label>مدقق الطلب</label>

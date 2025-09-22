@@ -70,7 +70,7 @@
                 <div class="receipt-amount">
                     {{ \App\Helpers\TranslationHelper::formatAmount($receipt->amount) }} {{ $receipt->currency == 'usd' ? 'دولار' : 'ليرة' }}
                 </div>
-                <div class="receipt-date">{{ $receipt->receipt_date->format('Y-m-d') }}</div>
+                <div class="receipt-date">{{ \App\Helpers\TranslationHelper::formatDate($receipt->receipt_date) }}</div>
             </div>
             <div class="receipt-actions">
                 @if (auth()->user()->canEditOrders())

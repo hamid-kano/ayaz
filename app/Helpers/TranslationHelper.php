@@ -215,4 +215,62 @@ class TranslationHelper
         
         return $result;
     }
+
+    /**
+     * Format date with Damascus timezone
+     *
+     * @param mixed $date
+     * @param string $format
+     * @return string
+     */
+    public static function formatDate($date, $format = 'Y-m-d')
+    {
+        if (!$date) return '';
+        
+        if (is_string($date)) {
+            $date = \Carbon\Carbon::parse($date);
+        }
+        
+        return $date->setTimezone('Asia/Damascus')->format($format);
+    }
+
+    /**
+     * Format datetime with Damascus timezone
+     *
+     * @param mixed $date
+     * @param string $format
+     * @return string
+     */
+    public static function formatDateTime($date, $format = 'Y-m-d H:i')
+    {
+        if (!$date) return '';
+        
+        if (is_string($date)) {
+            $date = \Carbon\Carbon::parse($date);
+        }
+        
+        return $date->setTimezone('Asia/Damascus')->format($format);
+    }
+
+    /**
+     * Get current Damascus time
+     *
+     * @param string $format
+     * @return string
+     */
+    public static function now($format = 'Y-m-d H:i:s')
+    {
+        return \Carbon\Carbon::now('Asia/Damascus')->format($format);
+    }
+
+    /**
+     * Get today's date in Damascus timezone
+     *
+     * @param string $format
+     * @return string
+     */
+    public static function today($format = 'Y-m-d')
+    {
+        return \Carbon\Carbon::today('Asia/Damascus')->format($format);
+    }
 }

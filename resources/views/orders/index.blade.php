@@ -122,7 +122,7 @@
                                 0 ل.س
                             @endif
                         </div>
-                        <div class="order-date">{{ $order->order_date->format('Y-m-d') }}</div>
+                        <div class="order-date">{{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
                     </div>
                 </div>
                 <div class="order-actions">

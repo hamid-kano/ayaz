@@ -310,7 +310,7 @@
                 </div>
                 <div style="text-align: center;">
                     <div>تم طباعة هذا المستند في</div>
-                    <div>{{ now()->format('Y-m-d H:i') }}</div>
+                    <div>{{ \App\Helpers\TranslationHelper::formatDateTime(now()) }}</div>
                 </div>
                 <div style="text-align: left;">
                     <div>ديار: ٠٩٩٤٧٢٥٠٩٠</div>

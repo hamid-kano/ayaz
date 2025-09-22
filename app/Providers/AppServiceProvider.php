@@ -21,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // تعيين التوقيت الافتراضي لـ Carbon
+        \Carbon\Carbon::setDefaultTimezone(config('app.timezone'));
+        
+        // تعيين التوقيت الافتراضي لـ PHP
+        date_default_timezone_set(config('app.timezone'));
+        
         $this->commands([
             CheckOrderDeliveryReminders::class,
         ]);

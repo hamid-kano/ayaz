@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
             <label>تاريخ المشترى</label>
-            <input type="date" name="purchase_date" value="{{ old('purchase_date', now()->format('Y-m-d')) }}" required>
+            <input type="date" name="purchase_date" value="{{ old('purchase_date', \App\Helpers\TranslationHelper::today()) }}" required>
             @error('purchase_date')
                 <span class="error-message">{{ $message }}</span>
             @enderror

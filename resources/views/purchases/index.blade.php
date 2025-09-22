@@ -51,7 +51,7 @@
                     <div class="purchase-amount">
                         {{ \App\Helpers\TranslationHelper::formatAmount($purchase->amount) }} {{ $purchase->currency == 'usd' ? 'دولار' : 'ليرة' }}
                     </div>
-                    <div class="purchase-date">{{ $purchase->purchase_date->format('Y-m-d') }}</div>
+                    <div class="purchase-date">{{ \App\Helpers\TranslationHelper::formatDate($purchase->purchase_date) }}</div>
                 </div>
             </div>
             <div class="purchase-footer">
