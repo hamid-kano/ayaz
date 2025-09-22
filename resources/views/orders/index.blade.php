@@ -108,22 +108,22 @@
                     <p class="order-type">{{ $order->order_type }}</p>
                     <p class="order-details">{{ Str::limit($order->order_details, 50) }}</p>
                 </div>
+                <div class="order-dates">
+                    <div class="order-date">تاريخ الطلب: {{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
+                    <div class="delivery-time">موعد التسليم: {{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m H:i') }}</div>
+                </div>
                 <div class="order-footer">
-                    <div class="order-meta">
-                        <div class="order-cost">
-                            @if ($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س +
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
-                            @elseif($order->total_cost_syp > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
-                            @elseif($order->total_cost_usd > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
-                            @else
-                                0 ل.س
-                            @endif
-                        </div>
-                        <div class="order-date">{{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
-                        <div class="delivery-time">{{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m H:i') }}</div>
+                    <div class="order-cost">
+                        @if ($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س +
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                        @elseif($order->total_cost_syp > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
+                        @elseif($order->total_cost_usd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                        @else
+                            0 ل.س
+                        @endif
                     </div>
                 </div>
                 <div class="order-actions">
