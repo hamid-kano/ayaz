@@ -174,13 +174,6 @@
             </div>
         </div>
         
-        @if($order->order_details)
-        <div class="order-details-section">
-            <div class="order-details-header">ملاحظات:</div>
-            <div class="order-details-content">{{ $order->order_details }}</div>
-        </div>
-        @endif
-
         <table class="items-table">
             <thead>
                 <tr>
@@ -247,6 +240,13 @@
                 @endif
             </tbody>
         </table>
+
+        @if($order->order_details)
+        <div class="order-details-section">
+            <div class="order-details-header">ملاحظات:</div>
+            <div class="order-details-content">{{ $order->order_details }}</div>
+        </div>
+        @endif
 
         <div class="footer-section">
             <div></div>
