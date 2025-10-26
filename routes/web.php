@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/debts', [OrderController::class, 'debts'])->name('orders.debts');
     Route::post('/orders/{order}/archive', [OrderController::class, 'archive'])->name('orders.archive');
     Route::get('/archives', [OrderController::class, 'archives'])->name('orders.archives');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 
     // Receipts
     Route::resource('receipts', ReceiptController::class);

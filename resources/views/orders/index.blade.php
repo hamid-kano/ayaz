@@ -127,6 +127,9 @@
                     </div>
                 </div>
                 <div class="order-actions">
+                    <button type="button" class="action-btn status" title="تغيير الحالة" onclick="showStatusModal({{ $order->id }}, '{{ $order->status }}')">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
                     <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
                         <i data-lucide="eye"></i>
                     </a>
@@ -183,7 +186,7 @@
             @endforelse
         </div>
 
-
+        @include('components.status-modal')
 
         @push('scripts')
             <script>
@@ -196,6 +199,8 @@
                     }
                     window.location = url;
                 }
+
+
 
                 function showArchiveModal(archiveUrl, itemName, formElement) {
                     const modal = document.querySelector('[x-data*="open: false"]');
@@ -210,9 +215,7 @@
                         }
                     }
 
-                    window.dispatchEvent(new CustomEvent('delete-modal'));
-
-                    const handleConfirm = (e) => {
+                    window.dispatchEvent(new CustomEvent('delete-modal'));t handleConfirm = (e) => {
                         if (formElement) {
                             formElement.submit();
                         }
@@ -223,4 +226,6 @@
                 }
             </script>
         @endpush
+
+
     @endsection

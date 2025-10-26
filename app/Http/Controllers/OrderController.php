@@ -485,4 +485,15 @@ class OrderController extends Controller
         
         return view('orders.archives', compact('archives'));
     }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'status' => 'required|in:new,in-progress,ready,delivered,archived,cancelled'
+        ]);
+
+        $order->update(['status' => $request->status]);
+
+        return redirect()->route('orders.index')->with('success', 'تم تحديث حالة الطلبية بنجاح');
+    }
 }

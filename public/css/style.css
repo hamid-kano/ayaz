@@ -1703,6 +1703,15 @@ body {
     color: #3b82f6;
 }
 
+.order-actions .action-btn.status {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.order-actions .action-btn.status:hover {
+    background: rgba(245, 158, 11, 0.2);
+}
+
 .order-actions .action-btn.details:hover {
     background: rgba(59, 130, 246, 0.2);
 }
