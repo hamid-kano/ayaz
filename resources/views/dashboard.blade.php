@@ -77,5 +77,10 @@
             </a>
         @endif
     </div>
+
+    <!-- Floating Refresh Button -->
+    <button class="floating-refresh-btn" onclick="window.location.reload()" title="إعادة تحميل">
+        <i data-lucide="refresh-cw"></i>
+    </button>
 </div>
 @endsection
