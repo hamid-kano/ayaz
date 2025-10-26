@@ -109,8 +109,10 @@
                     <p class="order-details">{{ Str::limit($order->order_details, 50) }}</p>
                 </div>
                 <div class="order-dates">
-                    <div class="order-date">تاريخ الطلب: {{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
-                    <div class="delivery-time">موعد التسليم: {{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m H:i') }}</div>
+                    <div class="order-date">تاريخ الطلب:
+                        {{ \App\Helpers\TranslationHelper::formatDate($order->order_date) }}</div>
+                    <div class="delivery-time">موعد التسليم:
+                        {{ \App\Helpers\TranslationHelper::formatDateTime($order->delivery_date, 'd/m H:i') }}</div>
                 </div>
                 <div class="order-footer">
                     <div class="order-cost">
@@ -127,7 +129,8 @@
                     </div>
                 </div>
                 <div class="order-actions">
-                    <button type="button" class="action-btn status" title="تغيير الحالة" onclick="showStatusModal({{ $order->id }}, '{{ $order->status }}')">
+                    <button type="button" class="action-btn status" title="تغيير الحالة"
+                        onclick="showStatusModal({{ $order->id }}, '{{ $order->status }}')">
                         <i data-lucide="refresh-cw"></i>
                     </button>
                     <a href="{{ route('orders.show', $order) }}" class="action-btn details" title="عرض التفاصيل">
@@ -188,44 +191,44 @@
 
         @include('components.status-modal')
 
-        @push('scripts')
-            <script>
-                function filterOrders(status) {
-                    const url = new URL(window.location);
-                    if (status) {
-                        url.searchParams.set('status', status);
-                    } else {
-                        url.searchParams.delete('status');
+        <script>
+            function filterOrders(status) {
+                const url = new URL(window.location);
+                if (status) {
+                    url.searchParams.set('status', status);
+                } else {
+                    url.searchParams.delete('status');
+                }
+                window.location = url;
+            }
+
+
+
+            function showArchiveModal(archiveUrl, itemName, formElement) {
+                const modal = document.querySelector('[x-data*="open: false"]');
+                if (modal) {
+                    const message = modal.querySelector('p');
+                    if (message) {
+                        message.textContent = `هل أنت متأكد من أنك تريد أرشفة ${itemName}؟ سيتم نقلها إلى الأرشيف.`;
                     }
-                    window.location = url;
+                    const title = modal.querySelector('h3');
+                    if (title) {
+                        title.textContent = 'تأكيد الأرشفة';
+                    }
                 }
 
-
-
-                function showArchiveModal(archiveUrl, itemName, formElement) {
-                    const modal = document.querySelector('[x-data*="open: false"]');
-                    if (modal) {
-                        const message = modal.querySelector('p');
-                        if (message) {
-                            message.textContent = `هل أنت متأكد من أنك تريد أرشفة ${itemName}؟ سيتم نقلها إلى الأرشيف.`;
-                        }
-                        const title = modal.querySelector('h3');
-                        if (title) {
-                            title.textContent = 'تأكيد الأرشفة';
-                        }
+                window.dispatchEvent(new CustomEvent('delete-modal'));
+                
+                const handleConfirm = (e) => {
+                    if (formElement) {
+                        formElement.submit();
                     }
+                    window.removeEventListener('confirm-delete', handleConfirm);
+                };
 
-                    window.dispatchEvent(new CustomEvent('delete-modal'));t handleConfirm = (e) => {
-                        if (formElement) {
-                            formElement.submit();
-                        }
-                        window.removeEventListener('confirm-delete', handleConfirm);
-                    };
-
-                    window.addEventListener('confirm-delete', handleConfirm);
-                }
-            </script>
-        @endpush
+                window.addEventListener('confirm-delete', handleConfirm);
+            }
+        </script>
 
 
     @endsection
