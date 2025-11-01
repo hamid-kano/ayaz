@@ -408,9 +408,9 @@
         });
     }
     
-    window.onload = function() {
-        window.print();
-    };
+    // window.onload = function() {
+    //     window.print();
+    // };
     
     document.addEventListener('DOMContentLoaded', function() {
         const pdfBtn = document.createElement('button');
