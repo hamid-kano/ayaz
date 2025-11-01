@@ -134,6 +134,35 @@
             padding: 10px;
             border-top: 1px solid #000;
         }
+        
+        .advances-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-top: 1px solid #000;
+        }
+        
+        .remaining-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-top: 1px solid #000;
+        }
+        
+        .floating-stamp {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -25%);
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .floating-stamp img {
+            width: 120px;
+            height: 120px;
+            opacity: 1;
+        }
 
         @media print {
             @page { size: A4; margin: 10mm; }
@@ -248,7 +277,10 @@
         </div>
         @endif
 
-        <div class="footer-section">
+        <div class="footer-section" style="position: relative;">
+            <div class="floating-stamp">
+                <img src="{{ asset('images/stamping.png') }}" alt="ختم">
+            </div>
             <div></div>
             <div><strong>المجموع:</strong> 
                 @if($order->items->count() > 0)
@@ -277,30 +309,55 @@
             </div>
         </div>
         
+        <div class="advances-section">
+            <div></div>
+            <div><strong>المقبوض سلفة:</strong> 
+                @php
+                    $receiptsSyp = $order->receipts->where('currency', 'syp')->sum('amount');
+                    $receiptsUsd = $order->receipts->where('currency', 'usd')->sum('amount');
+                @endphp
+                @if($receiptsSyp > 0 && $receiptsUsd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($receiptsSyp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($receiptsUsd) }} $
+                @elseif($receiptsSyp > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($receiptsSyp) }} ل.س
+                @elseif($receiptsUsd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($receiptsUsd) }} $
+                @else
+                    0 ل.س
+                @endif
+            </div>
+        </div>
+        
+        <div class="remaining-section">
+            <div></div>
+            <div><strong>الباقي:</strong> 
+                @if($order->remaining_amount_syp > 0 && $order->remaining_amount_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
+                @elseif($order->remaining_amount_syp > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_syp) }} ل.س
+                @elseif($order->remaining_amount_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->remaining_amount_usd) }} $
+                @else
+                    0 ل.س
+                @endif
+            </div>
+        </div>
+        
         <div style="padding: 10px; border-top: 1px solid #000; text-align: center; font-size: 12px; background: #f8f9fa;">
             <strong>المبلغ كتابة:</strong>
-            @if($order->items->count() > 0)
-                @php
-                    $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
-                    $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
-                @endphp
-                @if($totalSyp > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($totalSyp, 'SYP') }} ل.س فقط لا غير
-                @endif
-                @if($totalUsd > 0)
-                    @if($totalSyp > 0) + @endif
-                    {{ \App\Helpers\TranslationHelper::numberToWords($totalUsd, 'USD') }} دولار فقط لا غير
-                @endif
-            @else
-                @if($order->total_cost_syp > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_syp, 'SYP') }} ليرة فقط لا غير
-                @elseif($order->total_cost_usd > 0)
-                    {{ \App\Helpers\TranslationHelper::numberToWords($order->total_cost_usd, 'USD') }} دولار فقط لا غير
-                @else
-                    صفر فقط لا غير
-                @endif
+            @if($order->remaining_amount_syp > 0)
+                {{ \App\Helpers\TranslationHelper::numberToWords($order->remaining_amount_syp, 'SYP') }} ل.س فقط لا غير
+            @endif
+            @if($order->remaining_amount_usd > 0)
+                @if($order->remaining_amount_syp > 0) + @endif
+                {{ \App\Helpers\TranslationHelper::numberToWords($order->remaining_amount_usd, 'USD') }} دولار فقط لا غير
+            @endif
+            @if($order->remaining_amount_syp <= 0 && $order->remaining_amount_usd <= 0)
+                صفر فقط لا غير
             @endif
         </div>
+        
+
         
         <div class="page-footer">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding: 15px; background: #006400; color: white; font-size: 12px;">
