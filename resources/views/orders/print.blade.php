@@ -153,14 +153,14 @@
             position: absolute;
             top: 80%;
             left: 50%;
-            transform: translate(-50%, -25%);
+            transform: translate(-50%, -50%);
             z-index: 10;
             pointer-events: none;
         }
         
         .floating-stamp img {
-            width: 120px;
-            height: 120px;
+            width: 180px;
+            height: 180px;
             opacity: 1;
         }
 
