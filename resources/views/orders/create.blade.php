@@ -100,6 +100,50 @@
     <!-- Order Items Section -->
     @include('components.order-items', ['items' => collect([]), 'editable' => true])
     
+    <!-- Receipt Section -->
+    <div class="section-header">
+        <i data-lucide="banknote"></i>
+        <h3>سند قبض (سلفة)</h3>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group">
+            <label>المبلغ</label>
+            <input type="number" name="receipt_amount" value="{{ old('receipt_amount') }}" min="0" step="0.000001" placeholder="أدخل مبلغ السلفة">
+            @error('receipt_amount')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+            <small class="form-hint">اختياري - اترك فارغاً إذا لم يتم دفع سلفة</small>
+        </div>
+        <div class="form-group">
+            <label>العملة</label>
+            <select name="receipt_currency">
+                <option value="syp" {{ old('receipt_currency') == 'syp' ? 'selected' : '' }}>ليرة سورية</option>
+                <option value="usd" {{ old('receipt_currency') == 'usd' ? 'selected' : '' }}>دولار أمريكي</option>
+            </select>
+            @error('receipt_currency')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group">
+            <label>تاريخ القبض</label>
+            <input type="date" name="receipt_date" value="{{ old('receipt_date', now()->format('Y-m-d')) }}">
+            @error('receipt_date')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label>ملاحظات القبض (اختياري)</label>
+            <textarea name="receipt_notes" rows="2" placeholder="أي ملاحظات إضافية...">{{ old('receipt_notes') }}</textarea>
+            @error('receipt_notes')
+                <span class="error-message">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+    
     <!-- Attachments Section -->
     <div class="section-header">
         <i data-lucide="paperclip"></i>

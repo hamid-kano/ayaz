@@ -88,6 +88,10 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'items.*.currency' => 'required|in:syp,usd',
+            'receipt_amount' => 'nullable|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
+            'receipt_currency' => 'nullable|in:syp,usd',
+            'receipt_date' => 'nullable|date',
+            'receipt_notes' => 'nullable|string',
         ]);
 
         // إنشاء رقم طلبية تلقائي
@@ -127,6 +131,17 @@ class OrderController extends Controller
                     ['order_id' => $order->id, 'type' => 'new_order']
                 );
             }
+        }
+
+        // إنشاء سند القبض إذا تم إدخال مبلغ
+        if (!empty($validated['receipt_amount']) && $validated['receipt_amount'] > 0) {
+            \App\Models\Receipt::create([
+                'order_id' => $order->id,
+                'amount' => $validated['receipt_amount'],
+                'currency' => $validated['receipt_currency'] ?? 'syp',
+                'receipt_date' => $validated['receipt_date'] ?? now()->toDateString(),
+                'notes' => $validated['receipt_notes'],
+            ]);
         }
 
         // Handle file uploads
