@@ -11,6 +11,79 @@ use Carbon\Carbon;
 
 class ReportController extends Controller
 {
+    public function daily()
+    {
+        $today = Carbon::today();
+        $threeDaysAgo = Carbon::now()->subDays(3);
+        
+        // الطلبات الجديدة اليوم
+        $newOrders = Order::whereDate('order_date', $today)
+            ->with(['items'])
+            ->get();
+        
+        // الطلبات الجديدة
+        $newOrdersList = Order::where('status', 'new')->get();
+        
+        // الطلبات قيد التنفيذ
+        $inProgressList = Order::where('status', 'in-progress')->get();
+        
+        // الطلبات المتأخرة
+        $oldInProgress = Order::where('status', 'in-progress')
+            ->where('updated_at', '<=', $threeDaysAgo)
+            ->get();
+        
+        // إحصائيات الطلبات
+        $ordersStats = [
+            'new' => Order::where('status', 'new')->count(),
+            'in_progress' => Order::where('status', 'in-progress')->count(),
+            'ready' => Order::where('status', 'ready')->count(),
+            'delivered' => Order::whereDate('updated_at', $today)->where('status', 'delivered')->count(),
+        ];
+        
+        // المقبوضات اليوم
+        $receiptsToday = Receipt::whereDate('receipt_date', $today)->get();
+        $receiptsSyp = $receiptsToday->where('currency', 'syp')->sum('amount');
+        $receiptsUsd = $receiptsToday->where('currency', 'usd')->sum('amount');
+        
+        // المشتريات اليوم
+        $purchasesToday = Purchase::whereDate('purchase_date', $today)->get();
+        $purchasesSyp = $purchasesToday->where('currency', 'syp')->sum('amount');
+        $purchasesUsd = $purchasesToday->where('currency', 'usd')->sum('amount');
+        
+        // الديون لنا
+        $debtsToUs = Order::where('remaining_amount_syp', '>', 0)
+            ->orWhere('remaining_amount_usd', '>', 0)
+            ->get();
+        $debtsToUsSyp = $debtsToUs->sum('remaining_amount_syp');
+        $debtsToUsUsd = $debtsToUs->sum('remaining_amount_usd');
+        
+        // الديون علينا
+        $debtsOnUs = Purchase::where('status', 'debt')->get();
+        $debtsOnUsSyp = $debtsOnUs->where('currency', 'syp')->sum('amount');
+        $debtsOnUsUsd = $debtsOnUs->where('currency', 'usd')->sum('amount');
+        
+        return view('reports.daily', compact(
+            'today',
+            'newOrders',
+            'newOrdersList',
+            'inProgressList',
+            'oldInProgress',
+            'ordersStats',
+            'receiptsSyp',
+            'receiptsUsd',
+            'receiptsToday',
+            'purchasesSyp',
+            'purchasesUsd',
+            'purchasesToday',
+            'debtsToUsSyp',
+            'debtsToUsUsd',
+            'debtsToUs',
+            'debtsOnUsSyp',
+            'debtsOnUsUsd',
+            'debtsOnUs'
+        ));
+    }
+
     public function index(Request $request)
     {
         // تحديد الفترة الزمنية
