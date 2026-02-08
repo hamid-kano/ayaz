@@ -157,7 +157,7 @@ class SendDailyReportToTelegram extends Command
             if ($debtsOnUsSyp == 0 && $debtsOnUsUsd == 0) $message .= "• لا توجد ديون\n";
             
             // إضافة رابط التقرير المفصل
-            $reportUrl = route('reports.daily');
+            $reportUrl = 'https://ayazgraphics.shop/public/reports/daily';
             $message .= "\n🔗 [عرض التقرير المفصل]({$reportUrl})";
         
             // إرسال الرسالة
