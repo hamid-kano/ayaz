@@ -155,6 +155,10 @@ class SendDailyReportToTelegram extends Command
             if ($debtsOnUsSyp > 0) $message .= "• " . number_format($debtsOnUsSyp, 0) . " ل.س\n";
             if ($debtsOnUsUsd > 0) $message .= "• " . number_format($debtsOnUsUsd, 2) . " $\n";
             if ($debtsOnUsSyp == 0 && $debtsOnUsUsd == 0) $message .= "• لا توجد ديون\n";
+            
+            // إضافة رابط التقرير المفصل
+            $reportUrl = env('APP_URL') . '/reports/daily';
+            $message .= "\n🔗 [عرض التقرير المفصل]({$reportUrl})";
         
             // إرسال الرسالة
             $response = Http::timeout(30)->post("https://api.telegram.org/bot{$botToken}/sendMessage", [

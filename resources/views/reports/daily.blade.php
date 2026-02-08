@@ -267,12 +267,16 @@
                         <td>#{{ $debt->order_number }}</td>
                         <td>{{ $debt->customer_name }}</td>
                         <td class="amount">
-                            @if($debt->remaining_amount_syp > 0 && $debt->remaining_amount_usd > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($debt->remaining_amount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($debt->remaining_amount_usd) }} $
-                            @elseif($debt->remaining_amount_syp > 0)
-                                {{ \App\Helpers\TranslationHelper::formatAmount($debt->remaining_amount_syp) }} ل.س
+                            @if(isset($debt->debt_syp) && isset($debt->debt_usd))
+                                @if($debt->debt_syp > 0 && $debt->debt_usd > 0)
+                                    {{ \App\Helpers\TranslationHelper::formatAmount($debt->debt_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($debt->debt_usd) }} $
+                                @elseif($debt->debt_syp > 0)
+                                    {{ \App\Helpers\TranslationHelper::formatAmount($debt->debt_syp) }} ل.س
+                                @else
+                                    {{ \App\Helpers\TranslationHelper::formatAmount($debt->debt_usd) }} $
+                                @endif
                             @else
-                                {{ \App\Helpers\TranslationHelper::formatAmount($debt->remaining_amount_usd) }} $
+                                -
                             @endif
                         </td>
                     </tr>

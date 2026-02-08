@@ -29,7 +29,13 @@ class ReportController extends Controller
         
         // الطلبات المتأخرة
         $oldInProgress = Order::where('status', 'in-progress')
-            ->where('updated_at', '<=', $threeDaysAgo)
+            ->where(function($query) use ($threeDaysAgo) {
+                $query->where('delivery_date', '<=', $threeDaysAgo)
+                      ->orWhere(function($q) use ($threeDaysAgo) {
+                          $q->whereNull('delivery_date')
+                            ->where('updated_at', '<=', $threeDaysAgo);
+                      });
+            })
             ->get();
         
         // إحصائيات الطلبات
@@ -50,12 +56,35 @@ class ReportController extends Controller
         $purchasesSyp = $purchasesToday->where('currency', 'syp')->sum('amount');
         $purchasesUsd = $purchasesToday->where('currency', 'usd')->sum('amount');
         
-        // الديون لنا
-        $debtsToUs = Order::where('remaining_amount_syp', '>', 0)
-            ->orWhere('remaining_amount_usd', '>', 0)
+        // الديون لنا (استثناء الطلبات الملغاة)
+        $orders = Order::with(['items', 'receipts'])
+            ->whereNotIn('status', ['cancelled'])
             ->get();
-        $debtsToUsSyp = $debtsToUs->sum('remaining_amount_syp');
-        $debtsToUsUsd = $debtsToUs->sum('remaining_amount_usd');
+        $debtsToUsSyp = 0;
+        $debtsToUsUsd = 0;
+        $debtsToUs = collect();
+        
+        foreach ($orders as $order) {
+            $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
+            $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) {
+                return $item->quantity * $item->price;
+            });
+            $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
+            $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
+            
+            $debtSyp = $totalSyp - $paidSyp;
+            $debtUsd = $totalUsd - $paidUsd;
+            
+            if ($debtSyp > 0 || $debtUsd > 0) {
+                $order->debt_syp = $debtSyp;
+                $order->debt_usd = $debtUsd;
+                $debtsToUs->push($order);
+                if ($debtSyp > 0) $debtsToUsSyp += $debtSyp;
+                if ($debtUsd > 0) $debtsToUsUsd += $debtUsd;
+            }
+        }
         
         // الديون علينا
         $debtsOnUs = Purchase::where('status', 'debt')->get();
