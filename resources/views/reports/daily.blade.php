@@ -17,20 +17,38 @@
         .stat-card p { font-size: 28px; font-weight: 700; }
         .section { margin-bottom: 30px; }
         .section-title { background: #f7fafc; padding: 15px; border-right: 4px solid #667eea; margin-bottom: 15px; font-size: 20px; font-weight: 700; color: #2d3748; }
-        .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; overflow-x: auto; display: block; }
+        .table thead, .table tbody { display: table; width: 100%; table-layout: fixed; }
         .table th { background: #edf2f7; padding: 12px; text-align: right; font-weight: 600; color: #2d3748; border-bottom: 2px solid #cbd5e0; }
-        .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #4a5568; font-weight: 500; }
+        .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #4a5568; font-weight: 500; word-wrap: break-word; }
         .table tr:hover { background: #f7fafc; }
         .amount { font-weight: 700; color: #059669; }
         .amount.negative { color: #dc2626; }
         .no-data { text-align: center; padding: 40px; color: #a0aec0; font-style: italic; font-weight: 500; }
+        .print-btn { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 700; transition: transform 0.2s; }
+        .print-btn:hover { transform: translateY(-2px); }
         @media print {
             body { background: white; padding: 0; }
             .container { box-shadow: none; padding: 20px; }
             .no-print { display: none; }
         }
         @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            body { padding: 10px; }
+            .container { padding: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 15px; }
+            .stat-card h3 { font-size: 12px; }
+            .stat-card p { font-size: 20px; }
+            .header h1 { font-size: 24px; }
+            .header p { font-size: 14px; }
+            .section-title { font-size: 16px; padding: 10px; }
+            .table { font-size: 14px; }
+            .table th, .table td { padding: 8px; font-size: 12px; }
+            .print-btn { padding: 12px 30px; font-size: 14px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .table th, .table td { padding: 6px; font-size: 11px; }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -334,7 +352,7 @@
         </div>
 
         <div class="no-print" style="text-align: center; margin-top: 30px;">
-            <button onclick="window.print()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold;">
+            <button onclick="window.print()" class="print-btn">
                 🖨️ طباعة التقرير
             </button>
         </div>
