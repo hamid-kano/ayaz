@@ -6,24 +6,24 @@
     <title>التقرير اليومي - {{ \App\Helpers\TranslationHelper::formatDate($today) }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        body { font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #667eea; }
-        .header h1 { color: #2d3748; font-size: 32px; margin-bottom: 10px; }
-        .header p { color: #718096; font-size: 18px; }
+        .header h1 { color: #2d3748; font-size: 32px; margin-bottom: 10px; font-weight: 700; }
+        .header p { color: #718096; font-size: 18px; font-weight: 500; }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
-        .stat-card h3 { font-size: 14px; margin-bottom: 10px; opacity: 0.9; }
-        .stat-card p { font-size: 28px; font-weight: bold; }
+        .stat-card h3 { font-size: 14px; margin-bottom: 10px; opacity: 0.9; font-weight: 600; }
+        .stat-card p { font-size: 28px; font-weight: 700; }
         .section { margin-bottom: 30px; }
-        .section-title { background: #f7fafc; padding: 15px; border-right: 4px solid #667eea; margin-bottom: 15px; font-size: 20px; font-weight: bold; color: #2d3748; }
+        .section-title { background: #f7fafc; padding: 15px; border-right: 4px solid #667eea; margin-bottom: 15px; font-size: 20px; font-weight: 700; color: #2d3748; }
         .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .table th { background: #edf2f7; padding: 12px; text-align: right; font-weight: 600; color: #2d3748; border-bottom: 2px solid #cbd5e0; }
-        .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #4a5568; }
+        .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #4a5568; font-weight: 500; }
         .table tr:hover { background: #f7fafc; }
-        .amount { font-weight: bold; color: #059669; }
+        .amount { font-weight: 700; color: #059669; }
         .amount.negative { color: #dc2626; }
-        .no-data { text-align: center; padding: 40px; color: #a0aec0; font-style: italic; }
+        .no-data { text-align: center; padding: 40px; color: #a0aec0; font-style: italic; font-weight: 500; }
         @media print {
             body { background: white; padding: 0; }
             .container { box-shadow: none; padding: 20px; }
@@ -33,6 +33,9 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
