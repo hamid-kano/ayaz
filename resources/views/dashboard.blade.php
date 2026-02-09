@@ -80,7 +80,7 @@
                 @csrf
                 <button type="submit" class="menu-item telegram-report" style="border: none; cursor: pointer; font-family: inherit; text-decoration: none; color: inherit; background: white;">
                     <div class="menu-icon">
-                        <i data-lucide="message-circle"></i>
+                        <i data-lucide="send"></i>
                     </div>
                     <h3>إرسال التقرير</h3>
                     <p>إرسال التقرير لتلغرام</p>
