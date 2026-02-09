@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Purchase;
 use App\Models\Receipt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
 
 class ReportController extends Controller
@@ -111,6 +112,16 @@ class ReportController extends Controller
             'debtsOnUsUsd',
             'debtsOnUs'
         ));
+    }
+
+    public function sendTelegram()
+    {
+        try {
+            Artisan::call('report:send-telegram');
+            return redirect()->back()->with('success', 'تم إرسال التقرير إلى تلغرام بنجاح');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'فشل إرسال التقرير: ' . $e->getMessage());
+        }
     }
 
     public function index(Request $request)

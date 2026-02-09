@@ -75,6 +75,17 @@
                 <h3>إدارة المستخدمين</h3>
                 <p>إضافة وتعديل المستخدمين</p>
             </a>
+
+            <form method="POST" action="{{ route('reports.send-telegram') }}" style="display: contents;">
+                @csrf
+                <button type="submit" class="menu-item" style="background: linear-gradient(135deg, #0088cc 0%, #0066aa 100%); border: none; cursor: pointer; font-family: inherit;">
+                    <div class="menu-icon">
+                        <i data-lucide="send"></i>
+                    </div>
+                    <h3>إرسال التقرير</h3>
+                    <p>إرسال التقرير لتلغرام</p>
+                </button>
+            </form>
         @endif
     </div>
 

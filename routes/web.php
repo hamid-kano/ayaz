@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/daily', [ReportController::class, 'daily'])->name('reports.daily');
+    Route::post('/reports/send-telegram', [ReportController::class, 'sendTelegram'])->name('reports.send-telegram');
 
     // Settings
     Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');

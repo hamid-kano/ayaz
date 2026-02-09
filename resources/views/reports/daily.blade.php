@@ -351,10 +351,16 @@
             @endif
         </div>
 
-        <div class="no-print" style="text-align: center; margin-top: 30px;">
+        <div class="no-print" style="text-align: center; margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
             <button onclick="window.print()" class="print-btn">
                 🖨️ طباعة التقرير
             </button>
+            <form method="POST" action="{{ route('reports.send-telegram') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="print-btn" style="background: linear-gradient(135deg, #0088cc 0%, #0066aa 100%);">
+                    📨 إرسال لتلغرام
+                </button>
+            </form>
         </div>
     </div>
 </body>
