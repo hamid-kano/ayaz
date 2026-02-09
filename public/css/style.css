@@ -412,6 +412,11 @@ body {
     color: white;
 }
 
+.telegram-report .menu-icon {
+    background: linear-gradient(135deg, #0088cc 0%, #0066aa 100%);
+    color: white;
+}
+
 .menu-item h3 {
     font-size: 19px;
     font-weight: 700;

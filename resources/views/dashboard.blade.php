@@ -78,7 +78,7 @@
 
             <form method="POST" action="{{ route('reports.send-telegram') }}" style="display: contents;">
                 @csrf
-                <button type="submit" class="menu-item" style="background: linear-gradient(135deg, #0088cc 0%, #0066aa 100%); border: none; cursor: pointer; font-family: inherit;">
+                <button type="submit" class="menu-item telegram-report" style="border: none; cursor: pointer; font-family: inherit; text-decoration: none; color: inherit; background: white;">
                     <div class="menu-icon">
                         <i data-lucide="send"></i>
                     </div>
