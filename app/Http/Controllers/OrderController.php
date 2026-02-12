@@ -212,6 +212,20 @@ class OrderController extends Controller
 
         // تحديث المواد
         if (isset($validated['items'])) {
+            // حساب التكلفة الجديدة
+            $newTotalSyp = collect($validated['items'])->where('currency', 'syp')->sum(fn($i) => $i['quantity'] * $i['price']);
+            $newTotalUsd = collect($validated['items'])->where('currency', 'usd')->sum(fn($i) => $i['quantity'] * $i['price']);
+            
+            // التحقق من المقبوضات
+            if ($order->receipts()->count() > 0) {
+                $paidSyp = $order->total_paid_syp;
+                $paidUsd = $order->total_paid_usd;
+                
+                if ($newTotalSyp < $paidSyp || $newTotalUsd < $paidUsd) {
+                    return back()->with('warning', 'تنبيه: التكلفة الجديدة أقل من المبلغ المدفوع. تأكد من صحة البيانات.');
+                }
+            }
+            
             $order->items()->delete();
             foreach ($validated['items'] as $item) {
                 $order->items()->create($item);
@@ -327,8 +341,8 @@ class OrderController extends Controller
                 return $order->remaining_amount_syp > 0 || $order->remaining_amount_usd > 0;
             });
 
-        $totalUsd = $orders->sum('remaining_amount_usd');
-        $totalSyp = $orders->sum('remaining_amount_syp');
+        $totalUsd = $orders->filter(fn($o) => $o->remaining_amount_usd > 0)->sum('remaining_amount_usd');
+        $totalSyp = $orders->filter(fn($o) => $o->remaining_amount_syp > 0)->sum('remaining_amount_syp');
 
         return view('orders.debts', compact('orders', 'totalUsd', 'totalSyp'));
     }
