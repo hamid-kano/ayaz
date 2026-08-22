@@ -40,6 +40,11 @@
                 <input type="date" name="date_to" class="filter-select" value="{{ request('date_to') }}" onchange="submitReportFilters(this.form)">
             </label>
         </div>
+
+        <a href="{{ route('reports.index') }}" class="reset-filters-btn" title="إعادة تعيين الفلاتر">
+            <i data-lucide="rotate-ccw"></i>
+            <span>إعادة تعيين</span>
+        </a>
     </div>
 </form>
 
