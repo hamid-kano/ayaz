@@ -4,5 +4,9 @@ ssh -p 65002 u734737496@82.198.230.24
 
 Fc62aJDgqut_gdO
 
+cd domains/ayazgraphics.shop/public_html
+
+
+
 
 
