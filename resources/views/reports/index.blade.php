@@ -385,6 +385,31 @@ function submitReportFilters(form) {
     flex: 1;
 }
 
+.reset-filters-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    background: #fef2f2;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.reset-filters-btn:hover {
+    background: #fecaca;
+}
+
+.reset-filters-btn i {
+    width: 16px;
+    height: 16px;
+}
+
 .filter-btn {
     width: 48px;
     height: 48px;
