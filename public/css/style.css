@@ -20,6 +20,7 @@ body {
     min-height: 100vh;
     position: relative;
     box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    overflow-x: hidden;
 }
 
 /* Responsive Design */
@@ -1561,7 +1562,7 @@ body {
 @media (min-width: 768px) {
     .orders-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 20px;
         padding: 0 30px;
     }
@@ -1569,15 +1570,8 @@ body {
 
 @media (min-width: 1024px) {
     .orders-grid {
-        grid-template-columns: repeat(3, 1fr);
         gap: 25px;
         padding: 0 40px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .orders-grid {
-        grid-template-columns: repeat(4, 1fr);
     }
 }
 
@@ -3438,7 +3432,6 @@ body {
         grid-template-columns: repeat(8, 1fr);
     }
     
-    .orders-grid,
     .receipts-grid,
     .debts-grid,
     .purchases-grid {

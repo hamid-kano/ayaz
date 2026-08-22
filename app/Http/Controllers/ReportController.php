@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Purchase;
 use App\Models\Receipt;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
@@ -126,41 +127,58 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        // تحديد الفترة الزمنية
-        $period = $request->get('period', 180); // افتراضي 6 أشهر
-        $startDate = Carbon::now()->subDays($period);
+        // تحديد الفترة الزمنية (نطاق تاريخ مخصّص من/إلى يأخذ الأولوية على "period")
+        $dateFrom = $request->get('date_from', '');
+        $dateTo = $request->get('date_to', '');
+
+        if ($dateFrom !== '' && $dateTo !== '') {
+            $startDate = Carbon::parse($dateFrom)->startOfDay();
+            $endDate = Carbon::parse($dateTo)->endOfDay();
+            $period = $startDate->diffInDays($endDate);
+        } else {
+            $period = $request->get('period', 180); // افتراضي 6 أشهر
+            $startDate = Carbon::now()->subDays($period);
+            $endDate = Carbon::now();
+        }
+
+        // فلاتر إضافية
+        $executorId = $request->get('executor_id', '');
 
         // حساب الإحصائيات الحقيقية
-        $totalOrders = Order::where('order_date', '>=', $startDate)->count();
+        $totalOrders = Order::where('order_date', '>=', $startDate)->where('order_date', '<=', $endDate)->count();
         $completedOrders = Order::where('status', 'delivered')
-            ->where('order_date', '>=', $startDate)->count();
+            ->where('order_date', '>=', $startDate)->where('order_date', '<=', $endDate)->count();
         $pendingOrders = Order::whereIn('status', ['new', 'in-progress', 'ready'])
-            ->where('order_date', '>=', $startDate)->count();
+            ->where('order_date', '>=', $startDate)->where('order_date', '<=', $endDate)->count();
+        $cancelledOrders = Order::where('status', 'cancelled')
+            ->where('order_date', '>=', $startDate)->where('order_date', '<=', $endDate)->count();
 
         // حساب الإيرادات (مجموع المدفوعات)
-        $totalRevenueSyp = Receipt::where('receipt_date', '>=', $startDate)
+        $totalRevenueSyp = Receipt::where('receipt_date', '>=', $startDate)->where('receipt_date', '<=', $endDate)
             ->where('currency', 'syp')->sum('amount');
-        $totalRevenueUsd = Receipt::where('receipt_date', '>=', $startDate)
+        $totalRevenueUsd = Receipt::where('receipt_date', '>=', $startDate)->where('receipt_date', '<=', $endDate)
             ->where('currency', 'usd')->sum('amount');
 
         // حساب المصروفات
-        $totalExpensesSyp = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'syp')->sum('amount');
-        $totalExpensesUsd = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'usd')->sum('amount');
+        $purchasesBase = Purchase::where('purchase_date', '>=', $startDate)->where('purchase_date', '<=', $endDate);
+
+        $totalExpensesSyp = (clone $purchasesBase)->where('currency', 'syp')->sum('amount');
+        $totalExpensesUsd = (clone $purchasesBase)->where('currency', 'usd')->sum('amount');
 
         // حساب المشتريات نقداً وبالدين
-        $cashPurchasesSyp = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'syp')->where('status', 'cash')->sum('amount');
-        $cashPurchasesUsd = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'usd')->where('status', 'cash')->sum('amount');
-        $debtPurchasesSyp = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'syp')->where('status', 'debt')->sum('amount');
-        $debtPurchasesUsd = Purchase::where('purchase_date', '>=', $startDate)
-            ->where('currency', 'usd')->where('status', 'debt')->sum('amount');
+        $cashPurchasesSyp = (clone $purchasesBase)->where('currency', 'syp')->where('status', 'cash')->sum('amount');
+        $cashPurchasesUsd = (clone $purchasesBase)->where('currency', 'usd')->where('status', 'cash')->sum('amount');
+        $debtPurchasesSyp = (clone $purchasesBase)->where('currency', 'syp')->where('status', 'debt')->sum('amount');
+        $debtPurchasesUsd = (clone $purchasesBase)->where('currency', 'usd')->where('status', 'debt')->sum('amount');
 
-        // حساب المبيعات نقداً وبالدين
-        $orders = Order::with(['items', 'receipts'])->where('order_date', '>=', $startDate)->get();
+        // حساب المبيعات نقداً وبالدين (مع فلتر المنفّذ إن وُجد)
+        $ordersQuery = Order::with(['items', 'receipts', 'executor'])
+            ->where('order_date', '>=', $startDate)
+            ->where('order_date', '<=', $endDate);
+        if ($executorId !== '') {
+            $ordersQuery->where('executor_id', $executorId);
+        }
+        $orders = $ordersQuery->get();
         $totalSalesSyp = 0;
         $totalSalesUsd = 0;
         $cashSalesSyp = 0;
@@ -216,19 +234,14 @@ class ReportController extends Controller
         }
 
         // الديون علينا (المشتريات غير المدفوعة)
-        $debtsOnUsSyp = Purchase::where('status', 'debt')
-            ->where('currency', 'syp')
-            ->where('purchase_date', '>=', $startDate)
-            ->sum('amount');
-        $debtsOnUsUsd = Purchase::where('status', 'debt')
-            ->where('currency', 'usd')
-            ->where('purchase_date', '>=', $startDate)
-            ->sum('amount');
+        $debtsOnUsSyp = (clone $purchasesBase)->where('status', 'debt')->where('currency', 'syp')->sum('amount');
+        $debtsOnUsUsd = (clone $purchasesBase)->where('status', 'debt')->where('currency', 'usd')->sum('amount');
 
         $stats = [
             'total_orders' => $totalOrders,
             'completed_orders' => $completedOrders,
             'pending_orders' => $pendingOrders,
+            'cancelled_orders' => $cancelledOrders,
             'total_revenue_syp' => $totalRevenueSyp,
             'total_revenue_usd' => $totalRevenueUsd,
             'total_expenses_syp' => $totalExpensesSyp,
@@ -261,22 +274,26 @@ class ReportController extends Controller
             $monthlyRevenueSyp = Receipt::whereYear('receipt_date', $date->year)
                 ->whereMonth('receipt_date', $date->month)
                 ->where('receipt_date', '>=', $startDate)
+                ->where('receipt_date', '<=', $endDate)
                 ->where('currency', 'syp')
                 ->sum('amount');
             $monthlyRevenueUsd = Receipt::whereYear('receipt_date', $date->year)
                 ->whereMonth('receipt_date', $date->month)
                 ->where('receipt_date', '>=', $startDate)
+                ->where('receipt_date', '<=', $endDate)
                 ->where('currency', 'usd')
                 ->sum('amount');
 
             $monthlyExpensesSyp = Purchase::whereYear('purchase_date', $date->year)
                 ->whereMonth('purchase_date', $date->month)
                 ->where('purchase_date', '>=', $startDate)
+                ->where('purchase_date', '<=', $endDate)
                 ->where('currency', 'syp')
                 ->sum('amount');
             $monthlyExpensesUsd = Purchase::whereYear('purchase_date', $date->year)
                 ->whereMonth('purchase_date', $date->month)
                 ->where('purchase_date', '>=', $startDate)
+                ->where('purchase_date', '<=', $endDate)
                 ->where('currency', 'usd')
                 ->sum('amount');
 
@@ -289,9 +306,59 @@ class ReportController extends Controller
             ];
         }
 
+        // معدّل نمو المبيعات الشهري (نسبة التغيّر عن الشهر السابق)
+        $monthlyGrowthData = [];
+        foreach ($monthlyData as $i => $m) {
+            $curTotal = $m['revenue_syp'] + $m['revenue_usd'];
+            if ($i > 0) {
+                $prevTotal = $monthlyData[$i - 1]['revenue_syp'] + $monthlyData[$i - 1]['revenue_usd'];
+                $growth = $prevTotal != 0 ? round((($curTotal - $prevTotal) / $prevTotal) * 100, 1) : null;
+            } else {
+                $growth = null;
+            }
+            $monthlyGrowthData[] = [
+                'month' => $m['month'],
+                'growth' => $growth,
+            ];
+        }
+
+        // طلبيات حسب المنفّذ
+        $ordersByExecutor = $orders->groupBy('executor_id')
+            ->map(function ($group) {
+                $executor = $group->first()->executor;
+                return [
+                    'name' => $executor ? $executor->name : 'غير محدد',
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortByDesc('count')
+            ->values();
+
+        // مقارنة أشهر متتالية: السنة الحالية مقابل السنة الماضية (مستقل عن فلاتر النطاق الزمني)
+        $currentYear = Carbon::now()->year;
+        $yearComparisonData = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = Carbon::createFromDate($currentYear, $m, 1)->locale('ar')->translatedFormat('F');
+
+            $currentYearOrders = Order::whereYear('order_date', $currentYear)->whereMonth('order_date', $m)->with('items')->get();
+            $previousYearOrders = Order::whereYear('order_date', $currentYear - 1)->whereMonth('order_date', $m)->with('items')->get();
+
+            $yearComparisonData[] = [
+                'month' => $monthName,
+                'current_syp' => $currentYearOrders->sum(fn($o) => $o->items->where('currency', 'syp')->sum(fn($i) => $i->quantity * $i->price)),
+                'current_usd' => $currentYearOrders->sum(fn($o) => $o->items->where('currency', 'usd')->sum(fn($i) => $i->quantity * $i->price)),
+                'previous_syp' => $previousYearOrders->sum(fn($o) => $o->items->where('currency', 'syp')->sum(fn($i) => $i->quantity * $i->price)),
+                'previous_usd' => $previousYearOrders->sum(fn($o) => $o->items->where('currency', 'usd')->sum(fn($i) => $i->quantity * $i->price)),
+            ];
+        }
+
+        // خيارات الفلاتر
+        $executors = User::orderBy('name')->get();
+
         // أفضل العملاء
         $topCustomers = Order::with('items')
             ->where('order_date', '>=', $startDate)
+            ->where('order_date', '<=', $endDate)
             ->get()
             ->groupBy('customer_name')
             ->map(function ($orders, $customerName) {
@@ -317,6 +384,14 @@ class ReportController extends Controller
             ->values()
             ->toArray();
 
-        return view('reports.index', compact('stats', 'monthlyData', 'topCustomers'));
+        return view('reports.index', compact(
+            'stats',
+            'monthlyData',
+            'topCustomers',
+            'monthlyGrowthData',
+            'ordersByExecutor',
+            'yearComparisonData',
+            'executors'
+        ));
     }
 }

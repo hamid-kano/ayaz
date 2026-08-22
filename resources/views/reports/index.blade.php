@@ -22,6 +22,24 @@
             <option value="180" {{ request('period') == '180' ? 'selected' : '' }}>آخر 6 أشهر</option>
             <option value="365" {{ request('period') == '365' ? 'selected' : '' }}>السنة الحالية</option>
         </select>
+
+        <select name="executor_id" class="filter-select" onchange="this.form.submit()">
+            <option value="">كل المنفّذين</option>
+            @foreach($executors as $executor)
+                <option value="{{ $executor->id }}" {{ request('executor_id') == $executor->id ? 'selected' : '' }}>{{ $executor->name }}</option>
+            @endforeach
+        </select>
+
+        <div class="date-range-group">
+            <label class="date-range-label">
+                <span>من</span>
+                <input type="date" name="date_from" class="filter-select" value="{{ request('date_from') }}" onchange="this.form.submit()">
+            </label>
+            <label class="date-range-label">
+                <span>إلى</span>
+                <input type="date" name="date_to" class="filter-select" value="{{ request('date_to') }}" onchange="this.form.submit()">
+            </label>
+        </div>
     </div>
 </form>
 
@@ -34,17 +52,7 @@
             <i data-lucide="trending-up"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['total_revenue_syp'] > 0 && $stats['total_revenue_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_usd']) }} $
-                @elseif($stats['total_revenue_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_syp']) }} ل.س
-                @elseif($stats['total_revenue_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_revenue_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['total_revenue_syp']" :usd="$stats['total_revenue_usd']" />
             <p>إجمالي الإيرادات</p>
             <span class="stat-change positive">+12%</span>
         </div>
@@ -55,17 +63,7 @@
             <i data-lucide="trending-down"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['total_expenses_syp'] > 0 && $stats['total_expenses_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_usd']) }} $
-                @elseif($stats['total_expenses_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_syp']) }} ل.س
-                @elseif($stats['total_expenses_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['total_expenses_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['total_expenses_syp']" :usd="$stats['total_expenses_usd']" />
             <p>إجمالي المصروفات</p>
             <span class="stat-change negative">+5%</span>
         </div>
@@ -76,17 +74,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['net_profit_syp'] != 0 && $stats['net_profit_usd'] != 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_usd']) }} $
-                @elseif($stats['net_profit_syp'] != 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_syp']) }} ل.س
-                @elseif($stats['net_profit_usd'] != 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['net_profit_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['net_profit_syp']" :usd="$stats['net_profit_usd']" />
             <p>صافي الربح</p>
             <span class="stat-change positive">+18%</span>
         </div>
@@ -108,17 +96,7 @@
             <i data-lucide="banknote"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['cash_purchases_syp'] > 0 && $stats['cash_purchases_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_usd']) }} $
-                @elseif($stats['cash_purchases_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_syp']) }} ل.س
-                @elseif($stats['cash_purchases_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_purchases_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['cash_purchases_syp']" :usd="$stats['cash_purchases_usd']" />
             <p>مشتريات نقداً</p>
         </div>
     </div>
@@ -128,17 +106,7 @@
             <i data-lucide="credit-card"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['debt_purchases_syp'] > 0 && $stats['debt_purchases_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_usd']) }} $
-                @elseif($stats['debt_purchases_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_syp']) }} ل.س
-                @elseif($stats['debt_purchases_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_purchases_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['debt_purchases_syp']" :usd="$stats['debt_purchases_usd']" />
             <p>مشتريات بالدين</p>
         </div>
     </div>
@@ -148,17 +116,7 @@
             <i data-lucide="dollar-sign"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['cash_sales_syp'] > 0 && $stats['cash_sales_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_usd']) }} $
-                @elseif($stats['cash_sales_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_syp']) }} ل.س
-                @elseif($stats['cash_sales_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['cash_sales_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['cash_sales_syp']" :usd="$stats['cash_sales_usd']" />
             <p>مبيعات نقداً</p>
         </div>
     </div>
@@ -168,17 +126,7 @@
             <i data-lucide="trending-up"></i>
         </div>
         <div class="stat-content">
-            <h3>
-                @if($stats['debt_sales_syp'] > 0 && $stats['debt_sales_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_syp']) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_usd']) }} $
-                @elseif($stats['debt_sales_syp'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_syp']) }} ل.س
-                @elseif($stats['debt_sales_usd'] > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($stats['debt_sales_usd']) }} $
-                @else
-                    0 ل.س
-                @endif
-            </h3>
+            <x-dual-currency-amount :syp="$stats['debt_sales_syp']" :usd="$stats['debt_sales_usd']" />
             <p>مبيعات بالدين</p>
         </div>
     </div>
@@ -201,6 +149,33 @@
         </div>
         <div class="chart-container">
             <canvas id="ordersChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>طلبيات حسب المنفّذ</h3>
+        </div>
+        <div class="chart-container">
+            <canvas id="executorChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>مقارنة المبيعات: السنة الحالية مقابل الماضية</h3>
+        </div>
+        <div class="chart-container">
+            <canvas id="yearComparisonChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>معدّل نمو المبيعات الشهري</h3>
+        </div>
+        <div class="chart-container">
+            <canvas id="growthChart"></canvas>
         </div>
     </div>
 </div>
@@ -349,18 +324,50 @@
 
 .search-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     align-items: center;
 }
 
 .filter-select {
     flex: 1;
+    min-width: 150px;
     padding: 12px 16px;
     border: 1px solid #d1d5db;
     border-radius: 12px;
     background: white;
     font-size: 16px;
     color: #374151;
+}
+
+.date-range-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    flex: 2;
+    min-width: 280px;
+}
+
+.date-range-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: white;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.date-range-label .filter-select {
+    min-width: 0;
+    border: none;
+    padding: 12px 0;
+    flex: 1;
 }
 
 .filter-btn {
@@ -455,6 +462,20 @@
 
 .stat-content h3 {
     margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.3;
+}
+
+.dual-amount {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0 0 4px 0;
+}
+
+.dual-amount-line {
     font-size: 20px;
     font-weight: 700;
     color: #111827;
@@ -719,6 +740,15 @@
 }
 
 @media (max-width: 480px) {
+    .date-range-group {
+        min-width: 100%;
+    }
+
+    .date-range-label {
+        font-size: 12px;
+        padding: 0 8px;
+    }
+
     .stats-grid {
         gap: 12px;
     }
@@ -738,7 +768,11 @@
     .stat-content h3 {
         font-size: 18px;
     }
-    
+
+    .dual-amount-line {
+        font-size: 18px;
+    }
+
     .chart-container {
         height: 200px;
     }
@@ -857,7 +891,7 @@ new Chart(ordersCtx, {
     data: {
         labels: ['مكتملة', 'قيد التنفيذ', 'ملغاة'],
         datasets: [{
-            data: [{{ $stats['completed_orders'] }}, {{ $stats['pending_orders'] }}, 5],
+            data: [{{ $stats['completed_orders'] }}, {{ $stats['pending_orders'] }}, {{ $stats['cancelled_orders'] }}],
             backgroundColor: ['#22c55e', '#f59e0b', '#ef4444']
         }]
     },
@@ -872,6 +906,94 @@ new Chart(ordersCtx, {
                         family: 'Cairo, Tajawal, sans-serif',
                         size: 12
                     }
+                }
+            }
+        }
+    }
+});
+
+// Orders by Executor Chart
+const executorCtx = document.getElementById('executorChart').getContext('2d');
+new Chart(executorCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($ordersByExecutor->pluck('name')) !!},
+        datasets: [{
+            label: 'عدد الطلبيات',
+            data: {!! json_encode($ordersByExecutor->pluck('count')) !!},
+            backgroundColor: '#3b82f6'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+        }
+    }
+});
+
+// Year-over-Year Comparison Chart
+const yearComparisonCtx = document.getElementById('yearComparisonChart').getContext('2d');
+new Chart(yearComparisonCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode(array_column($yearComparisonData, 'month')) !!},
+        datasets: [{
+            label: 'السنة الحالية (ل.س)',
+            data: {!! json_encode(array_column($yearComparisonData, 'current_syp')) !!},
+            backgroundColor: '#3b82f6'
+        }, {
+            label: 'السنة الماضية (ل.س)',
+            data: {!! json_encode(array_column($yearComparisonData, 'previous_syp')) !!},
+            backgroundColor: '#94a3b8'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: {
+                        family: 'Cairo, Tajawal, sans-serif',
+                        size: 13
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Monthly Sales Growth Rate Chart
+const growthCtx = document.getElementById('growthChart').getContext('2d');
+new Chart(growthCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode(array_column($monthlyGrowthData, 'month')) !!},
+        datasets: [{
+            label: 'نسبة النمو (%)',
+            data: {!! json_encode(array_column($monthlyGrowthData, 'growth')) !!},
+            borderColor: '#8b5cf6',
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            tension: 0.4,
+            spanGaps: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value) { return value + '%'; }
                 }
             }
         }
