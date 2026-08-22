@@ -14,16 +14,16 @@
 </div>
 
 <!-- Filters Section -->
-<form method="GET" action="{{ route('reports.index') }}" class="search-container">
+<form method="GET" action="{{ route('reports.index') }}" class="search-container" onsubmit="return submitReportFilters(this)">
     <div class="search-group">
-        <select name="period" class="filter-select" onchange="this.form.submit()">
+        <select name="period" class="filter-select" onchange="submitReportFilters(this.form)">
             <option value="30" {{ request('period') == '30' ? 'selected' : '' }}>آخر 30 يوم</option>
             <option value="90" {{ request('period') == '90' ? 'selected' : '' }}>آخر 3 أشهر</option>
             <option value="180" {{ request('period') == '180' ? 'selected' : '' }}>آخر 6 أشهر</option>
             <option value="365" {{ request('period') == '365' ? 'selected' : '' }}>السنة الحالية</option>
         </select>
 
-        <select name="executor_id" class="filter-select" onchange="this.form.submit()">
+        <select name="executor_id" class="filter-select" onchange="submitReportFilters(this.form)">
             <option value="">كل المنفّذين</option>
             @foreach($executors as $executor)
                 <option value="{{ $executor->id }}" {{ request('executor_id') == $executor->id ? 'selected' : '' }}>{{ $executor->name }}</option>
@@ -33,15 +33,25 @@
         <div class="date-range-group">
             <label class="date-range-label">
                 <span>من</span>
-                <input type="date" name="date_from" class="filter-select" value="{{ request('date_from') }}" onchange="this.form.submit()">
+                <input type="date" name="date_from" class="filter-select" value="{{ request('date_from') }}" onchange="submitReportFilters(this.form)">
             </label>
             <label class="date-range-label">
                 <span>إلى</span>
-                <input type="date" name="date_to" class="filter-select" value="{{ request('date_to') }}" onchange="this.form.submit()">
+                <input type="date" name="date_to" class="filter-select" value="{{ request('date_to') }}" onchange="submitReportFilters(this.form)">
             </label>
         </div>
     </div>
 </form>
+
+<script>
+function submitReportFilters(form) {
+    form.querySelectorAll('select, input').forEach(function (field) {
+        field.disabled = field.value === '';
+    });
+    form.submit();
+    return false;
+}
+</script>
 
 
 
