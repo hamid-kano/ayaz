@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group">
+                <div class="form-group full-row">
                     <label>سبب الخصم</label>
                     <input type="text" id="discountReason" maxlength="255" placeholder="مثال: زبون دائم">
                 </div>
@@ -111,6 +111,25 @@
 
 <style>
 .discount-amount { color: #dc2626; }
+
+/* تجاوب الشاشات الصغيرة */
+.order-discounts-section .form-group.full-row { grid-column: 1 / -1; }
+.order-discounts-section .item-header { gap: 12px; align-items: flex-start; }
+.order-discounts-section .item-name { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.order-discounts-section .item-total { white-space: nowrap; flex-shrink: 0; }
+.order-discounts-section .item-details { flex-wrap: wrap; gap: 8px 16px; }
+.order-discounts-section .empty-items { padding: 24px 16px; }
+.discounts-summary .summary-row span:last-child { white-space: nowrap; }
+
+@media (max-width: 480px) {
+    .order-discounts-section .item-card { padding: 14px 16px; }
+    .order-discounts-section .item-name,
+    .order-discounts-section .item-total { font-size: 15px; }
+    .order-discounts-section .form-row { gap: 10px; }
+    .order-discounts-section .form-actions { margin-top: 12px; }
+    .order-discounts-section .form-actions > button { flex: 1; justify-content: center; }
+    .discounts-summary .summary-row { padding: 10px 12px; font-size: 13px; }
+}
 .discounts-locked-note {
     display: flex; align-items: center; gap: 8px;
     padding: 12px 16px; margin-bottom: 12px;

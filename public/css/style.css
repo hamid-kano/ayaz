@@ -2510,7 +2510,8 @@ body {
 }
 
 .tab-btn {
-    flex: 1;
+    /* لا ينكمش الزر أقل من عرض محتواه حتى لا يخرج العدد عن حدوده */
+    flex: 1 0 auto;
     min-width: 80px;
     padding: 10px 12px;
     background: #f8f9fa;
@@ -2540,6 +2541,8 @@ body {
     min-width: 18px;
     text-align: center;
     transition: all 0.3s ease;
+    flex-shrink: 0;
+    line-height: 1.4;
 }
 
 .tab-btn.active .count {
