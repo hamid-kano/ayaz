@@ -128,23 +128,29 @@
             flex: 1;
         }
 
+        .discount-reason {
+            color: #dc2626;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
         .footer-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start; /* المحتوى يبدأ من اليمين */
             padding: 10px;
             border-top: 1px solid #000;
         }
         
         .advances-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start; /* المحتوى يبدأ من اليمين */
             padding: 10px;
             border-top: 1px solid #000;
         }
         
         .remaining-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start; /* المحتوى يبدأ من اليمين */
             padding: 10px;
             border-top: 1px solid #000;
         }
@@ -303,13 +309,12 @@
         <div class="advances-section">
             <div></div>
             <div><strong>الخصم:</strong>
-                @if($order->total_discount_syp > 0 && $order->total_discount_usd > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_usd) }} $
-                @elseif($order->total_discount_syp > 0)
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_syp) }} ل.س
-                @else
-                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_usd) }} $
-                @endif
+                {{-- كل خصم بمبلغه وسببه في نفس السطر --}}
+                @foreach($order->discounts as $discount)
+                    @if(!$loop->first) + @endif
+                    {{ \App\Helpers\TranslationHelper::formatAmount($discount->amount) }} {{ $discount->currency == 'usd' ? '$' : 'ل.س' }}
+                    <span class="discount-reason">({{ $discount->reason }})</span>
+                @endforeach
             </div>
         </div>
 
