@@ -99,6 +99,9 @@
     
     <!-- Order Items Section -->
     @include('components.order-items', ['items' => collect([]), 'editable' => true])
+
+    <!-- Discounts Section -->
+    @include('components.order-discounts', ['discounts' => collect(), 'editable' => true])
     
     <!-- Receipt Section -->
     <div class="section-header">

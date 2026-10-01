@@ -230,6 +230,9 @@ function updateHiddenInputs() {
             form.appendChild(input);
         });
     });
+
+    // إبلاغ مكوّن الخصومات بتغيّر المواد لتحديث الملخص
+    document.dispatchEvent(new CustomEvent('order-items-changed'));
 }
 </script>
 @endif

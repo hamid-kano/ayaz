@@ -283,31 +283,51 @@
             </div>
             <div></div>
             <div><strong>المجموع:</strong> 
-                @if($order->items->count() > 0)
-                    @php
-                        $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) { return $item->quantity * $item->price; });
-                        $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) { return $item->quantity * $item->price; });
-                    @endphp
-                    @if($totalSyp > 0 && $totalUsd > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
-                    @elseif($totalSyp > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س
-                    @else
-                        {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
-                    @endif
+                @php
+                    $totalSyp = $order->subtotal_syp;
+                    $totalUsd = $order->subtotal_usd;
+                @endphp
+                @if($totalSyp > 0 && $totalUsd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
+                @elseif($totalSyp > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($totalSyp) }} ل.س
+                @elseif($totalUsd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($totalUsd) }} $
                 @else
-                    @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
-                    @elseif($order->total_cost_syp > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
-                    @elseif($order->total_cost_usd > 0)
-                        {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
-                    @else
-                        0 ل.س
-                    @endif
+                    0 ل.س
                 @endif
             </div>
         </div>
+
+        @if($order->discounts->count() > 0)
+        <div class="advances-section">
+            <div></div>
+            <div><strong>الخصم:</strong>
+                @if($order->total_discount_syp > 0 && $order->total_discount_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_usd) }} $
+                @elseif($order->total_discount_syp > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_syp) }} ل.س
+                @else
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_usd) }} $
+                @endif
+            </div>
+        </div>
+
+        <div class="advances-section">
+            <div></div>
+            <div><strong>الصافي بعد الخصم:</strong>
+                @if($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س + {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                @elseif($order->total_cost_syp > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ل.س
+                @elseif($order->total_cost_usd > 0)
+                    {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_usd) }} $
+                @else
+                    0 ل.س
+                @endif
+            </div>
+        </div>
+        @endif
         
         <div class="advances-section">
             <div></div>

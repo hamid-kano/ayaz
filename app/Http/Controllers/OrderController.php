@@ -8,7 +8,9 @@ use App\Models\Attachment;
 use App\Models\AudioRecording;
 use App\Services\OneSignalService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -19,7 +21,7 @@ class OrderController extends Controller
             abort(403, 'غير مصرح لك بعرض الطلبيات');
         }
 
-        $query = Order::with(['executor']);
+        $query = Order::with(['executor', 'items', 'discounts']);
 
         // إذا كان المستخدم عادي، إظهار طلبياته فقط
         if (!auth()->user()->isAdmin() && !auth()->user()->isAuditor()) {
@@ -92,7 +94,21 @@ class OrderController extends Controller
             'receipt_currency' => 'nullable|in:syp,usd',
             'receipt_date' => 'nullable|date',
             'receipt_notes' => 'nullable|string',
-        ]);
+        ] + $this->discountRules());
+
+        // التحقق من الخصومات قبل أي حفظ
+        $discounts = $this->normalizeDiscounts($validated['discounts'] ?? []);
+        $items = $validated['items'] ?? [];
+        $paidSyp = 0;
+        $paidUsd = 0;
+        if (!empty($validated['receipt_amount']) && $validated['receipt_amount'] > 0) {
+            if (($validated['receipt_currency'] ?? 'syp') === 'usd') {
+                $paidUsd = (float) $validated['receipt_amount'];
+            } else {
+                $paidSyp = (float) $validated['receipt_amount'];
+            }
+        }
+        $this->assertValidTotals($items, $discounts, $paidSyp, $paidUsd);
 
         // إنشاء رقم طلبية تلقائي
         $lastOrder = Order::orderBy('id', 'desc')->first();
@@ -100,14 +116,26 @@ class OrderController extends Controller
         $validated['order_number'] = 'ORD-' . $nextNumber;
         $validated['order_date'] = \Carbon\Carbon::now('Asia/Damascus')->toDateString();
 
-        $order = Order::create($validated);
+        $order = DB::transaction(function () use ($validated, $items, $discounts) {
+            $order = Order::create($validated);
 
-        // إضافة المواد
-        if (isset($validated['items'])) {
-            foreach ($validated['items'] as $item) {
+            // إضافة المواد
+            foreach ($items as $item) {
                 $order->items()->create($item);
             }
-        }
+
+            // إضافة الخصومات
+            foreach ($discounts as $discount) {
+                $order->discounts()->create([
+                    'amount' => $discount['amount'],
+                    'currency' => $discount['currency'],
+                    'reason' => $discount['reason'],
+                    'created_by' => auth()->id(),
+                ]);
+            }
+
+            return $order;
+        });
 
         // إرسال إشعار للمنفذ عند تعيين طلبية جديدة
         if ($order->executor_id) {
@@ -170,7 +198,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['executor', 'attachments', 'audioRecordings', 'receipts', 'items']);
+        $order->load(['executor', 'attachments', 'audioRecordings', 'receipts', 'items', 'discounts.creator']);
         return view('orders.show', compact('order'));
     }
 
@@ -205,32 +233,53 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,6})?$/',
             'items.*.currency' => 'required|in:syp,usd',
-        ]);
+        ] + $this->discountRules());
 
-        $oldExecutorId = $order->executor_id;
-        $order->update($validated);
+        $order->load(['items', 'discounts']);
 
-        // تحديث المواد
-        if (isset($validated['items'])) {
-            // حساب التكلفة الجديدة
-            $newTotalSyp = collect($validated['items'])->where('currency', 'syp')->sum(fn($i) => $i['quantity'] * $i['price']);
-            $newTotalUsd = collect($validated['items'])->where('currency', 'usd')->sum(fn($i) => $i['quantity'] * $i['price']);
-            
-            // التحقق من المقبوضات
-            if ($order->receipts()->count() > 0) {
-                $paidSyp = $order->total_paid_syp;
-                $paidUsd = $order->total_paid_usd;
-                
-                if ($newTotalSyp < $paidSyp || $newTotalUsd < $paidUsd) {
-                    return back()->with('warning', 'تنبيه: التكلفة الجديدة أقل من المبلغ المدفوع. تأكد من صحة البيانات.');
-                }
-            }
-            
-            $order->items()->delete();
-            foreach ($validated['items'] as $item) {
-                $order->items()->create($item);
+        // المواد الجديدة إن أُرسلت، وإلا المواد الحالية
+        $itemsSubmitted = isset($validated['items']);
+        $items = $itemsSubmitted
+            ? $validated['items']
+            : $order->items->map(fn($i) => ['quantity' => $i->quantity, 'price' => $i->price, 'currency' => $i->currency])->all();
+
+        // الخصومات الجديدة إن أُرسلت، وإلا الخصومات الحالية
+        $discountsSubmitted = $request->boolean('discounts_submitted');
+        $discounts = $discountsSubmitted
+            ? $this->normalizeDiscounts($validated['discounts'] ?? [])
+            : $this->normalizeDiscounts($order->discounts->toArray());
+
+        // منع تعديل الخصومات على طلب مؤرشف أو ملغى
+        if ($discountsSubmitted && $this->discountsChanged($order, $discounts)) {
+            if ($order->discountsLocked() || in_array($validated['status'], Order::DISCOUNT_LOCKED_STATUSES, true)) {
+                throw ValidationException::withMessages([
+                    'discounts' => 'لا يمكن تعديل الخصومات على طلبية مؤرشفة أو ملغاة',
+                ]);
             }
         }
+
+        // الصافي لا يقل عن المدفوع، ويُفحص قبل أي حفظ
+        $this->assertValidTotals($items, $discounts, (float) $order->total_paid_syp, (float) $order->total_paid_usd);
+
+        unset($validated['items'], $validated['discounts']);
+        $oldExecutorId = $order->executor_id;
+
+        DB::transaction(function () use ($order, $validated, $items, $itemsSubmitted, $discounts, $discountsSubmitted) {
+            $order->update($validated);
+
+            // تحديث المواد
+            if ($itemsSubmitted) {
+                $order->items()->delete();
+                foreach ($items as $item) {
+                    $order->items()->create($item);
+                }
+            }
+
+            // تحديث الخصومات
+            if ($discountsSubmitted) {
+                $this->syncDiscounts($order, $discounts);
+            }
+        });
 
         // إرسال إشعار عند تغيير المنفذ
         if ($oldExecutorId != $validated['executor_id']) {
@@ -325,7 +374,7 @@ class OrderController extends Controller
 
     public function debts(Request $request)
     {
-        $query = Order::with(['receipts', 'items']);
+        $query = Order::with(['receipts', 'items', 'discounts']);
 
         if ($request->has('search')) {
             $search = $request->search;
@@ -468,13 +517,13 @@ class OrderController extends Controller
 
     public function print(Order $order)
     {
-        $order->load(['executor', 'receipts', 'items']);
+        $order->load(['executor', 'receipts', 'items', 'discounts']);
         return view('orders.print', compact('order'));
     }
 
     public function publicPrint(Order $order)
     {
-        $order->load(['executor', 'receipts', 'items']);
+        $order->load(['executor', 'receipts', 'items', 'discounts']);
         return view('orders.print', compact('order'));
     }
 
@@ -495,7 +544,7 @@ class OrderController extends Controller
 
     public function archives(Request $request)
     {
-        $query = Order::with(['executor'])->where('status', 'archived');
+        $query = Order::with(['executor', 'items', 'discounts'])->where('status', 'archived');
 
         if (!auth()->user()->isAdmin()) {
             $query->where('executor_id', auth()->id());
@@ -524,5 +573,102 @@ class OrderController extends Controller
         $order->update(['status' => $request->status]);
 
         return redirect()->route('orders.index')->with('success', 'تم تحديث حالة الطلبية بنجاح');
+    }
+
+    /**
+     * قواعد التحقق الأساسية لحقول الخصومات
+     */
+    private function discountRules(): array
+    {
+        return [
+            'discounts' => 'nullable|array',
+            'discounts.*.id' => 'nullable|integer',
+            'discounts.*.amount' => 'required|numeric|gt:0|regex:/^\d+(\.\d{1,6})?$/',
+            'discounts.*.currency' => 'required|in:syp,usd',
+            'discounts.*.reason' => 'required|string|max:255',
+        ];
+    }
+
+    /**
+     * توحيد شكل الخصومات القادمة من النموذج أو من قاعدة البيانات
+     */
+    private function normalizeDiscounts(array $discounts): array
+    {
+        return collect($discounts)->map(fn($d) => [
+            'id' => !empty($d['id']) ? (int) $d['id'] : null,
+            'amount' => round((float) $d['amount'], 6),
+            'currency' => $d['currency'],
+            'reason' => trim($d['reason']),
+        ])->values()->all();
+    }
+
+    /**
+     * التحقق من أن الخصم لا يتجاوز مجموع الطلب بعملته، وأن الصافي لا يقل عن المدفوع
+     */
+    private function assertValidTotals(array $items, array $discounts, float $paidSyp, float $paidUsd): void
+    {
+        $currencies = ['syp' => 'الليرة السورية', 'usd' => 'الدولار'];
+        $errors = [];
+
+        foreach ($currencies as $currency => $label) {
+            $subtotal = round(collect($items)->where('currency', $currency)->sum(fn($i) => $i['quantity'] * $i['price']), 6);
+            $discount = round(collect($discounts)->where('currency', $currency)->sum('amount'), 6);
+            $paid = round($currency === 'syp' ? $paidSyp : $paidUsd, 6);
+            $net = round($subtotal - $discount, 6);
+
+            if ($discount > 0 && $subtotal <= 0) {
+                $errors[] = "لا توجد مواد بعملة {$label} حتى يُطبَّق عليها خصم";
+            } elseif ($discount > $subtotal) {
+                $errors[] = "مجموع الخصومات بعملة {$label} أكبر من مجموع الطلبية بهذه العملة";
+            } elseif ($net < $paid) {
+                $errors[] = "صافي الطلبية بعملة {$label} بعد الخصم أقل من المبلغ المدفوع";
+            }
+        }
+
+        if ($errors) {
+            throw ValidationException::withMessages(['discounts' => $errors]);
+        }
+    }
+
+    /**
+     * هل تختلف الخصومات المرسلة عن الخصومات المحفوظة؟
+     */
+    private function discountsChanged(Order $order, array $discounts): bool
+    {
+        $key = fn($d) => ($d['id'] ?? '') . '|' . number_format($d['amount'], 6, '.', '') . '|' . $d['currency'] . '|' . $d['reason'];
+
+        $existing = collect($this->normalizeDiscounts($order->discounts->toArray()))->map($key)->sort()->values()->all();
+        $submitted = collect($discounts)->map($key)->sort()->values()->all();
+
+        return $existing !== $submitted;
+    }
+
+    /**
+     * مزامنة الخصومات: تحديث الموجود، إضافة الجديد، حذف المحذوف
+     */
+    private function syncDiscounts(Order $order, array $discounts): void
+    {
+        $existing = $order->discounts()->get()->keyBy('id');
+        $keptIds = [];
+
+        foreach ($discounts as $discount) {
+            $data = [
+                'amount' => $discount['amount'],
+                'currency' => $discount['currency'],
+                'reason' => $discount['reason'],
+            ];
+
+            if ($discount['id'] && $existing->has($discount['id'])) {
+                $existing[$discount['id']]->update($data);
+                $keptIds[] = $discount['id'];
+            } else {
+                $order->discounts()->create($data + ['created_by' => auth()->id()]);
+            }
+        }
+
+        $removedIds = $existing->keys()->diff($keptIds);
+        if ($removedIds->isNotEmpty()) {
+            $order->discounts()->whereIn('id', $removedIds)->delete();
+        }
     }
 }

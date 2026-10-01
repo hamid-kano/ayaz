@@ -35,7 +35,7 @@ class ReceiptController extends Controller
             abort(403, 'غير مصرح لك بإنشاء مقبوضات');
         }
         
-        $orders = Order::with(['receipts', 'items'])
+        $orders = Order::with(['receipts', 'items', 'discounts'])
             ->get()
             ->filter(function($order) {
                 return $order->remaining_amount_syp > 0 || $order->remaining_amount_usd > 0;
@@ -94,7 +94,7 @@ class ReceiptController extends Controller
             abort(403, 'غير مصرح لك بتعديل المقبوضات');
         }
         
-        $receipt->load('order.items');
+        $receipt->load(['order.items', 'order.discounts']);
         return view('receipts.edit', compact('receipt'));
     }
 
@@ -113,7 +113,7 @@ class ReceiptController extends Controller
         ]);
 
         $order = $receipt->order;
-        $order->load('items');
+        $order->load(['items', 'discounts']);
         $oldAmount = $receipt->amount;
         $newAmount = $validated['amount'];
         $currency = $receipt->currency;

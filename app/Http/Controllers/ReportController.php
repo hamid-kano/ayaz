@@ -59,20 +59,16 @@ class ReportController extends Controller
         $purchasesUsd = $purchasesToday->where('currency', 'usd')->sum('amount');
         
         // الديون لنا (استثناء الطلبات الملغاة)
-        $orders = Order::with(['items', 'receipts'])
+        $orders = Order::with(['items', 'receipts', 'discounts'])
             ->whereNotIn('status', ['cancelled'])
             ->get();
         $debtsToUsSyp = 0;
         $debtsToUsUsd = 0;
         $debtsToUs = collect();
-        
+
         foreach ($orders as $order) {
-            $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) {
-                return $item->quantity * $item->price;
-            });
-            $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) {
-                return $item->quantity * $item->price;
-            });
+            $totalSyp = $order->total_cost_syp;
+            $totalUsd = $order->total_cost_usd;
             $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
             $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
             
@@ -172,7 +168,7 @@ class ReportController extends Controller
         $debtPurchasesUsd = (clone $purchasesBase)->where('currency', 'usd')->where('status', 'debt')->sum('amount');
 
         // حساب المبيعات نقداً وبالدين (مع فلتر المنفّذ إن وُجد)
-        $ordersQuery = Order::with(['items', 'receipts', 'executor'])
+        $ordersQuery = Order::with(['items', 'receipts', 'executor', 'discounts'])
             ->where('order_date', '>=', $startDate)
             ->where('order_date', '<=', $endDate);
         if ($executorId !== '') {
@@ -185,14 +181,16 @@ class ReportController extends Controller
         $cashSalesUsd = 0;
         $debtSalesSyp = 0;
         $debtSalesUsd = 0;
+        $totalDiscountsSyp = 0;
+        $totalDiscountsUsd = 0;
 
         foreach ($orders as $order) {
-            $orderTotalSyp = $order->items->where('currency', 'syp')->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
-            $orderTotalUsd = $order->items->where('currency', 'usd')->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
+            // المبيعات تُحسب بالصافي بعد الخصم
+            $orderTotalSyp = $order->total_cost_syp;
+            $orderTotalUsd = $order->total_cost_usd;
+
+            $totalDiscountsSyp += $order->total_discount_syp;
+            $totalDiscountsUsd += $order->total_discount_usd;
 
             $totalSalesSyp += $orderTotalSyp;
             $totalSalesUsd += $orderTotalUsd;
@@ -216,12 +214,8 @@ class ReportController extends Controller
         $outstandingDebtsUsd = 0;
 
         foreach ($orders as $order) {
-            $totalSyp = $order->items->where('currency', 'syp')->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
-            $totalUsd = $order->items->where('currency', 'usd')->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
+            $totalSyp = $order->total_cost_syp;
+            $totalUsd = $order->total_cost_usd;
 
             $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
             $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
@@ -242,6 +236,8 @@ class ReportController extends Controller
             'completed_orders' => $completedOrders,
             'pending_orders' => $pendingOrders,
             'cancelled_orders' => $cancelledOrders,
+            'total_discounts_syp' => $totalDiscountsSyp,
+            'total_discounts_usd' => $totalDiscountsUsd,
             'total_revenue_syp' => $totalRevenueSyp,
             'total_revenue_usd' => $totalRevenueUsd,
             'total_expenses_syp' => $totalExpensesSyp,
@@ -340,15 +336,15 @@ class ReportController extends Controller
         for ($m = 1; $m <= 12; $m++) {
             $monthName = Carbon::createFromDate($currentYear, $m, 1)->locale('ar')->translatedFormat('F');
 
-            $currentYearOrders = Order::whereYear('order_date', $currentYear)->whereMonth('order_date', $m)->with('items')->get();
-            $previousYearOrders = Order::whereYear('order_date', $currentYear - 1)->whereMonth('order_date', $m)->with('items')->get();
+            $currentYearOrders = Order::whereYear('order_date', $currentYear)->whereMonth('order_date', $m)->with(['items', 'discounts'])->get();
+            $previousYearOrders = Order::whereYear('order_date', $currentYear - 1)->whereMonth('order_date', $m)->with(['items', 'discounts'])->get();
 
             $yearComparisonData[] = [
                 'month' => $monthName,
-                'current_syp' => $currentYearOrders->sum(fn($o) => $o->items->where('currency', 'syp')->sum(fn($i) => $i->quantity * $i->price)),
-                'current_usd' => $currentYearOrders->sum(fn($o) => $o->items->where('currency', 'usd')->sum(fn($i) => $i->quantity * $i->price)),
-                'previous_syp' => $previousYearOrders->sum(fn($o) => $o->items->where('currency', 'syp')->sum(fn($i) => $i->quantity * $i->price)),
-                'previous_usd' => $previousYearOrders->sum(fn($o) => $o->items->where('currency', 'usd')->sum(fn($i) => $i->quantity * $i->price)),
+                'current_syp' => $currentYearOrders->sum(fn($o) => $o->total_cost_syp),
+                'current_usd' => $currentYearOrders->sum(fn($o) => $o->total_cost_usd),
+                'previous_syp' => $previousYearOrders->sum(fn($o) => $o->total_cost_syp),
+                'previous_usd' => $previousYearOrders->sum(fn($o) => $o->total_cost_usd),
             ];
         }
 
@@ -356,22 +352,14 @@ class ReportController extends Controller
         $executors = User::orderBy('name')->get();
 
         // أفضل العملاء
-        $topCustomers = Order::with('items')
+        $topCustomers = Order::with(['items', 'discounts'])
             ->where('order_date', '>=', $startDate)
             ->where('order_date', '<=', $endDate)
             ->get()
             ->groupBy('customer_name')
             ->map(function ($orders, $customerName) {
-                $totalSyp = $orders->sum(function ($order) {
-                    return $order->items->where('currency', 'syp')->sum(function ($item) {
-                        return $item->quantity * $item->price;
-                    });
-                });
-                $totalUsd = $orders->sum(function ($order) {
-                    return $order->items->where('currency', 'usd')->sum(function ($item) {
-                        return $item->quantity * $item->price;
-                    });
-                });
+                $totalSyp = $orders->sum(fn($order) => $order->total_cost_syp);
+                $totalUsd = $orders->sum(fn($order) => $order->total_cost_usd);
                 return [
                     'name' => $customerName,
                     'orders' => $orders->count(),

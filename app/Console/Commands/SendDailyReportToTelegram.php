@@ -58,19 +58,15 @@ class SendDailyReportToTelegram extends Command
             $purchasesUsd = $purchasesToday->where('currency', 'usd')->sum('amount');
             
             // حساب الديون لنا (استثناء الطلبات الملغاة)
-            $orders = Order::with(['items', 'receipts'])
+            $orders = Order::with(['items', 'receipts', 'discounts'])
                 ->whereNotIn('status', ['cancelled'])
                 ->get();
             $debtsToUsSyp = 0;
             $debtsToUsUsd = 0;
-            
+
             foreach ($orders as $order) {
-                $totalSyp = $order->items->where('currency', 'syp')->sum(function($item) {
-                    return $item->quantity * $item->price;
-                });
-                $totalUsd = $order->items->where('currency', 'usd')->sum(function($item) {
-                    return $item->quantity * $item->price;
-                });
+                $totalSyp = $order->total_cost_syp;
+                $totalUsd = $order->total_cost_usd;
                 $paidSyp = $order->receipts->where('currency', 'syp')->sum('amount');
                 $paidUsd = $order->receipts->where('currency', 'usd')->sum('amount');
                 

@@ -40,7 +40,7 @@
                 <span>{{ $order->order_type }}</span>
             </div>
             <div class="info-item">
-                <label>الكلفة</label>
+                <label>{{ $order->discounts->count() > 0 ? 'الكلفة بعد الخصم' : 'الكلفة' }}</label>
                 <span class="cost-value">
                     @if ($order->total_cost_syp > 0 && $order->total_cost_usd > 0)
                         {{ \App\Helpers\TranslationHelper::formatAmount($order->total_cost_syp) }} ليرة +
@@ -54,6 +54,32 @@
                     @endif
                 </span>
             </div>
+            @if($order->discounts->count() > 0)
+                <div class="info-item">
+                    <label>الكلفة قبل الخصم</label>
+                    <span>
+                        @if ($order->subtotal_syp > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->subtotal_syp) }} ليرة
+                        @endif
+                        @if ($order->subtotal_syp > 0 && $order->subtotal_usd > 0) + @endif
+                        @if ($order->subtotal_usd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->subtotal_usd) }} دولار
+                        @endif
+                    </span>
+                </div>
+                <div class="info-item">
+                    <label>مجموع الخصومات</label>
+                    <span class="discount-amount">
+                        @if ($order->total_discount_syp > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_syp) }} ليرة
+                        @endif
+                        @if ($order->total_discount_syp > 0 && $order->total_discount_usd > 0) + @endif
+                        @if ($order->total_discount_usd > 0)
+                            {{ \App\Helpers\TranslationHelper::formatAmount($order->total_discount_usd) }} دولار
+                        @endif
+                    </span>
+                </div>
+            @endif
             <div class="info-item">
                 <label>حالة الطلبية</label>
                 <span class="status {{ $order->status }}">
@@ -110,6 +136,11 @@
 
         <!-- Order Items Section -->
         @include('components.order-items', ['items' => $order->items, 'editable' => false])
+
+        <!-- Discounts Section -->
+        @if($order->discounts->count() > 0)
+            @include('components.order-discounts', ['discounts' => $order->discounts, 'editable' => false])
+        @endif
 
         <!-- Attachments Section -->
         <div class="section-header">

@@ -105,6 +105,9 @@
     
     <!-- Order Items Section -->
     @include('components.order-items', ['items' => $order->items, 'editable' => true])
+
+    <!-- Discounts Section -->
+    @include('components.order-discounts', ['discounts' => $order->discounts, 'editable' => true, 'locked' => $order->discountsLocked()])
     
     <!-- Action Buttons -->
     <div class="form-actions">

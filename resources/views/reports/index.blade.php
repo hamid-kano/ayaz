@@ -145,6 +145,16 @@ function submitReportFilters(form) {
             <p>مبيعات بالدين</p>
         </div>
     </div>
+
+    <div class="stat-card discounts">
+        <div class="stat-icon">
+            <i data-lucide="badge-percent"></i>
+        </div>
+        <div class="stat-content">
+            <x-dual-currency-amount :syp="$stats['total_discounts_syp']" :usd="$stats['total_discounts_usd']" />
+            <p>إجمالي الخصومات</p>
+        </div>
+    </div>
 </div>
 
 <!-- Charts Section -->
@@ -498,6 +508,11 @@ function submitReportFilters(form) {
 .stat-card.debt-sales .stat-icon {
     background: #fdf4ff;
     color: #a855f7;
+}
+
+.stat-card.discounts .stat-icon {
+    background: #fef2f2;
+    color: #dc2626;
 }
 
 .stat-content h3 {

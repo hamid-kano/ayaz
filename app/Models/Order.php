@@ -56,6 +56,19 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function discounts()
+    {
+        return $this->hasMany(OrderDiscount::class);
+    }
+
+    // الحالات التي يُمنع فيها تعديل الخصومات
+    public const DISCOUNT_LOCKED_STATUSES = ['archived', 'cancelled'];
+
+    public function discountsLocked(): bool
+    {
+        return in_array($this->status, self::DISCOUNT_LOCKED_STATUSES, true);
+    }
+
     public function notifications()
     {
         return $this->hasMany(\App\Models\Notification::class, 'data->order_id', 'id');
@@ -85,18 +98,37 @@ class Order extends Model
     
 
     
+    // مجموع المواد قبل الخصم
+    public function getSubtotalSypAttribute()
+    {
+        return $this->items->where('currency', 'syp')->sum(fn($item) => $item->quantity * $item->price);
+    }
+
+    public function getSubtotalUsdAttribute()
+    {
+        return $this->items->where('currency', 'usd')->sum(fn($item) => $item->quantity * $item->price);
+    }
+
+    // مجموع الخصومات لكل عملة
+    public function getTotalDiscountSypAttribute()
+    {
+        return $this->discounts->where('currency', 'syp')->sum('amount');
+    }
+
+    public function getTotalDiscountUsdAttribute()
+    {
+        return $this->discounts->where('currency', 'usd')->sum('amount');
+    }
+
+    // الصافي بعد الخصم: هو المبلغ المستحق على الزبون
     public function getTotalCostSypAttribute()
     {
-        return $this->items->where('currency', 'syp')->sum(function($item) {
-            return $item->quantity * $item->price;
-        });
+        return $this->subtotal_syp - $this->total_discount_syp;
     }
-    
+
     public function getTotalCostUsdAttribute()
     {
-        return $this->items->where('currency', 'usd')->sum(function($item) {
-            return $item->quantity * $item->price;
-        });
+        return $this->subtotal_usd - $this->total_discount_usd;
     }
     
 
